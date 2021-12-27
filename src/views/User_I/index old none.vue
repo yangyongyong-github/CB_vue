@@ -8,76 +8,47 @@
       <div class="title">User_I Center</div>
       <!-- 基础信息 -->
       <div class="user-data-base tit">
-        <div class="user-name">
-          <span class="guide">Name: </span> {{ userData.name }}
-        </div>
-        <div class="user-sex">
-          <span class="guide">Gender : </span>
-          {{ userData.sex === "true" ? "男" : "女" }}
-        </div>
-        <div class="user-age">
-          <span class="guide">Age : </span>
-          {{ userData.age }}
-        </div>
-        <div class="user-job">
-          <span class="guide"> 职业: </span>
-          {{ userData.job }}
-        </div>
-        <div class="user-mobile">
-          <span class="guide"> 联系电话: </span>{{ userData.mobile }}
-        </div>
-        <div class="user-company">
-          <span class="guide"> 单位/公司: </span> {{ userData.company }}
-        </div>
+        <div class="user-name">{{ userName }}</div>
+        <div class="user-sex">{{ userSex === "true" ? "男" : "女" }}</div>
+        <div class="user-age">年龄 {{ userAge }} 岁</div>
+        <div class="user-job">职业：{{ userJob }}</div>
+        <div class="user-mobile">电话：{{ userMobile }}</div>
+        <div class="user-company">公司：{{ userCompany }}</div>
       </div>
 
       <!-- 业务信息 -->
       <div class="user-data-account tit">
         <!-- 身份 loan ? deposit -->
         <div class="user-cage">
-          <span class="guide"> 用户类别: </span> {{ userData.flag }}
-          {{ userData.flag === "useri" ? "贷款" : "存款" }}用户
+          用户类别: {{ userCage }} {{ userCage === "I" ? "贷款" : "存款" }}用户
         </div>
-        <div class="user-account">
-          <span class="guide">账号 : </span> {{ userData.account }}
-        </div>
-        <div class="user-login-id">
-          <span class="guide"> LoginID : </span>
-          {{ userData.loginId }}
-        </div>
+        <div class="user-account">账号:{{ userAccount }}</div>
+        <div class="user-login-id">LoginId：{{ userLoginId }}</div>
       </div>
 
       <!-- 用户贷款信息 -->
       <div class="user-loan tit">
         <!-- 贷款额度总计 -->
-        <div class="user-loan-num">
-          <span class="guide"> 贷款总额-本金: </span> {{ userData.loan }}元
-        </div>
+        <div class="user-loan">贷款总额-本金:{{ userLoan }}元</div>
         <!-- 贷款利息总结 -->
-        <div class="user-interest">
-          <span class="guide"> 贷款总额-利息: </span>{{ userData.interest }}元
-        </div>
-        <div><span class="guide"> 本息共计: </span>{{ loanTotal }}</div>
-        <div><span class="guide"> 上次贷款类别 : </span></div>
+        <div class="user-interest">贷款总额-利息:{{ userInterest }}元</div>
+        <div>本息共计{{ loanTotal }}</div>
+        <div>上次贷款类别：</div>
         <!-- 上次贷类别:1个人2企业 -->
-        <div class="user-ident">
-          {{ userData.ident === 1 ? "个人" : "企业" }}
-        </div>
-        <div>
-          <span class="guide"> 上次贷款原因: </span>
-        </div>
+        <div class="user-ident">{{ userIdent === 1 ? "个人" : "企业" }}</div>
+        <div>上次贷款原因：</div>
         <!-- 这里由于db存储原因，只能存储最近的一次 -->
-        <div class="user-cause">{{ userData.cause }}</div>
+        <div class="user-cause">{{ userCause }}</div>
 
-        <!-- 有待扩展 -->
         <!-- 还款日期,还剩多少天 -->
         <!-- 是否拖欠还款, 未还款,不予续贷 -->
       </div>
     </header>
 
+    <!-- ============================================== -->
     <div class="work-category">
       请选择办理业务类型:
-      <div>
+      <span>
         <label
           >贷款
           <input
@@ -87,8 +58,8 @@
             value="loan"
           />
         </label>
-      </div>
-      <div>
+      </span>
+      <span>
         <label>还款</label>
         <input
           type="radio"
@@ -96,15 +67,15 @@
           v-model="serCategory"
           value="repay"
         />
-      </div>
+      </span>
     </div>
-
+    <!-- ======================loan====================-->
     <!-- 一、对应的办理内容 -->
     <div class="work-content">
       <!-- 借款loan -->
       <div class="ser-loan" v-if="this.serCategory === 'loan'">
         <!-- 二（二）续贷工作区 -->
-        <div class="loan-work">
+        <div class="loanWork">
           <!-- 1. 类型选择 -->
           <h3>loan page</h3>
           <div class="loan">
@@ -115,10 +86,10 @@
                 value="short"
                 v-model="loanFormData.loan_category"
               />
-              <div class="title">短期(1-3)</div>
-
+              <div class="title">短期：</div>
+              <div class="time">时间：1-3years</div>
               <div class="rate">
-                利息：<span>{{ rateData.L_s }}</span>
+                利息：<span>{{ rateFormData.short }}</span>
               </div>
             </div>
 
@@ -129,10 +100,10 @@
                 value="middle"
                 v-model="loanFormData.loan_category"
               />
-              <div class="title">中期(3-5)</div>
-
+              <div class="title">中期：</div>
+              <div class="time">时间：3-5</div>
               <div class="rate">
-                利息：<span>{{ rateData.L_m }}</span>
+                利息：<span>{{ rateFormData.middle }}</span>
               </div>
             </div>
 
@@ -143,10 +114,10 @@
                 value="long"
                 v-model="loanFormData.loan_category"
               />
-              <div class="title">长期(>5)</div>
-
+              <div class="title">长期：</div>
+              <div class="time">时间：>5 yrears</div>
               <div class="rate">
-                利息：<span>{{ rateData.L_l }}</span>
+                利息：<span>{{ rateFormData.long }}</span>
               </div>
             </div>
           </div>
@@ -204,22 +175,65 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
+import { rate as rateData } from "@/store/temp"; // rate临时配置变量
 import { DecimalPos } from "@/utils";
 
 export default {
   data() {
     return {
-      serCategory: "loan", // 默认值, 用户选择的服务类型：loan ? repay
+      // 从localStorage中获取已登录用户的各种信息
+
+      //  <!-- 基础信息 -->
+      userName: localStorage.getItem("useri-name"),
+      userSex: localStorage.getItem("useri-sex"),
+      userAge: localStorage.getItem("useri-age"),
+      userJob: localStorage.getItem("useri-job"),
+      userMobile: localStorage.getItem("useri-mobile"),
+      userCompany: localStorage.getItem("useri-company"),
+
+      //  <!-- 业务信息 -->
+      userCage: localStorage.getItem("useri-cage"),
+      userAccount: localStorage.getItem("useri-account"),
+      userLoginId: localStorage.getItem("useri-loginId"),
+
+      // <!-- 用户贷款信息 -->
+      userLoan: localStorage.getItem("useri-loan"),
+      userInterest: localStorage.getItem("useri-interest"),
+      userIdent: localStorage.getItem("useri-ident"),
+      userCause: localStorage.getItem("useri-cause"),
+      // 用户控制信息
+      userLimited: localStorage.getItem("useri-limited"),
+      userFreezed: localStorage.getItem("useri-freezed"),
+
+      // 利率数据表
+      rateFormData: {
+        A: rateData.A, // 大额存款起薪
+        B: rateData.B, // 中额存款起薪
+        C: rateData.C, // 大额贷款 限制标准数值
+        // deposit
+        A_1: rateData.A_1, // 大额存1-3年
+        A_3: rateData.A_3, // 大额 存>=3年
+        B_1: rateData.B_1, //中额 1-3年
+        B_3: rateData.B_3, // 中额 >= 3年
+        // loan rate
+        short: rateData.L_s, // 短期 1年
+        middle: rateData.L_m, // 中期 1-3年
+        long: rateData.L_l, // 长期 >3年
+      },
+
+      // 用户选择的服务类型：loan ? repay
+      serCategory: "loan", // 默认值
 
       // 还款数据对象
       repayData: {
         number: 0,
       },
+
       // 续贷数据(用户输入的数据)
       loanFormData: {
+        // loan_category: "", // 用户选择的 贷款利率类型，初始为空，需要用户选择
         loan_category: "short", // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
         inputNumber: "",
         inputYear: "",
@@ -227,43 +241,30 @@ export default {
         interest: 0,
         total: 0,
       },
-      isSubmiting: false, // 还款确认按钮
+
+      // 还款确认按钮
+      isSubmiting: false,
     };
   },
+
+  // computed: mapState("useriloginUser", ["data", "isLoading"]),
   components: {
     Icon,
     TopTip,
   },
   computed: {
-    ...mapState({
-      userData: (state) => state.userData,
-      rateData: (state) => state.rateData,
-    }),
     // 本息共计，每次通过计算获得
     loanTotal() {
-      return DecimalPos(+this.userData.loan + +this.userData.interest, 2);
+      return DecimalPos(+this.userLoan + +this.userInterest, 2);
     },
     // 计算贷款利息
     loanInterest() {
-      const loanYear = Math.ceil(+this.loanFormData.inputYear); // 贷款时间，向上取整
-
-      /**
-       * 根据用户输入的类型，得出相应的利率
-       */
-      var rateVlaue = 0;
-      if (this.loanFormData.loan_category === "short") {
-        rateVlaue = this.rateData.L_s;
-      } else if (this.loanFormData.loan_category === "middle") {
-        rateVlaue = this.rateData.L_m;
-      } else if (this.loanFormData.loan_category === "long") {
-        rateVlaue = this.rateData.L_l;
-      } else {
-        rateVlaue = 1;
-      }
-
+      const loanYear = Math.ceil(this.loanFormData.inputYear); // 贷款时间，向上取整
       const result =
-        (+this.loanFormData.inputNumber * +loanYear * +rateVlaue) / 100;
-
+        (this.loanFormData.inputNumber *
+          loanYear *
+          this.rateFormData[this.loanFormData.loan_category]) /
+        100;
       return DecimalPos(result, 2); //保留2位小数
     },
   },
@@ -303,13 +304,15 @@ export default {
 
       // 3. loan >= 大额贷款限制限制
       if (
-        this.loanTotal + +this.loanFormData.inputNumber >= this.rateData.C &&
+        this.loanTotal + +this.loanFormData.inputNumber >=
+          this.rateFormData.C &&
         this.userLimited
       ) {
         alert(
-          "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
+          "您贷款超过了银行的贷款限制数额，亲联系管理员为您开通【大额贷款限制】"
         );
         this.loanFormData.inputNumber = "";
+        // this.loanFormData.interest = 0;
         return;
       }
 
@@ -321,74 +324,13 @@ export default {
       this.loanFormData.interest = this.loanInterest; // call computed
     },
 
-    // loan main func
-    async loanWorking() {
-      // 先要通过input框中的验证
-      if (this.rules() !== "passRules") {
-        alert("输入框未通过验证！");
-
-        this.loanFormData.inputNumber = "";
-      }
-      this.isSubmiting = true; // 正在提交，防止重复点击
-      this.loanFormData.interest = this.loanInterest;
-
-      console.log(
-        "本此贷款：",
-        this.loanFormData.inputNumber,
-        "仓库中 共计: ",
-        this.$store.state.userData.loan,
-        "利息为：",
-        this.loanInterest,
-        "仓库中 共计 : ",
-        this.$store.state.userData.interest
-      );
-
-      this.$store.commit("setUserILoan", this.loanFormData.inputNumber);
-      this.$store.state.userData.interest = this.loanInterest;
-
-      this.writeDB(); // write db
-    },
-
-    // 点击按钮进行还款
-    // repay main func
-    async repayWorking() {
-      // 先要通过input框中的验证
-      if (this.rules() !== "passRules") {
-        alert("输入框未通过验证！");
-        this.repayData.number = "";
-        // return;
-      }
-
-      this.isSubmiting = true; // 正在提交，防止重复点击
-      console.log("本此还款：", this.repayData.number);
-
-      // 规范的提交风格
-      this.$store.commit("setUserILoan", this.loanFormData.inputNumber);
-      this.$store.commit("setUserInterest", this.loanFormData.inputNumber);
-
-      this.writeDB(); // write db
-    },
-
-    async writeDB() {
-      // 1. from store get data
-      const userObj = {
-        loginId: this.userData.loginId,
-        loan: this.userData.loan,
-        interest: this.userData.interest,
-        flag: this.userData.flag,
-      };
-      /**
-       * 2. 写入db
-      */
-      try {
-        await this.$store.dispatch("updata", userObj);
-        this.tip(); // showMesage
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // assist func
+    /**
+     * 完成提示消息
+     * Assit_func show Message
+     */
     tip() {
+      // this.$emit("submit", this.formData, (successMsg) => {
+      /* */
       this.$showMessage({
         content: "完成！", //successMsg
         type: "success",
@@ -405,6 +347,63 @@ export default {
         },
       });
     },
+
+    // loan main func
+    async loanWorking() {
+      // 先要通过input框中的验证
+      if (this.rules() !== "passRules") {
+        alert("输入框未通过验证！");
+        // return; //会导致刷新页面(用户登录的信息全部消失)
+        // 清空即可
+
+        this.loanFormData.inputNumber = "";
+      }
+      this.isSubmiting = true; // 正在提交，防止重复点击
+      this.loanFormData.interest = this.loanInterest;
+      // console.log(
+      //   "本此贷款：",
+      //   this.loanFormData.inputNumber,
+      //   "利息为：",
+      //   this.loanInterest
+      // );
+      this.tip(); // showMesage
+    },
+
+    // 点击按钮进行还款
+    // repay main func
+    async repayWorking() {
+      // 先要通过input框中的验证
+      if (this.rules() !== "passRules") {
+        alert("输入框未通过验证！");
+        // return;
+        this.repayData.number = "";
+      }
+
+      this.isSubmiting = true; // 正在提交，防止重复点击
+      console.log("本此还款：", this.repayData.number);
+
+      /**
+       * > 异步执行还款操做
+       * -  拿到LocalStorage值,
+       * -  计算,
+       * -  并写入localStorage，
+       * -  以及提交到数据库中
+       */
+
+      /**
+      *  button click 事件：
+      *   - 点击一次后 再次点击无效
+      *         样式：灰色 或者
+      *         显示加载中的效果
+      * 
+          - 弹出提示页面：偿还成功 
+          - 清空输入框
+          - 基本信息栏中的数据重新获取和页面显示———— 刷新页面 无需登录的前提下
+
+          参照 components / MessategoryArea 
+      */
+      this.tip();
+    },
   },
 };
 </script>
@@ -412,47 +411,6 @@ export default {
 <style lang="less" scoped>
 @import "~@/styles/var.less";
 @import "~@/styles/mixin.less";
-// @import "./style.less";
+@import "./style.less";
 @import "~@/styles/user.less";
-
-.useri-container {
-  width: 100%;
-  min-width: 900px;
-  box-sizing: border-box;
-
-  header {
-    .user-data-base {
-    } // done
-    .user-data-account {
-    } // done
-    .user-loan {
-      .to-flex();
-    }
-  }
-  // 请选择办理业务类型
-  .work-category {
-    width: 300px;
-    margin-left: 38%;
-    text-align: center;
-    border: 1px solid;
-    .to-flex();
-  }
-
-  .work-content {
-    .ser-loan,
-    .ser-repay {
-      .to-flex();
-      .loan-work {
-        .loan {
-          width: 70%;
-          border: 2px solid gray;
-          border-radius: 20px;
-          & > div {
-            .to-flex();
-          }
-        }
-      }
-    }
-  }
-}
 </style>

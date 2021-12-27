@@ -270,7 +270,7 @@
 import { mapState } from "vuex";
 import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
-import { rate as rateData } from "@/store/rateTemp"; // rate临时配置变量
+import rateData from "../../store/rateTemp"; // rate临时配置变量
 import { DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
 // import writeDB from "@/mixins/writeDB";
@@ -280,25 +280,7 @@ export default {
   // mixins: [writeDB()],
   data() {
     return {
-      // 利率数据表
-      rateFormData: {
-        A: rateData.A, // 大额存款起薪
-        B: rateData.B, // 中额存款起薪
-        C: rateData.C, // 大额存款 限制标准数值
-        // deposit
-        A_1: rateData.A_1, // 大额存1-3年
-        A_3: rateData.A_3, // 大额 存>=3年
-        B_1: rateData.B_1, //中额 1-3年
-        B_3: rateData.B_3, // 中额 >= 3年
-        // loan rate
-        short: rateData.L_s, // 短期 1年
-        middle: rateData.L_m, // 中期 1-3年
-        long: rateData.L_l, // 长期 >3年
-      },
-      // -----------------------------------
-
-      // 用户选择的服务类型：deposit ? take
-      serCategory: "deposit", // 默认值
+      serCategory: "deposit", // 用户选择的服务类型：deposit ? take
 
       // 取款数据对象
       takeData: {
@@ -307,7 +289,6 @@ export default {
 
       // 存款数据(用户输入的数据)
       depositFormData: {
-        // deposit_category: "", // 用户选择的 存款利率类型，初始为空，需要用户选择
         deposit_category: "A_1", // A_1,A_3,B_1,B_3, other // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
         inputNumber: "",
         inputYear: "",
@@ -345,9 +326,9 @@ export default {
       const result =
         (this.depositFormData.inputNumber *
           deposit_time *
-          this.rateFormData[this.depositFormData.deposit_category]) /
+          this.rateData[this.depositFormData.deposit_category]) /
         100;
-      // console.log( this.rateFormData[this.depositFormData.deposit_category] )
+      // console.log( this.rateData[this.depositFormData.deposit_category] )
       return DecimalPos(result, 2); //保留2位小数
     },
   },
@@ -401,9 +382,9 @@ export default {
       if (
         (this.depositFormData.deposit_category === "A_1" ||
           this.depositFormData.deposit_category === "A_3") &&
-        this.depositFormData.inputNumber < this.rateFormData.A
+        this.depositFormData.inputNumber < this.rateData.A
       ) {
-        alert(`大额存款，起存金额：${this.rateFormData.A}`);
+        alert(`大额存款，起存金额：${this.rateData.A}`);
         this.clearInput_deposit();
         return;
       }
@@ -412,9 +393,9 @@ export default {
       if (
         (this.depositFormData.deposit_category === "B_1" ||
           this.depositFormData.deposit_category === "B_3") &&
-        this.depositFormData.inputNumber < this.rateFormData.B
+        this.depositFormData.inputNumber < this.rateData.B
       ) {
-        alert(`中额存款，起存金额：${this.rateFormData.B}`);
+        alert(`中额存款，起存金额：${this.rateData.B}`);
         this.clearInput_deposit();
         return;
       }
