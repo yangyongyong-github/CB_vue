@@ -1,5 +1,5 @@
 import request from "./request";
-import { delay } from "./utils";
+import delay from "@/utils/delay";
 
 /**
  * 拿到 rate
@@ -8,7 +8,9 @@ import { delay } from "./utils";
  */
 export async function getRate(id) {
     await delay(1000);
-    const resp = await request().post("/api/rate", { id })
+    console.log('service id : ', id);
+    const resp = await request().post("/api/rate", { id });
+    console.log('service resp : ', resp);
     return resp.data;
 }
 
@@ -24,3 +26,5 @@ export async function updateRate(id, rateObj) {
     const resp = await request().post("/api/admin/rate", { id, rateObj })
     return resp.data;
 }
+
+// 这里可以考虑将 rate bank 进行合并，因为操做业务逻辑相同

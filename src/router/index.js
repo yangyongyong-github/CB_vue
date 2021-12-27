@@ -4,7 +4,6 @@ import routes from "./routes";
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-    //config
     routes,
     mode: "history",
     base: process.env.BASE_URL,

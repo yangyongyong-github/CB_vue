@@ -11,62 +11,30 @@
 
       <!-- 基础信息 -->
       <div class="user-data-base tit">
-        <div class="user-name">
-          <span class="guide"> 姓名 : </span>{{ userData.name }}
-        </div>
-        <div class="user-sex">
-          <span class="guide"> 性别 : </span>
-          {{ userData.sex === "true" ? "男" : "女" }}
-        </div>
-        <div class="user-age">
-          <span class="guide"> 年龄 : </span>
-          {{ userData.age }} 岁
-        </div>
-        <div class="user-job">
-          <span class="guide"> 职业 : </span>
-          {{ userData.job }}
-        </div>
-        <div class="user-mobile">
-          <span class="guide"> 联系电话 : </span>
-          {{ userData.mobile }}
-        </div>
+        <div class="user-name">{{ userName }}</div>
+        <div class="user-sex">{{ userSex === "true" ? "男" : "女" }}</div>
+        <div class="user-age">年龄 {{ userAge }} 岁</div>
+        <div class="user-job">职业：{{ userJob }}</div>
+        <div class="user-mobile">电话：{{ userMobile }}</div>
       </div>
 
       <!-- 业务信息 -->
       <div class="user-data-account tit">
         <!-- 身份 loan ? deposit -->
         <div class="user-cage">
-          <span class="guide"> 用户类别 : </span>
-          {{ userData.flag }}
-          {{ userData.flag === "I" ? "贷款" : "存款" }}用户
+          用户类别: {{ userCage }} {{ userCage === "I" ? "贷款" : "存款" }}用户
         </div>
-        <div class="user-account">
-          <span class="guide"> 账号 : </span>
-          {{ userData.account }}
-        </div>
-        <div class="user-login-id">
-          <span class="guide"> LoginId : </span>
-          {{ userData.account }}
-        </div>
+        <div class="user-account">账号:{{ userAccount }}</div>
+        <div class="user-login-id">LoginId：{{ userLoginId }}</div>
       </div>
 
       <!-- 用户存款信息 -->
       <div class="user-deposit tit">
         <!-- 存款额度总计 -->
-        <div class="user-deposit">
-          <span class="guide"> 存款总额-本金 : </span>
-          {{ userData.deposit }}元
-        </div>
+        <div class="user-deposit">存款总额-本金:{{ userDeposit }}元</div>
         <!-- 存款利息总结 -->
-        <div class="user-interest">
-          <span class="guide"> 存款总额-利息 : </span>
-          {{ userData.interest }}元
-        </div>
-
-        <div>
-          <span class="guide"> 本息共计 : </span>
-          {{ depositTotal }}
-        </div>
+        <div class="user-interest">存款总额-利息:{{ userInterest }}元</div>
+        <div>本息共计{{ depositTotal }}</div>
       </div>
     </header>
     <!-- ==================workarea======================== -->
@@ -116,7 +84,7 @@
               <div>
                 <div class="head-tip">
                   <div class="tit">大额存款</div>
-                  <div class="start">起存金额(元) {{ rateData.A }}</div>
+                  <div class="start">起存金额(元) {{ rateFormData.A }}</div>
                 </div>
 
                 <hr />
@@ -132,7 +100,7 @@
                 <div class="title">短期：</div>
                 <div class="time">时间：1-3years</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_1 }}</span>
+                  利息：<span>{{ rateFormData.A_1 }}</span>
                 </div>
               </div>
 
@@ -146,7 +114,7 @@
                 <div class="title">中长期：</div>
                 <div class="time">时间：>=3 yrears</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_3 }}</span>
+                  利息：<span>{{ rateFormData.A_3 }}</span>
                 </div>
               </div>
 
@@ -154,7 +122,7 @@
               <div>
                 <div class="head-tip mt-15">
                   <div class="tit">中额存款</div>
-                  <div class="start">起存金额(元) {{ rateData.B }}</div>
+                  <div class="start">起存金额(元) {{ rateFormData.B }}</div>
                 </div>
 
                 <hr />
@@ -171,7 +139,7 @@
                 <div class="title">短期：</div>
                 <div class="time">时间：1-3years</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_1 }}</span>
+                  利息：<span>{{ rateFormData.B_1 }}</span>
                 </div>
               </div>
 
@@ -185,7 +153,7 @@
                 <div class="title">中长期：</div>
                 <div class="time">时间：>=3 yrears</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_3 }}</span>
+                  利息：<span>{{ rateFormData.B_3 }}</span>
                 </div>
               </div>
               <hr />
@@ -267,19 +235,38 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
-import { rate as rateData } from "@/store/rateTemp"; // rate临时配置变量
+import { rate as rateData } from "@/store/temp"; // rate临时配置变量
 import { DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
-// import writeDB from "@/mixins/writeDB";
 
 export default {
-  inject: ["reload"], // 刷新界面
-  // mixins: [writeDB()],
+  inject: ["reload"], // 用户刷新界面
   data() {
     return {
+      // 从localStorage中获取已登录用户的各种信息
+
+      //  <!-- 基础信息 -->
+      userName: localStorage.getItem("userii-name"),
+      userSex: localStorage.getItem("userii-sex"),
+      userAge: localStorage.getItem("userii-age"),
+      userJob: localStorage.getItem("userii-job"),
+      userMobile: localStorage.getItem("userii-mobile"),
+
+      //  <!-- 业务信息 -->
+      userCage: localStorage.getItem("userii-cage"),
+      userAccount: localStorage.getItem("userii-account"),
+      userLoginId: localStorage.getItem("userii-loginId"),
+
+      // <!-- 用户存款信息 -->
+      userDeposit: localStorage.getItem("userii-deposit"),
+      userInterest: localStorage.getItem("userii-interest"),
+
+      // 用户控制信息
+      userFreezed: localStorage.getItem("userii-freezed"),
+
+      // －－－－－－－－－－－－－－－－－
       // 利率数据表
       rateFormData: {
         A: rateData.A, // 大额存款起薪
@@ -320,19 +307,16 @@ export default {
       isSubmiting: false,
     };
   },
+
   components: {
     Icon,
     TopTip,
     Modal,
   },
   computed: {
-    ...mapState({
-      userData: (state) => state.userData,
-      rateData: (state) => state.rateData,
-    }),
     // 本息共计，每次通过计算获得
     depositTotal() {
-      return DecimalPos(+this.userData.deposit + +this.userData.interest, 2);
+      return DecimalPos(+this.userDeposit + +this.userInterest, 2);
     },
     // 计算存款利息
     depositInterest() {
@@ -479,86 +463,13 @@ export default {
       this.depositFormData.interest = this.depositInterest; // 将计算的利息赋值给用户的利息
     },
 
-    // deposit main func
-    async depositWorking() {
-      // 统一规则验证
-      if (this.rules_depo() !== "passRules") {
-        // alert("输入框未通过验证！");
-        this.clearInput_deposit();
-        return;
-      }
-
-      this.isSubmiting = true; // 正在提交，防止重复点击
-      this.depositFormData.interest = this.depositInterest;
-
-      // ---------------------------------------------------------
-
-      /**
-       * 1.1  deposit 直接写到store中
-       * 追加上之前的，而非直接替换
-       */
-      // new depisit value
-      this.userData.deposit =
-        +this.depositFormData.inputNumber + +this.userData.deposit;
-      // new interest value
-      this.userData.interest = DecimalPos(
-        +this.depositFormData.interest + +this.userData.interest,
-        2
-      );
-
-      console.log(`本此存款： ${this.depositFormData.inputNumber} ，本此存款利息：${this.depositFormData.interest},
-        帐户最新存款共计：${this.userData.deposit} ，帐户最新利息共计：${this.userData.interest} `);
-
-      this.writeDB();
-    },
-
-    // ===============================================
-
-    // take main func
-    async takeWorking() {
-      // 先要通过input框中的验证
-      if (this.rules_take() !== "passRules") {
-        // alert("输入框未通过验证！");
-        return;
-      }
-
-      this.isSubmiting = true; // 正在提交，防止重复点击
-      console.log("本此取款：", this.takeData.number);
-
-      /**
-       * 1.2 take
-       * deposit < take < (deposit + interest)
-       *
-       * userData.deposit 减少
-       * userData.interst 清零
-       */
-      if (+this.takeData.number >= +this.userData.deposit) {
-        // console.log("deposit < take < deposit + interest");
-
-        this.userData.interest = 0;
-        this.userData.deposit = Math.abs(
-          DecimalPos(
-            +this.takeData.number -
-              this.userData.deposit -
-              this.userData.interest,
-            2
-          )
-        );
-      } else {
-        /**
-         * take < deposit
-         * userData.deposit 减少
-         * userData.interst 不变
-         *
-         */
-        this.userData.deposit = Math.abs(
-          DecimalPos(+this.userData.deposit - this.takeData.number, 2)
-        );
-      }
-      this.writeDB();
-    },
-
+    /**
+     * 完成提示消息
+     * Assit_func : show Message
+     */
     tip() {
+      // this.$emit("submit", this.formData, (successMsg) => {
+      /* */
       this.$showMessage({
         content: "完成！", //successMsg
         type: "success",
@@ -574,20 +485,100 @@ export default {
       });
     },
 
-    async writeDB() {
-      // 1. from store get data
+    // deposit main func
+    async depositWorking() {
+      // 统一规则验证
+      if (this.rules_depo() !== "passRules") {
+        // alert("输入框未通过验证！");
+        this.clearInput_deposit();
+        return;
+      }
+
+      this.isSubmiting = true; // 正在提交，防止重复点击
+      this.depositFormData.interest = this.depositInterest;
+
+      // ---------------------------------------------------------
+      // 1. 【先写入localStorage】
+
+      // 1.1  deposit
+      // 追加上之前的，而非直接替换
+      const newDepositValue =
+        +this.depositFormData.inputNumber + +this.userDeposit;
+      const newInterestValue = DecimalPos(
+        +this.depositFormData.interest + +this.userInterest,
+        2
+      );
+
+      localStorage.setItem("userii-deposit", newDepositValue);
+      localStorage.setItem("userii-interest", newInterestValue);
+
+      console.log(
+        `本此存款： ${this.depositFormData.inputNumber} ，本此存款利息：${this.depositFormData.interest},
+        帐户最新存款共计：${newDepositValue} ，帐户最新利息共计：${newInterestValue}
+       `
+      );
+
       const userObj = {
-        loginId: this.userData.loginId,
-        deposit: this.userData.deposit,
-        interest: this.userData.interest,
-        flag: this.userData.flag,
+        loginId: localStorage.getItem("userii-loginId"),
+        deposit: newDepositValue,
+        interest: newInterestValue,
       };
-      /**
-       * 2. 写入db
-       */
+
+      // 【2. 再去写入db】
       try {
-        await this.$store.dispatch("updata", userObj);
+        await this.$store.dispatch("userii/updata", userObj);
         this.tip(); // showMesage
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // ===============================================
+
+    // take main func
+    async takeWorking() {
+      // 先要通过input框中的验证
+      if (this.rules_take() !== "passRules") {
+        // alert("输入框未通过验证！");
+        return;
+      }
+
+      this.isSubmiting = true; // 正在提交，防止重复点击
+      console.log("本此取款：", this.takeData.number);
+
+      // 1.2 take
+      // deposit < take < deposit + interest
+      if (+this.takeData.number >= +this.userDeposit) {
+        // console.log("deposit < take < deposit + interest");
+
+        const newTakeValue = Math.abs(
+          DecimalPos(
+            +this.takeData.number - this.userDeposit - this.userInterest,
+            2
+          )
+        );
+
+        localStorage.setItem("userii-deposit", 0);
+        localStorage.setItem("userii-interest", newTakeValue);
+      } else {
+        // take < deposit
+        // console.log(" take < deposit");
+        const newTakeValue = Math.abs(
+          DecimalPos(+this.userDeposit - this.takeData.number, 2)
+        );
+        localStorage.setItem("userii-deposit", newTakeValue);
+      }
+
+      const userObj = {
+        loginId: localStorage.getItem("userii-loginId"),
+        deposit: localStorage.getItem("userii-deposit"),
+        interest: localStorage.getItem("userii-interest"),
+      };
+
+      // 再去写入db
+      try {
+        await this.$store.dispatch("userii/updata", userObj);
+        this.tip();
       } catch (error) {
         console.log(error);
       }
@@ -599,6 +590,7 @@ export default {
 <style lang="less" scoped>
 @import "~@/styles/var.less";
 @import "~@/styles/mixin.less";
+@import "./style.less";
 @import "~@/styles/user.less";
 .useri-container {
   width: 100%;

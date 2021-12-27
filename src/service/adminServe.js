@@ -1,5 +1,11 @@
 import request from "./request";
-import { delay } from "./utils";
+import delay from "@/utils/delay";
+
+/**
+ * 这里集中了所有权限的 admin的 接口函数
+ * 具体页面中的时候，再根据admin的等级来给对应的接口方法
+ */
+
 
 /**
     设置本金curpos:增减操做

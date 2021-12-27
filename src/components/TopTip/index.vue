@@ -1,7 +1,7 @@
 <template>
   <div class="top-tip-container">
-    <Icon :type="IconType" />
-    <div class="text">{{ tipText }}</div>
+    <div class="text"><Icon :type="IconType" />
+    {{ tipText }}</div>
   </div>
 </template>
 
@@ -30,21 +30,21 @@ export default {
 
 <style lang="less" scoped>
 .top-tip-container {
-  
-  width: 40%;
-  height: 50px;
+  width: 20%;
+  min-width: 100px;
+  height: 20px;
   // 左右居中
   position: absolute;
   margin: auto;
   left: 0;
   right: 0;
   top: 20px;
-  border: 2px solid rgb(190, 179, 179);
-  background-color: rgb(238, 222, 202);
+  background-color: rgb(214, 190, 160);
   border-radius: 20px;
+  display: flex;
+  padding-left: 30px;
+  box-sizing: border-box;
   .text {
-    font-family: "Lucida Sans";
-    // color: @;
     text-align: center;
   }
 }
