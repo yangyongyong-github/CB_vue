@@ -17,13 +17,21 @@ export async function login(loginId, loginPwd, flag) {
   return resp.data;
 }
 
+// test rate
+export async function getRateData(id = 1) {
+  await delay(1000);
+  const resp = await request().post(`/api/rate`, { id });
+  console.log('here ', resp.data);
+  return resp.data;
+}
+
 export function loginOut() {
   localStorage.removeItem("token");
   localStorage.clear();
 }
 
 export async function whoAmI(flag) {
-  await delay(2000);
+  // await delay(2000);
   const resp = await request().get(`/api/${flag}/login`);
   return resp.data;
 }
@@ -32,6 +40,7 @@ export async function whoAmI(flag) {
 // query: account
 export async function query(account, flag) {
   await delay(2000);
+  console.log('will go ', account, flag)
   const resp = await request().post(`/api/${flag}/query`, { account });
   return resp.data;
 }

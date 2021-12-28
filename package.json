@@ -6,6 +6,10 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangyongyong-github/CB_vue.git"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",

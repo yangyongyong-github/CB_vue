@@ -26,7 +26,8 @@ export default {
     },
 
     // 注册前验证帐户是否已存在
-    async query({ account, flag }) {
+    async queryUser({ commit }, { account, flag }) { // 参数1 即使不用也要写上去，因为是源码中的参数
+        console.log('scan ', { account, flag });
         const resp = await userServ.query(account, flag);
         return resp.data;
     },
@@ -61,7 +62,7 @@ export default {
      */
     async getAllUser({ commit }) {
         const resp = await userServ.getAllUsersData();
-        console.log('getAllUser resp :',resp.data)
+        console.log('getAllUser resp :', resp.data)
         commit("setUsersData", resp.data)
         return resp.data
     }

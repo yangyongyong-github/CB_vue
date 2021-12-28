@@ -4,11 +4,11 @@
       <h3>用户注册页面</h3>
 
       <b>请选择用户身份 </b>
-      <select v-model="userFlag">
+      <select v-model="userInfo.flag">
         <option value="useri">I</option>
         <option value="userii">II</option>
       </select>
-      <b> {{ userFlag | FilterFlag }} </b>
+      <b> {{ userInfo.flag | FilterFlag }} </b>
     </div>
 
     <div class="input-area">
@@ -79,7 +79,7 @@
       <!-- 具体涉及到业务不同的 -->
       <div class="different">
         <!-- --------------- user_i----------------- -->
-        <div class="useri" v-if="userFlag === 'useri'">
+        <div class="useri" v-if="userInfo.flag === 'useri'">
           <!-- limited = none-input -->
           <!-- isFreezed  = none-input  -->
           <!-- indet 1 person /2 -->
@@ -111,13 +111,8 @@
 export default {
   data() {
     return {
-      userFlag: "userii",
       userInfo: {
-        /**
-         * 基本思路： 信息全部输入，等到向后台发送数据的时候，再选择发送相应类型的用户信息
-         */
-        // 业务部分
-        flag: this.userFlag,
+        flag: "userii",
         account: "", // 需要验证 数据库中验证通过后一起赋值
         loginId: "", // 需要验证
 
@@ -130,7 +125,7 @@ export default {
         company: "", // I
         mobile: "", // 需要验证
       },
-      // 验证信息存储中介
+      // 验证信息存储中介 待验证
       userInfoTemp: {
         account: "", // 数据库中去验证
         ps1: "",
@@ -139,9 +134,9 @@ export default {
       },
       // 参照格式
       formatData: {
-        account: "姓名拼音+数字，示例:yangxiang01",
+        account: "姓名拼音+数字|示例:yangxiang01",
         // loginId: "", // 账号输入即可
-        loginPwd: "账号+'.p', 示例:yangxiang01.p",
+        loginPwd: "账号.p| 示例:yangxiang01.p",
       },
     };
   },
@@ -182,10 +177,10 @@ export default {
     },
     // 去数据库中验证 账号是否可用
     async accountIsUseable() {
-      console.log("to db valiable .");
-      const user = await this.$store.dispatch("query", {
-        account: this.userInfoTemp.account,
-        flag: this.userFlag,
+      console.log("is repeat ? to db valiable .");
+      const user = await this.$store.dispatch("queryUser", {
+         account: this.userInfoTemp.account,
+        flag: this.userInfo.flag,
       });
 
       if (user) {
@@ -229,7 +224,7 @@ export default {
     async submit() {
       console.log(this.userInfo, this.userInfoTemp);
 
-      if (this.userFlag === "useri") {
+      if (this.userInfo.flag === "useri") {
         // ------------ useri to register ---------------
         console.log("register : I");
 
@@ -276,7 +271,7 @@ export default {
         }
 
         // -------------- userii to register --------------------------
-      } else if (this.userFlag === "userii") {
+      } else if (this.userInfo.flag === "userii") {
         console.log("register : II");
 
         const userIIObj = {

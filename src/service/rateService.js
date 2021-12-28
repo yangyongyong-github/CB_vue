@@ -10,6 +10,11 @@ export async function getRate(id) {
     await delay(1000);
     console.log('service id : ', id);
     const resp = await request().post("/api/rate", { id });
+    // const resp = await request().post("/api/admin", { 
+    //     loginId:'admin',
+    //     loginPwd:'1234',
+    //     flag:'admin'
+    // });
     console.log('service resp : ', resp);
     return resp.data;
 }

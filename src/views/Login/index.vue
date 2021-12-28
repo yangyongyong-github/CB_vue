@@ -57,7 +57,7 @@ export default {
       };
 
       const user = await this.$store.dispatch("login", userObj);
-      
+
       if (user) {
         // log in
         this.$router.push(`/${userObj.flag}`);
