@@ -115,7 +115,6 @@ export default {
         flag: "userii",
         account: "", // 需要验证 数据库中验证通过后一起赋值
         loginId: "", // 需要验证
-
         loginPwd: "", // 需要验证
         // 个人信息
         name: "",
@@ -178,15 +177,16 @@ export default {
     // 去数据库中验证 账号是否可用
     async accountIsUseable() {
       console.log("is repeat ? to db valiable .");
-      const user = await this.$store.dispatch("queryUser", {
-         account: this.userInfoTemp.account,
+      const userr = await this.$store.dispatch("queryUser", {
+        account: this.userInfoTemp.account,
         flag: this.userInfo.flag,
       });
 
-      if (user) {
+      if (userr) {
         alert("该账号已被注册，请重新填写！");
         this.userInfoTemp.account = "";
         this.userInfoTemp.ps1 = "";
+        this.userInfoTemp.ps2 = "";
         return;
       }
       // 验证通过，赋值
@@ -225,7 +225,7 @@ export default {
       console.log(this.userInfo, this.userInfoTemp);
 
       if (this.userInfo.flag === "useri") {
-        // ------------ useri to register ---------------
+        // ================ useri to register=====================
         console.log("register : I");
 
         const userIObj = {
@@ -239,22 +239,21 @@ export default {
           mobile: this.userInfo.mobile,
           company: this.userInfo.company, // I
           // 固定上传部分
-          cause: null,
           isFreezed: false,
-          loan: 0, //I
+          loan: 0,
           interest: 0,
-          limited: true, //I
+          limited: true,
           cause: null,
+          ident: 1,
           flag: "useri",
         };
 
+        console.log("添加前确认", userIObj);
         // write to db
 
         try {
           const user = await this.$store.dispatch("adduser", userIObj);
           alert("adduser I done ");
-
-          this.clearInput();
 
           // 注册完成后，直接 跳转到 个人中心页面
           const goto = window.confirm("to enter center page I ?");
@@ -270,7 +269,7 @@ export default {
           console.log(error);
         }
 
-        // -------------- userii to register --------------------------
+        // =========== userii to register ==================
       } else if (this.userInfo.flag === "userii") {
         console.log("register : II");
 
@@ -284,7 +283,6 @@ export default {
           job: this.userInfo.job,
           mobile: this.userInfo.mobile,
           // 固定上传部分
-          cause: null,
           isFreezed: false,
           interest: 0,
           deposit: 0, // II

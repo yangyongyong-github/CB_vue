@@ -6,7 +6,6 @@ import delay from "@/utils/delay";
  * 具体页面中的时候，再根据admin的等级来给对应的接口方法
  */
 
-
 /**
     设置本金curpos:增减操做
  */
@@ -15,6 +14,7 @@ export async function setCurpos(num) {
     const resp = await request().post("/api/admin/setcurpos", { num })
     return resp.data;
 }
+
 
 /**
  * 设置冻结/解冻用户
@@ -30,7 +30,7 @@ export async function setFreeze() {
  * 设置/取消大额贷款限制
  * 调用函数，自动执行取反即可
  */
- export async function setLimited() {
+export async function setLimited() {
     await delay(2000);
     const resp = await request().post("/api/admin/setlimit")
     return resp.data;

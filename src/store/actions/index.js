@@ -1,6 +1,6 @@
 import user from './user'
-import rate from './rate'
+import other from './other'
 
-const content = Object.assign({}, user, rate)
+const content = Object.assign({}, user, other)
 
 export default content;

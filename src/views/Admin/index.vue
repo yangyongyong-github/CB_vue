@@ -3,6 +3,14 @@
     <TopTip IconType="qq" tipText="银行有我来守护~" />
     <header>
       <!-- base info -->
+      <!-- 不同的等级显示不同的提示语 -->
+      <div class="rank-show">
+        <div class="high" v-if="userData.rank === 'h'">欢迎管理银行资产！</div>
+        <div class="common" v-else-if="userData.rank === 'c'">
+          欢迎管理银行用户信息！
+        </div>
+        <div v-else>你是什么身份？</div>
+      </div>
       <div class="name">
         <span class="guide">Name: </span> {{ userData.name }}
       </div>
@@ -12,14 +20,21 @@
       <div class="rank">
         <span class="guide">Rank : </span> {{ userData.rank | FilterRank }}
       </div>
+      <!-- 该按钮只针对高级管理员显示 -->
+      <div class="common-op-btn" v-show="userData.rank === 'h'">
+        普通操做区域:
+        <button @click="handlecommonOP">
+          {{ highFormData.commonOP | FilterComOP }}
+        </button>
+      </div>
     </header>
     <div class="main-operation">
       <!-- 主要的操做区域 -->
       <div class="high" v-if="userData.rank === 'h'">
-        <b>high</b>
-        <!-- 银行本金 : 操做-增减 -->
+        <!--【part-1】 银行本金 : 操做-增减 -->
         <div class="corpus">
           <h3>银行资金</h3>
+
           <div>
             <!-- 目前银行在涨资金 = 本金  -->
             <!-- 银行目前总共流动资金 -->
@@ -62,7 +77,80 @@
             </div>
           </div>
         </div>
-        <!-- 银行汇率控制 添加和增减 -->
+        <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
+        <!-- 【part-2 用户情况 】 -->
+        <div class="users-status">
+          <div class="user-status">
+            <div>
+              <div>
+                <span class="indicate">目前在账资金(流动资金-贷款本金):</span>
+                {{ All_Fund }}
+              </div>
+              <div>
+                <span class="indicate"> 银行流动资金:</span>
+                {{ All_FundWater }}
+              </div>
+            </div>
+
+            <div>
+              <b>用户情况</b>
+              <div class="user-num">
+                <div>
+                  <span class="indicate">用户总数:</span>
+                  {{ All_Users }}
+                </div>
+              </div>
+            </div>
+            <!-- useri 总数 -->
+            <div class="useri">
+              <div>
+                <span class="indicate">Loan 用户总数:</span>
+                {{ usersData[0].length }}
+              </div>
+              <div>
+                <span class="indicate">用户总贷款:</span> {{ All_Loan_I }}
+                <span class="indicate">用户总贷款利息:</span>
+                {{ All_Interest_I }}
+              </div>
+            </div>
+            <div class="userii">
+              <div>
+                <span class="indicate">Deposit 用户总数:</span>
+                {{ usersData[1].length }}
+              </div>
+              <div>
+                <span class="indicate">用户总存款:</span> {{ All_Deposit_II }}
+                <span class="indicate">用户总存款利息:</span>
+                {{ All_Interest_II }}
+              </div>
+              <div>
+                <span class="indicate">存款用户-资金占比(在用户资金中):</span>
+                {{ Persent_Deposit_fund }}
+                <span class="indicate">存款用户-人数占比:</span>
+                {{ Persent_Deposit_user }}
+              </div>
+              <div>
+                <span class="indicate">贷款用户-资金占比(在用户资金中):</span>
+                {{ Persent_Loan_fund }}
+                <span class="indicate">贷款用户-人数占比:</span>
+                {{ Persent_Loan_user }}
+              </div>
+              <div>
+                <span class="indicate"> 银行本金-资金占比:</span>
+                {{ Persent_Bank_corpus }}
+                <span class="indicate"> 用户资金-资金占比:</span>
+                {{ Persent_users_corpus }}
+              </div>
+            </div>
+          </div>
+          <div class="charts">
+            <div class="charts1">
+              <!-- <Charts /> -->
+            </div>
+            <div class="charts2" ref="chart2"></div>
+          </div>
+        </div>
+        <!-- 【part-3】 银行汇率控制 添加和增减 -->
         <div class="rate-op">
           <h3>银行汇率</h3>
           <!-- 查看 -->
@@ -94,24 +182,176 @@
               <td>{{ rateData.L_s }}</td>
             </tbody>
           </table>
+          <button @click="toOpRate">修改</button>
           <!-- 修改 -->
-          <!-- 添加 -->
+          <div class="alter-rate" v-show="highFormData.alterRate_Flag">
+            <b class="guide">请选择需要修改的利率类型:</b>
+            <select v-model="highFormData.rateCategory">
+              <option
+                v-for="(item, index) in rateDataLists"
+                :key="index"
+                :value="item.value"
+              >
+                {{ item.title }}
+              </option>
+            </select>
+            <label>
+              <b class="guide">请输入对应的利率/数额:</b>
+              <input type="number" v-model="highFormData.rateInput"
+            /></label>
+            <button @click="toAlertRate">提交</button>
+          </div>
         </div>
       </div>
-      <div class="common">
-        <b>base</b>
-        <button @click="getAllUsers">Users</button>
-        <!-- 用户列表 -->
 
-        <!-- 贷款总人数 贷款总额 -->
-        <!-- 存款总人数 存款总额 -->
+      <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
+      <div
+        class="common"
+        v-show="userData.rank === 'c' || highFormData.commonOP === true"
+      >
+        <!-- 查找和操做用户 -->
+        <div class="work-user">
+          <div class="query-user">
+            <div><b>查找指定用户</b></div>
+            <div>
+              <span class="guide">请输入待查用户账号:</span>
+              <input type="text" v-model="com_OP_FormData.userAccount" />
+            </div>
+            <div>
+              <span class="guide">请选择用户的类型:</span>
+              <select v-model="com_OP_FormData.userCategory">
+                <option value="useri">I</option>
+                <option value="userii">II</option>
+              </select>
+            </div>
+            <div><button @click="toQueryUser">查询</button></div>
+          </div>
+          <div class="some-set-op"></div>
+          <div class="query-result">
+            <p class="guide tip-t">查询结果:</p>
 
-        <!-- 查找指定用户 by account -->
-        <!-- input: account + flag -->
-        <!-- 展示该用户的所有信息 -->
+            <div class="useri" v-if="userQueryData.flag === 'useri'">
+              <!-- useri -->
+              <b>用户类型:I</b>
+              <div class="line">
+                <div>
+                  <span class="guide">Name:</span>{{ userQueryData.name }}
+                </div>
+                <div>
+                  <span class="guide">Gender:</span
+                  >{{ userQueryData.sex | FilterSex }}
+                </div>
+                <div>
+                  <span class="guide">Birthday:</span
+                  >{{ userQueryData.birthday | FilterBirthday }}
+                </div>
+                <div>
+                  <span class="guide">Age:</span>{{ userQueryData.age }}
+                </div>
+                <div>
+                  <span class="guide">Account:</span>{{ userQueryData.account }}
+                </div>
+                <div>
+                  <span class="guide">LoginID:</span>{{ userQueryData.loginId }}
+                </div>
+                <div>
+                  <span class="guide">Mobile:</span>{{ userQueryData.mobile }}
+                </div>
+                <div>
+                  <span class="guide">Job:</span>{{ userQueryData.job }}
+                </div>
+                <div>
+                  <span class="guide">Limited:</span>{{ userQueryData.limited }}
+                </div>
+                <div>
+                  <span class="guide">isFreezed:</span
+                  >{{ userQueryData.isFreezed }}
+                </div>
+              </div>
+              <div class="line">
+                <div>
+                  <span class="guide">Ident:</span>{{ userQueryData.ident }}
+                </div>
+                <div>
+                  <span class="guide">loan:</span>{{ userQueryData.loan }}
+                </div>
+                <div>
+                  <span class="guide">Interest:</span
+                  >{{ userQueryData.interest }}
+                </div>
+                <div>
+                  <span class="guide">Flag:</span>{{ userQueryData.flag }}
+                </div>
+                <div>
+                  <span class="guide">Company:</span>{{ userQueryData.company }}
+                </div>
+                <div>
+                  <span class="guide">Cause:</span>{{ userQueryData.cause }}
+                </div>
+              </div>
+              <div class="line admin-op">
+                <span class="guide"
+                  >是否被冻结: {{ userQueryData.isFreezed }}
+                  <button @click="toFreezedUser">
+                    {{ userQueryData.isFreezed | FilterFreezed }}
+                  </button>
+                </span>
 
+                <span class="guide"
+                  >大额贷款限制: {{ userQueryData.limited }}
+                  <button @click="toLimtedUser">
+                    {{ userQueryData.limited | FilterLimited }}
+                  </button>
+                </span>
+                <span class="guide">
+                  <button @click="toDeleteUser">删除用户</button>
+                </span>
+                <span class="guide">
+                  <button @click="toAlertUserInfo">修改用户信息</button>
+                </span>
+              </div>
+              <!-- 管理员点击是否需要修改用户信息区域 style-common.css -->
+              <div
+                class="alter-user-info"
+                v-show="com_OP_FormData.userInfoAlert"
+              >
+                <b>修改用户信息</b>
+                <div>
+                  <!-- alter-pwd -->
+                  <b class="guide">修改密码</b>
+                  <label class="guide"> 请输入新密码: </label>
+                  <input type="text" v-model="alter_userInfo.newPsw" />
+                </div>
+                <div>
+                  <!-- alter-mobile --><b class="guide">修改联系电话</b>
+                  <label class="guide"> 请输入新联系电话: </label>
+                  <input type="number" v-model="alter_userInfo.newMobile" />
+                </div>
+                <div>
+                  <!-- alter-job -->
+                  <b class="guide">修改工作</b>
+                  <label class="guide"> 请输入新工作: </label>
+                  <input type="text" v-model="alter_userInfo.newJob" />
+                </div>
+                <button @click="toSubmit_alterUserInfo">提交</button>
+              </div>
+            </div>
+            <div class="userii" v-else-if="userQueryData.flag === 'userii'">
+              <!-- userii -->
+              <b>用户类型:II</b>
+            </div>
+            <div v-else></div>
+          </div>
+        </div>
+
+        <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
         <!-- 展示用户信息,动态渲染 -->
         <div class="users-show">
+          <p class="guide tip-t">
+            ------------------ 部分用户信息(前5条)------------------------
+          </p>
+          <!-- I -->
+          <h4>User_I Loan user</h4>
           <table class="user-i">
             <thead>
               <tr class="guide">
@@ -134,10 +374,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in UsersData[0]" :key="index">
+              <tr
+                v-for="(item, index) in usersData[0]"
+                :key="index"
+                v-show="item.deletedAt === null"
+              >
                 <td>{{ item.name }}</td>
                 <td>{{ item.sex | FilterSex }}</td>
-                <td>({{ item.birthday | FilterBirthday }})</td>
+                <td>{{ item.birthday | FilterBirthday }}</td>
                 <td>{{ item.age }}</td>
                 <td>{{ item.account }}</td>
                 <td>{{ item.loginId }}</td>
@@ -154,6 +398,42 @@
               </tr>
             </tbody>
           </table>
+          <!-- II -->
+          <h4>User_II Deposit user</h4>
+          <table class="user-ii">
+            <thead>
+              <tr class="guide">
+                <td>Name</td>
+                <td>Sex</td>
+                <td>Birthday</td>
+                <td>Age</td>
+                <td>Account</td>
+                <td>LoginID</td>
+                <td>mobile</td>
+                <td>job</td>
+                <td>isFreezed</td>
+                <td>deposit</td>
+                <td>interest</td>
+                <td>flag</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in usersData[1]" :key="index">
+                <td>{{ item.name }}</td>
+                <td>{{ item.sex | FilterSex }}</td>
+                <td>{{ item.birthday | FilterBirthday }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.account }}</td>
+                <td>{{ item.loginId }}</td>
+                <td>{{ item.mobile }}</td>
+                <td>{{ item.job }}</td>
+                <td>{{ item.isFreezed }}</td>
+                <td>{{ item.deposit }}</td>
+                <td>{{ item.interest }}</td>
+                <td>{{ item.flag }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -165,42 +445,188 @@ import { mapState } from "vuex";
 import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
 import * as MATH from "@/utils";
-
+import Charts from "@/components/Echarts";
+const echarts = require("echarts");
 export default {
   inject: ["reload"], // 友好的刷新界面
   data() {
     return {
       /**
-       * 高级管理员的操做表单
+       * admin alter rate
        */
+      rateDataLists: [
+        { title: "大额存款起薪	", value: "A" },
+        { title: "中额存款起薪	", value: "B" },
+        { title: "大额贷款限制	", value: "C" },
+        { title: "大额存款(>3年)", value: "A_3" },
+        { title: "大额存款(1-3年)", value: "A_1" },
+        { title: "中额存款(>3年)", value: "B_3" },
+        { title: "中额存款(1-3年)", value: "B_1" },
+        { title: "长期贷款(>5年)", value: "L_l" },
+        { title: "中期贷款(3-5年)", value: "L_m" },
+        { title: "短期贷款(1-3年)", value: "L_s" },
+      ],
+      //高级管理员的操做表单
       highFormData: {
+        /**
+         * alter corpus
+         */
         corpus: 0,
-        corpusFlag: false,
+        corpusFlag: false, // show/hidden 修改corpus的按钮
         corpusCategory: "",
+        /**
+         * alter rate
+         */
+        alterRate_Flag: false, // show/hidden 修改利率的按钮
+        rateInput: 0,
+        rateCategory: "",
+        /**
+         * other
+         */
+        commonOP: true,
+      },
+      // 普通管理员的操做表单
+      com_OP_FormData: {
+        userAccount: "",
+        userCategory: "",
+        userInfoAlert: false,
+      },
+      // 管理员修改用户信息表单
+      alter_userInfo: {
+        newPsw: "",
+        newMobile: "",
+        newJob: "",
       },
     };
+  },
+  components: {
+    Icon,
+    TopTip,
+    Charts,
+  },
+  mounted() {
+    // this.initCharts();
   },
   computed: {
     ...mapState({
       userData: (state) => state.userData,
-      UsersData: (state) => state.UsersData,
+      usersData: (state) => state.usersData,
       rateData: (state) => state.rateData,
       bankData: (state) => state.bankData,
+      userQueryData: (state) => state.userQueryData,
     }),
+    // useri 的 所有的贷款累计
+    All_Loan_I() {
+      return MATH.Sum(this.usersData[0], "loan");
+    },
+    // useri 的 所有的利息总计
+    All_Interest_I() {
+      return MATH.Sum(this.usersData[0], "interest");
+    },
+    // userii 的 所有的deposit累计
+    All_Deposit_II() {
+      return MATH.Sum(this.usersData[1], "deposit");
+    },
+    // useri 的 所有的利息总计
+    All_Interest_II() {
+      return MATH.Sum(this.usersData[1], "interest");
+    },
     /**
+     * 用户总数
      * useri+userii
      */
-    AllUsers() {},
+    All_Users() {
+      return this.usersData[0].length + this.usersData[1].length;
+    },
     /**
      * 流动资金
      * useri: loan+interest + userii: deposit+interest
      */
-    AllFundWater() {},
+    All_FundWater() {
+      // console.log(this.bankData.corpus*1)
+      const useri = this.All_Loan_I + this.All_Interest_I;
+      const userii = this.All_Deposit_II + this.All_Interest_II;
+
+      return MATH.DecimalPos(useri + userii + this.bankData.corpus * 1, 2);
+    },
     /**
      *
      * 目前在账资金 : AllFundWater - loan
      */
-    AllFund() {},
+    All_Fund() {
+      return MATH.DecimalPos(this.All_FundWater - this.All_Loan_I, 2);
+    },
+    // 银行本金资金占比
+    Persent_Bank_corpus() {
+      const num =
+        MATH.DecimalPos((this.bankData.corpus * 1) / this.All_FundWater, 2) *
+        100;
+      return `${num} % `;
+    },
+    // 银行用户资金占比
+    Persent_users_corpus() {
+      const num =
+        MATH.DecimalPos(
+          (this.All_Loan_I +
+            this.All_Interest_I +
+            this.All_Deposit_II +
+            this.All_Interest_II) /
+            this.All_FundWater,
+          2
+        ) * 100; // 还是有小数位？进一步约束
+      const newNum = MATH.DecimalPos(num, 2);
+      return `${newNum} % `;
+    },
+
+    // 存款用户资金占比(在用户资金中)
+    Persent_Deposit_fund() {
+      const num =
+        MATH.DecimalPos(
+          (this.All_Loan_I + this.All_Interest_I) / this.All_FundWater,
+          2
+        ) * 100;
+      return `${num} % `;
+    },
+    // 贷款用户占比
+    Persent_Loan_fund() {
+      const num =
+        MATH.DecimalPos(
+          1 - (this.All_Loan_I + this.All_Interest_I) / this.All_FundWater,
+          2
+        ) * 100;
+      return `${num} % `;
+    },
+    // 存款用户人数占比
+    Persent_Deposit_user() {
+      const num = MATH.DecimalPos(
+        this.usersData[1].length /
+          (this.usersData[0].length + this.usersData[1].length),
+        2
+      );
+      return MATH.Persent(num);
+    },
+    // 贷款用户人数占比(在用户资金中)
+    Persent_Loan_user() {
+      const num = MATH.DecimalPos(
+        1 -
+          this.usersData[1].length /
+            (this.usersData[0].length + this.usersData[1].length),
+        2
+      );
+      return MATH.Persent(num);
+    },
+
+    /**
+     *收益=贷款利息-存款利息
+      1. 贷款利息一定大于存款利息吗？ 数据库中的借款变动是很大的影响因素
+     */
+    // // 数额
+    // Bank_fund_income() {
+    //   const num = MATH.DecimalPos(All_Interest_I * 1 - All_Interest_II * 1, 2);
+    //   return MATH.Persent(num);
+    // },
+    // // 占比
+    // Persent_Bank_fund_income() {},
   },
   filters: {
     /**
@@ -239,18 +665,200 @@ export default {
         return;
       }
     },
+    // 冻结/解冻 用户
+    FilterFreezed(value) {
+      if (value === true) {
+        return "解冻";
+      } else {
+        return "冻结";
+      }
+    },
+    // 设置/取消 大额带宽限制
+    FilterLimited(value) {
+      if (value === true) {
+        return "取消";
+      } else {
+        return "设置";
+      }
+    },
+    FilterComOP(value) {
+      if (value === true) {
+        return "隐藏";
+      } else {
+        return "显示";
+      }
+    },
   },
-  components: {
-    Icon,
-    TopTip,
+  watch: {
+    /**
+     * 监听echarts中依赖的数据变化
+     */
+    // (newV,oldV){
+    //   this.initCharts();
+    // }
   },
   methods: {
+    /**
+     * writeDB
+     * common func
+     * apply : alter user
+     */
+    async writeDB() {
+      console.log(
+        "> 管理员修改了用户信息，在写入数据库之前 : ",
+        this.userQueryData
+      );
+      const result = await this.$store.dispatch("update", this.userQueryData);
+      if (result) {
+        console.log("> 管理员修改了用户信息，在写入数据库之后 : ", result);
+        alert("alter done");
+      } else {
+        alert("alter fail");
+      }
+    },
+    /**
+     * admin aler user ------------
+     */
+    // delete user
+    async toDeleteUser() {
+      const resu = confirm("comfire to delete ?");
+      if (!resu) {
+        return;
+      }
+      const deleResu = await this.$store.dispatch("deleteUser", {
+        account: this.userQueryData.account,
+        flag: this.userQueryData.flag,
+      });
+      if (deleResu) {
+        alert("delete done");
+        this.reload();
+        console.log("after delete :", this.userQueryData);
+      } else {
+        alert("delete user fail");
+      }
+    },
+    // set limted
+    async toLimtedUser() {
+      const resu = confirm("comfire ?");
+      if (!resu) {
+        return;
+      }
+      this.userQueryData.limited = !this.userQueryData.limited;
+      this.writeDB();
+    },
+    // set freezed
+    async toFreezedUser() {
+      const resu = confirm("comfire ?");
+      if (!resu) {
+        return;
+      }
+      this.userQueryData.isFreezed = !this.userQueryData.isFreezed;
+      this.writeDB();
+    },
+    /**
+     * 管理员点击修改用户信息
+     */
+    async toSubmit_alterUserInfo() {
+      // 输入验证
+      if (
+        this.alter_userInfo.newJob &&
+        this.alter_userInfo.newPwd &&
+        this.alter_userInfo.newMobile
+      ) {
+        alert("修改框未输入任何信息，无需修改！");
+        return;
+      }
+
+      /**
+       * 有新值则赋予，没有则使用原来的值(一次性的，减少提交次数，性能)
+       * -  该项没有填写为空值时，则直接使用原有的
+       */
+
+      this.userQueryData.job =
+        this.alter_userInfo.newJob || this.userQueryData.job;
+      this.userQueryData.password =
+        this.alter_userInfo.newPsw || this.userQueryData.password;
+      this.userQueryData.mobile =
+        this.alter_userInfo.newMobile || this.userQueryData.mobile;
+
+      // write db .
+      await this.writeDB();
+      // clear input
+      this.alter_userInfo.newJob = "";
+      this.alter_userInfo.newPwd = "";
+      this.alter_userInfo.newMobile = "";
+    },
+    // ----------------------------------
+    /**
+     * 高级管理员 点击show/hidden 普通的管理员操作区域
+     */
+    handlecommonOP() {
+      // 状态取反
+      this.highFormData.commonOP = !this.highFormData.commonOP;
+    },
+    // 管理员点击, 是否需要修改用户信息区域的show/hidden
+    toAlertUserInfo() {
+      this.com_OP_FormData.userInfoAlert = !this.com_OP_FormData.userInfoAlert;
+    },
+    /**
+     * 点击查询用户
+     */
+    async toQueryUser() {
+      if (!this.com_OP_FormData.userAccount) {
+        alert("please input user account !");
+        return;
+      } else if (!this.com_OP_FormData.userCategory) {
+        alert("please check user category !");
+        return;
+      }
+      console.log("query...");
+      const result = await this.$store.dispatch("QueryUser", {
+        account: this.com_OP_FormData.userAccount,
+        flag: this.com_OP_FormData.userCategory,
+      });
+      if (result) {
+        console.log("query result : ", result);
+        console.log("store : ", this.userQueryData);
+        this.reload(); // 刷新页面
+      } else {
+        console.log("query result : null");
+        return;
+      }
+    },
+
     /**
      * admin-high 是否需要点击管理资金
      */
     toOpCorpus() {
       this.highFormData.corpusFlag = !this.highFormData.corpusFlag; // 用户点击，不想操做时可以再次点击隐藏的
       // 操做完成，让其隐藏
+    },
+    /**
+     * admin-high 是否需要点击 alter rate
+     */
+    toOpRate() {
+      this.highFormData.alterRate_Flag = !this.highFormData.alterRate_Flag;
+      // 操做完成，让其隐藏
+    },
+    /**
+     * admin-high to alter rate
+     */
+    async toAlertRate() {
+      if (
+        this.highFormData.rateInput <= 0 ||
+        this.highFormData.rateCategory === ""
+      ) {
+        alert("值缺失！");
+        return;
+      }
+      // 1. this.highFormData.rateInput -> rateData(store) 2. write to db
+      console.log(
+        ` alter rate :  ${this.highFormData.rateCategory} = ${this.highFormData.rateInput}`
+      );
+
+      // clear
+      this.highFormData.rateInput === 0;
+      this.highFormData.rateCategory === "";
     },
     /**
      * 点击提交进行curpos操做
@@ -271,33 +879,17 @@ export default {
         console.log("开始执行操做...");
 
         if (this.highFormData.corpusCategory === "increase") {
-          const newCorpus =
-            +this.$store.state.bankData.corpus + +this.highFormData.corpus;
-          this.$store.commit("setCorpusData", newCorpus);
-          // -----  write in db ------
-          // console.log(
-          //   "new corpus : ",
-          //   newCorpus,
-          //   "store : ",
-          //   this.bankData.corpus
-          // );
+          const newCorpus = +this.bankData.corpus + +this.highFormData.corpus;
+          this.$store.dispatch("setBankCorpus", newCorpus);
         } else if (this.highFormData.corpusCategory === "decrease") {
-          const newCorpus =
-            +this.$store.state.bankData.corpus - +this.highFormData.corpus;
-          this.$store.commit("setCorpusData", newCorpus);
-          // -----  write in db ------
-          // console.log(
-          //   "new corpus : ",
-          //   newCorpus,
-          //   "store : ",
-          //   this.bankData.corpus
-          // );
+          const newCorpus = +this.bankData.corpus - +this.highFormData.corpus;
+          this.$store.dispatch("setBankCorpus", newCorpus);
         } else {
           return;
         }
 
         alert("set corpus done.");
-        console.log("执行操作完成");
+        console.log("执行操作完成!");
 
         // clear input
         this.highFormData.corpus = 0;
@@ -316,6 +908,50 @@ export default {
       if (Users) {
         console.log(Users);
       }
+    },
+    /**
+     * charts
+     */
+    initCharts() {
+      let myChart = echarts.init(this.$refs.chart2);
+      // 绘制图表
+      myChart.setOption({
+        title: {
+          // title style
+          text: "ChinaBank All_Fund",
+          subtext: "CB",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        legend: {
+          orient: "vertical", //horizontal
+          left: "left",
+        },
+
+        series: [
+          {
+            name: "ChinaBank fund",
+            type: "pie",
+            radius: "50%",
+            data: [
+              { value: this.bankData.corpus, name: "银行本金" },
+              { value: this.All_Loan_I, name: "贷款用户-总贷款(本金)" },
+              { value: this.All_Interest_I, name: "贷款用户-总贷款(利息)" },
+              { value: this.All_Deposit_II, name: "存款用户-总存款(本金)" },
+              { value: this.All_Interest_II, name: "存款用户-总存款(利息)" },
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      });
     },
   },
 };

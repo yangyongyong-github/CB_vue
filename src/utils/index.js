@@ -10,4 +10,4 @@ export { default as debounce } from "./debounce";
 
 export { default as delay } from './delay'
 
-export { DecimalPos, Persent, opposite, uuid, toThousand } from "./math"
+export { DecimalPos, Sum, Persent, opposite, uuid, toThousand } from "./math"

@@ -3,18 +3,44 @@ export default {
     setUserData(state, payload) {
         state.userData = payload;
     },
-    // interest
+    // interest (useri userii)
     setUserInterest(state, payload) {
         state.userData.interest = payload;
     },
-    // loan
-    setUserILoan(state, payload) {
+    // admin query user by account
+    setUserQueryData(state, payload) {
+        state.userQueryData = payload;
+    },
+    /**
+     * I
+     */
+    setUserILoan(state, payload) { // loan
         state.userData.loan = payload;
+    },
+    setUserIIdent(state, payload) {
+        state.userData.ident = payload;
+    },
+    setUserICause(state, payload) {
+        state.userData.cause = payload;
+    },
+    setUserICompany(state, payload) {
+        state.userData.company = payload;
+    },
+
+    /**
+     * II
+     */
+    setUserInterest(state, payload) { // interest
+        state.userData.interest = payload;
     },
     // deposit
     setUserIIDeposit(state, payload) {
         state.userData.deposit = payload;
     },
+
+    /**
+     * other
+     */
     // usersData
     setUsersData(state, payload) {
         state.usersData = payload;
@@ -22,4 +48,5 @@ export default {
     setIsLoading(state, payload) {
         state.isLoading = payload;
     },
+
 }

@@ -3,12 +3,19 @@
     <h3>Login {{ loginFormData.flag }}</h3>
     <p>
       <!-- autocomplete="new-password" -->
-      账号：<input type="text" v-model="loginFormData.loginId" />
+      <!-- 账号 -->
+      {{ language.Account[lang] }} :
+      <input type="text" v-model="loginFormData.loginId" />
     </p>
-    <p>密码：<input type="password" v-model="loginFormData.loginPwd" /></p>
+    <p>
+      <!-- 密码 -->
+
+      {{ language.PassWord[lang] }}:
+      <input type="password" v-model="loginFormData.loginPwd" />
+    </p>
 
     <!-- 选择登录身份 -->
-    选择登录身份
+    {{ language.SelectYouLoginIdentify[lang] }}
     <select v-model="loginFormData.flag">
       <option
         v-for="(item, index) in userLists"
@@ -19,8 +26,14 @@
       </option>
     </select>
     <p class="btn">
-      <button @click="toLogin">登录</button>
-      <button @click="toRegister">注册</button>
+      <button @click="toLogin">
+        <!-- 登录 -->
+        {{ language.Login[lang] }}
+      </button>
+      <button @click="toRegister">
+        <!-- 注册 -->
+        {{ language.Register[lang] }}
+      </button>
     </p>
   </div>
 </template>
@@ -39,7 +52,7 @@ export default {
     };
   },
   components: {},
-  computed: mapState(["userData", "lang"]),
+  computed: mapState(["userData", "lang", "language"]),
   methods: {
     async toLogin() {
       if (
@@ -62,6 +75,12 @@ export default {
         // log in
         this.$router.push(`/${userObj.flag}`);
         console.log("user info :", user); // 从数据库中拿到了该用户的所有信息
+
+        // // 获取所有的用户信息
+        // if (userObj.flag === "admin") {
+        //   await this.$store.dispatch("getUsers");
+        // }
+
         try {
           this.$store.commit("setUserData", user);
         } catch (error) {

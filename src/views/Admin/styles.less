@@ -1,7 +1,11 @@
+@import '~@/styles/mixin.less';
+
 .admin-container {
   width: 100%;
   min-width: 1257px;
   box-sizing: border-box;
+  margin-bottom: 200px;
+  padding: 0 5px;
 
   header {
     width: 100%;
@@ -16,13 +20,23 @@
     border-top: 2px dotted black;
     box-sizing: border-box;
 
+    // part1 资金控制
     .high {
+
+      // &:hover{
+      //   transition: all 1.5s;
+      //   border: 5px solid saddlebrown;
+      //   padding: 5px;
+      // }
+      // display: flex;
+      // part-1
       .corpus {
         width: 30%;
         min-width: 200px;
         border: 1px solid saddlebrown;
         box-sizing: border-box;
         padding-left: 30px;
+
         .input-corpus {
           input {
             margin-right: 20px;
@@ -35,11 +49,41 @@
 
       }
 
-      .rate-op{
+      .users-status {
+        display: flex;
+
+        // part-2 用户情况
+        .user-status {
+          width: 1200px;
+          border: 1px solid royalblue;
+
+          .user-num {}
+
+          .useri {}
+
+          .userii {}
+        }
+
+        .charts {
+          width: 100%;
+          border: 1px solid rgb(233, 143, 25);
+          display: flex;
+
+          .charts2 {
+            width: 650px;
+            height: 300px;
+            border: 1px solid;
+          }
+        }
+      }
+
+      .rate-op {
         border: 1px solid saddlebrown;
-        table{
+
+        table {
           border: 1px solid;
-          td{
+
+          td {
             padding-left: 10px;
           }
         }
@@ -47,21 +91,57 @@
     }
 
     .common {
-      margin-top: 40px;
-      border-top: 3px dotted;
+      border-top: 2px solid saddlebrown;
+
+      .work-user {
+        padding-left: 30px;
+
+        .query-user {
+          width: 800px;
+          margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+        }
+
+        .come-set-op {}
+
+        .query-result {
+          .line {
+            display: flex;
+
+            div {
+              margin-right: 30px;
+              margin-top: 10px;
+            }
+          }
+
+          .admin-op {
+            width: 800px;
+            border: 1px solid;
+            padding: 5px 0;
+            margin-top: 10px;
+            .to-flex();
+
+          }
+        }
+      }
+
 
       .users-show {
-        border: 1px solid;
+        .tip-t {
+          font-size: 1.2em;
+          text-align: center;
+        }
 
         table {
           width: 100%;
           margin-top: 10px;
-          border: 1px solid violet;
+          // border: 1px solid violet;
 
           theader td,
           tbody td {
             padding-left: 3px;
-            border-left: 2px solid;
+            // border-left: 2px solid;
           }
         }
       }

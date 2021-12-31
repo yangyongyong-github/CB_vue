@@ -1,12 +1,14 @@
-/* 
-    global common.css alraddy derection
-.guide {
-  color: rgb(163, 157, 157);
-  font-size: 0.8em;
-} */
 
 .guide-h {
   color: sienna;
   margin-right: 3px;
   font-size: 0.9em;
+}
+
+.alter-user-info{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  border: 1px dotted;
+  padding: 10px;
 }

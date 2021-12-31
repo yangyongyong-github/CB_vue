@@ -306,6 +306,9 @@ export default {
     TopTip,
     Modal,
   },
+  created() {
+    console.log("rateData : ", this.rateData);
+  },
   computed: {
     ...mapState({
       userData: (state) => state.userData,
@@ -507,8 +510,8 @@ export default {
       console.log("本此取款：", this.takeData.number);
 
       /**
-       * 1.2 take
-       * deposit < take < (deposit + interest)
+       * 1.2 take (1)
+       * deposit < [take] < (deposit + interest)
        *
        * userData.deposit 减少
        * userData.interst 清零
@@ -525,9 +528,26 @@ export default {
             2
           )
         );
+      } else if (
+        +this.takeData.number >= +this.userData.deposit &&
+        +this.takeData.number <= this.userData.interest
+      ) {
+        /**
+         * (2)
+         * status : deposit 取完了，但是还剩很多Interst需要取
+         * resolve : 先取利息，然后剩下的利息转为deposit
+         */
+        const depositVlaue = DecimalPos(
+          this.depositTotal - this.takeData.number - 0,
+          2
+        );
+        this.userData.interest = 0;
+        this.userData.deposit = this.userData.deposit + depositVlaue;
       } else {
         /**
-         * take < deposit
+         * (3)
+         * 绝大部分情况
+         * [take] < deposit
          * userData.deposit 减少
          * userData.interst 不变
          *
