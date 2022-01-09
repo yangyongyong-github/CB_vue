@@ -1,7 +1,7 @@
 <template>
   <div class="user-container">
     <div class="select-indent">
-      <h3>用户注册页面</h3>
+      <h3 class="page-title">用户注册页面</h3>
 
       <b>请选择用户身份 </b>
       <select v-model="userInfo.flag">
@@ -11,11 +11,20 @@
       <b> {{ userInfo.flag | FilterFlag }} </b>
     </div>
 
+    <div class="img-show">
+      <div class="useri" v-if="userInfo.flag === 'useri'">
+        <img src="@/assets/loan.png" alt="useri-img" />
+      </div>
+      <div class="userii" v-else-if="userInfo.flag === 'userii'">
+        <img src="@/assets/deposit.png" alt="userii-img" />
+      </div>
+    </div>
+
     <div class="input-area">
       <p><b>业务部分</b></p>
       <!-- 业务部分 -->
       <div class="item">
-        <label> 账号： </label
+        <label> 账号 </label
         ><input
           type="text"
           v-model="userInfoTemp.account"
@@ -23,18 +32,18 @@
           autocomplete="new-password"
         />
         <!-- 去数据库中验证 -->
-        <span class="format-tip">格式为 【{{ formatData.account }}】</span>
+        <!-- <span class="format-tip">格式为 【{{ formatData.account }}】</span> -->
       </div>
       <!-- 业务部分 -->
       <div class="item">
-        <label> 密码： </label>
+        <label> 密码 </label>
         <!-- 先存储在temp中，验证通过了再存储到信息中 -->
         <input type="password" v-model="userInfoTemp.ps1" />
-        <span class="format-tip">格式为【 {{ formatData.loginPwd }}】</span>
+        <!-- <span class="format-tip">格式为【 {{ formatData.loginPwd }}】</span> -->
       </div>
       <!-- 业务部分 -->
-      <div class="item">
-        <label> 确认密码： </label
+      <div class="item last">
+        <label> 确认密码</label
         ><input
           type="password"
           v-model="userInfoTemp.ps2"
@@ -50,10 +59,13 @@
       </div>
 
       <div class="item">
-        <label>性别：</label>
-        <label>男</label>
+        <label>性别</label>
+        男
         <input type="radio" name="sex" v-model="userInfo.sex" value="true" />
-        <label>女</label>
+        <label>
+          <!-- 占位距离 -->
+        </label>
+        女
         <input type="radio" name="sex" v-model="userInfo.sex" value="false" />
       </div>
 
@@ -63,12 +75,12 @@
       </div>
 
       <div class="item">
-        <label for="">工作</label>
+        <label for="">工作 </label>
         <input type="text" v-model="userInfo.job" />
       </div>
 
       <div class="item">
-        <label for="">联系电话：</label>
+        <label for="">联系电话</label>
         <input
           type="number"
           v-model="userInfoTemp.mobile"
@@ -87,7 +99,7 @@
           <!-- interest = 0 = none-input -->
           <div class="item">
             <!-- company -->
-            <label>所在单位：（学校或公司）</label>
+            <label>所在单位（学校或公司）</label>
             <input type="text" v-model="userInfo.company" />
           </div>
           <!-- cause = none-input - -->
@@ -98,11 +110,8 @@
           <!-- loan = 0 = none-input -->
           <!-- interest = 0 = none-input -->
         </div>
-      </div>
-
-      <p class="btn">
         <button class="submit-btn" @click="submit">提交</button>
-      </p>
+      </div>
     </div>
   </div>
 </template>
@@ -131,12 +140,12 @@ export default {
         ps2: "",
         mobile: "",
       },
-      // 参照格式
-      formatData: {
-        account: "姓名拼音+数字|示例:yangxiang01",
-        // loginId: "", // 账号输入即可
-        loginPwd: "账号.p| 示例:yangxiang01.p",
-      },
+      // // 参照格式
+      // formatData: {
+      //   account: "姓名拼音+数字|示例:yangxiang01",
+      //   // loginId: "", // 账号输入即可
+      //   loginPwd: "账号.p| 示例:yangxiang01.p",
+      // },
     };
   },
   filters: {
@@ -326,14 +335,12 @@ export default {
 
 .user-container {
   width: 100%;
+  position: relative;
   // common
   .format-tip {
     color: @gray;
     margin-left: 10px;
     font-size: 0.8em;
-  }
-  button {
-    padding: 3px 10px;
   }
 
   // top 下拉框
@@ -342,20 +349,40 @@ export default {
     margin-top: 30px;
     text-align: center;
   }
+  .img-show {
+    width: 200px;
+    position: absolute;
+    top: 180px;
+    left: 235px;
+    img {
+      width: 100%;
+    }
+  }
   // middle input
   .input-area {
     min-width: 50%;
     padding: 20px 50px;
-    border: 1px dotted gray;
+
+    padding-left: 40%;
+    .item {
+      margin-top: 10px;
+
+      label {
+        width: 70px;
+        display: inline-block;
+      }
+    }
+    .last {
+      margin-bottom: 20px;
+    }
 
     // 涉及到不同的具体独有的业务类型部分
     .different {
       margin-top: 20px;
     }
-  }
-  // bottom btn
-  .btn {
-    text-align: center;
+    button {
+      margin-left: 100px;
+    }
   }
 }
 </style>

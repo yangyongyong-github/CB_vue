@@ -1,0 +1,67 @@
+
+@import "~@/styles/var.less";
+@import "~@/styles/mixin.less";
+@import "~@/styles/user.less";
+
+.useri-container {
+  width: 100%;
+  min-width: 900px;
+  box-sizing: border-box;
+
+  header {
+    .user-data-base {
+    } // done
+    .user-data-account {
+    } // done
+    .user-loan {
+      .to-flex();
+    }
+  }
+  // 请选择办理业务类型
+  .work-category {
+    width: 300px;
+    margin-left: 34%;
+    margin-bottom: 50px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  
+    .border-shadow();
+    .to-flex();
+  }
+
+  .work-content {
+    .ser-loan,
+    .ser-repay {
+      padding: 0 150px;
+      .info-select {
+        width: 300px;
+        margin: 0 50px;
+        .border-shadow-hover();
+
+        .ident-category {
+          .to-flex();
+        }
+        .cause-input {
+          margin-left: 20px;
+          margin-top: 20px;
+        }
+      }
+      .to-flex();
+      .loan-work {
+        .loan {
+          width: 70%;
+          border: 2px solid gray;
+          border-radius: 20px;
+          margin-bottom: 20px;
+          & > div {
+            .to-flex();
+          }
+        }
+        .item {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}

@@ -30,15 +30,22 @@ export default {
         return resp.data;
     },
 
-    /**
-     * set bank corpus
-     */
-    async setBankCorpus({ commit }, { id = "CBNo1", newCorpus }) {
-        commit("setCorpusData", resp.data);
-        const resp = await Serv.updateBankCorpus(id, newCorpus);
-        
+    // update bank
+    async updateBank({ commit }, obj) { // {id, obj} -> obj 这里直接是一整个，不再区分
+        commit("setIsLoading", true);
+        const resp = await Serv.updateBank(obj);
+        commit("setIsLoading", false);
         return resp.data;
-    }
+    },
+
+   // update rate
+    async updateRate({ commit }, obj) {
+        commit("setIsLoading", true);
+        const resp = await Serv.updateRate(obj);
+        commit("setIsLoading", false);
+        return resp.data;
+        
+    },
 
 }
 

@@ -45,8 +45,5 @@ export default {
     setUsersData(state, payload) {
         state.usersData = payload;
     },
-    setIsLoading(state, payload) {
-        state.isLoading = payload;
-    },
 
 }

@@ -1,0 +1,92 @@
+@import '~@/styles/mixin.less';
+
+.introduce-container {
+    width: 100%;
+    min-width: 800px;
+    .border-shadow-style-A();
+
+    .base {
+        width: 100%;
+        margin-bottom: 50px;
+
+        .img-brief {
+
+         .to-flex();
+
+            .text{
+                width: 55%;
+                // border: 1px solid;
+
+                display: flex;
+                justify-content: space-around;
+                
+                .left{
+                    width: 45%;
+                    height: 100%;
+
+                   .item{
+                      
+                       display: flex;
+                       border-bottom: 2px dotted;
+                       margin-top: 10px;
+                       padding-left: 10px;
+                       box-sizing: border-box;
+                       .tit{
+                           width: 30%;
+                           font-weight: bold;
+                           color: rgb(143, 140, 140);
+
+                       }
+                       .content{
+                           width: 70%;
+                           font-family: Cambria;
+                       }
+                       .blue{
+                           color: rgb(24, 176, 236);
+                       }
+                   }
+                }
+
+            }
+
+            .map {
+                width: 28%;
+
+                img {
+                    width: 100%;
+                }
+
+                div {
+                    padding-left: 30px;
+                }
+            }
+        }
+    }
+
+    .history {
+        width: 100%;
+
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+
+        .introduce-img-area {
+            width: 100%;
+            .to-flex();
+
+            div.img {
+                width: 30%;
+                // box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+
+                img {
+                    width: 100%;
+                    border: 3px double;
+                }
+            }
+        }
+
+    }
+
+
+
+
+}

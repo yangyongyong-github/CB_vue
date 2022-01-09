@@ -23,19 +23,118 @@
     // part1 资金控制
     .high {
 
-      // &:hover{
-      //   transition: all 1.5s;
-      //   border: 5px solid saddlebrown;
-      //   padding: 5px;
-      // }
-      // display: flex;
-      // part-1
+      .users-status {
+        .to-flex();
+        // margin: 100px 0;
+        margin-bottom: 50px;
+
+        // border: 1px solid;
+        // part-2 用户情况
+        .user-status {
+          width: 500px;
+          // border: 1px solid royalblue;
+          .border-shadow-hover();
+
+          .overall {
+            margin-left: 10%;
+          }
+
+          .users-nums {
+            margin-top: 20px;
+          }
+
+          .tit {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-decoration: underline 2px;
+          }
+
+          .useri,
+          .userii {
+            padding: 3px 10px;
+            background: rgb(238, 235, 235);
+            margin-top: 5px;
+          }
+
+          .fund-alay {
+            border: 1px solid silver;
+            margin-top: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 20px;
+
+            div {
+              margin-top: 5px;
+            }
+          }
+
+        }
+
+        .charts {
+           width: 600px;
+            height: 260px;
+          .border-shadow-hover();
+        }
+      }
+
+      .rate-op {
+        width: 1300px;
+        // padding: 20px;
+        margin-left: 10%;
+
+        //  border: 1px solid saddlebrown;
+        button {
+          padding: 0 3px;
+          margin-left: 20px;
+        }
+
+        p {
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.2em;
+
+          button {
+            font-size: .8em;
+          }
+
+        }
+
+        table {
+          .border-shadow-hover();
+          border-radius: 10px;
+
+          td {
+            padding-left: 10px;
+          }
+        }
+
+        .alter-rate {
+          margin-top: 15px;
+
+          button {
+            padding: 5px 7px;
+          }
+        }
+      }
+
       .corpus {
         width: 30%;
-        min-width: 200px;
-        border: 1px solid saddlebrown;
         box-sizing: border-box;
-        padding-left: 30px;
+        margin-left: 44%;
+        margin-top: 50px;
+        padding-bottom: 20px;
+
+        .tit {
+          font-weight: bolder;
+          font-size: 1.2em;
+          margin-right: 30px;
+        }
+
+        button {
+          font-size: .8em;
+          padding: 2px 5px;
+        }
 
         .input-corpus {
           input {
@@ -47,51 +146,14 @@
           }
         }
 
+
       }
 
-      .users-status {
-        display: flex;
 
-        // part-2 用户情况
-        .user-status {
-          width: 1200px;
-          border: 1px solid royalblue;
-
-          .user-num {}
-
-          .useri {}
-
-          .userii {}
-        }
-
-        .charts {
-          width: 100%;
-          border: 1px solid rgb(233, 143, 25);
-          display: flex;
-
-          .charts2 {
-            width: 650px;
-            height: 300px;
-            border: 1px solid;
-          }
-        }
-      }
-
-      .rate-op {
-        border: 1px solid saddlebrown;
-
-        table {
-          border: 1px solid;
-
-          td {
-            padding-left: 10px;
-          }
-        }
-      }
     }
 
     .common {
-      border-top: 2px solid saddlebrown;
+      .border-shadow-hover();
 
       .work-user {
         padding-left: 30px;
@@ -99,8 +161,8 @@
         .query-user {
           width: 800px;
           margin-top: 10px;
-        display: flex;
-        justify-content: space-around;
+          display: flex;
+          justify-content: space-around;
         }
 
         .come-set-op {}
@@ -115,34 +177,65 @@
             }
           }
 
+          .result {
+            .border-shadow();
+          }
+
           .admin-op {
             width: 800px;
-            border: 1px solid;
+            // .border-shadow-hover(@outline);
+            border-top: 1px solid;
             padding: 5px 0;
             margin-top: 10px;
             .to-flex();
 
           }
         }
+
+
       }
 
 
       .users-show {
-        .tip-t {
-          font-size: 1.2em;
+        .users-show-title {
           text-align: center;
-        }
+          font-size: 1.2em;
+          margin-top: 20px;
+          font-weight: bold;
 
-        table {
-          width: 100%;
-          margin-top: 10px;
-          // border: 1px solid violet;
-
-          theader td,
-          tbody td {
-            padding-left: 3px;
-            // border-left: 2px solid;
+          .nums {
+            font-size: 1.2em;
+           
+            text-shadow: 0 0 3px rgb(202, 157, 43),
+              0 0 4px rgb(226, 172, 24),
+              0 0 6px rgb(235, 84, 84),
+              0 -5px 3px rgb(209, 145, 145),
+              0 -15px 4px gold;
+            /* 这里阴影可以不断的叠加，产生效果*/
           }
+        }
+      }
+
+
+      .t5 {
+        font-size: .8em;
+        margin-left: 4px;
+      }
+
+      h4 {
+        margin-top: 10px;
+        margin-left: 1%;
+        text-decoration: underline 2px;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 10px;
+
+        theader td,
+        tbody td {
+          padding-left: 3px;
+          // border-left: 2px solid;
         }
       }
     }

@@ -1,95 +1,118 @@
 <template>
   <div class="home-container">
-    <h2>Home</h2>
-    <!-- <div class="test">
-      <button @click="GetRate">getRate</button>
-      <button @click="GetBank">bank</button>
-      <button @click="GetUsers">users</button>
-    </div> -->
+    <TopTip IconType="yuque" tipText="欢迎来到 中国银行！" />
 
-    <div class="rate-show">
-      <div>
-        <h3>我要存贷款，利率展示区</h3>
+    <div class="banner">
+      <div class="swipper">
+        <a-carousel autoplay>
+          <img :src="item.img" alt="" v-for="(item, index) in swiperImgs" :key="index">
+        </a-carousel>
       </div>
-      <!-- deposit-table -->
-      <b>Deposit 存款</b>
-      <table class="deposit">
-        <thead>
-          <tr>
-            <td>
-              大额存款
-              <span class="guide">起薪:{{ rateData.A }}￥</span>
-            </td>
-            <td></td>
-            <td>
-              中额存款
-              <span class="guide">起薪:{{ rateData.B }}￥</span>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="guide">
-            <!-- 大额 -->
-            <td>短期(1-3年)</td>
-            <td>中长期(>3年)</td>
-            <!-- 中额 -->
-            <td>短期(1-3年)</td>
-            <td>中长期(>3年)</td>
-          </tr>
-          <tr>
-            <!-- 大额 -->
-            <td>{{ rateData.A_1 }}</td>
-            <td>{{ rateData.A_3 }}</td>
-            <!-- 中额 -->
-            <td>{{ rateData.B_1 }}</td>
-            <td>{{ rateData.B_3 }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="guide">
-        说明:(1)
-        目前仅支持以上的两类存款，用户存款时，必须手动选择与之匹配的；(2)
-        除此之外，存款暂时没有利息。
-      </div>
-      <!-- loan-table -->
-      <b>Loan 贷款</b>
-      <table class="loan">
-        <thead>
-          <tr>
-            <td>长期贷款</td>
-            <td>中期贷款</td>
-            <td>短期贷款</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="guide">>5年</td>
-            <td class="guide">3-5年</td>
-            <td class="guide">1-3年</td>
-          </tr>
-          <tr>
-            <td>{{ rateData.L_l }}</td>
-            <td>{{ rateData.L_m }}</td>
-            <td>{{ rateData.L_s }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="guide">
-        说明：(1)贷款不按金额计算，按年限计算; (2) 不足一年按一年计算。
+      <aside>
+        <div class="desc">
+          <h2>重要公告</h2>
+          <ul>
+            <li v-for="(item, index) in descLists" :key="index">
+              <a :href="item.link">{{ item.title }}</a>
+            </li>
+          </ul>
+        </div>
+        <div class="hand-server">
+          <h2>便捷服务</h2>
+          <div class="items">
+            <div class="show" v-for="(item, index) in serverLists" :key="index">
+              <img :src="item.src" :alt="item.title" /><br>
+              <a :href="item.link">{{ item.title }}</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="line">
+      <RateShow />
+      <!-- 使用日历组件 -->
+      <div class="calendar">
+        <a-calendar :fullscreen="false" />
       </div>
     </div>
+
+    <footer>
+      <PureFooter />
+    </footer>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import TopTip from "@/components/TopTip";
+import PureFooter from "@/components/PureFooter";
+import RateShow from "@/components/RateShow";
+// server imgs
+import serImg0  from "@/assets/home/server-price-icon.gif"
+import serImg1  from '@/assets/home/client-icon.gif'
+import serImg2  from '@/assets/home/e-icon.gif'
+import serImg3  from '@/assets/home/application-icon.gif'
+
+// swiper imgs
+import swImg0 from '@/assets/home-img0.jpg';
+import swImg1 from '@/assets/home-img1.jpg';
+import swImg2 from '@/assets/home-img2.jpg';
+import swImg3 from '@/assets/home-img3.jpg';
+
+
 export default {
-  computed: {
-    ...mapState({
-      rateData: (state) => state.rateData,
-    }),
+  data() {
+    return {
+      swiperImgs: [
+        { img: swImg0, link: "" },
+        { img: swImg1, link: "" },
+        { img: swImg2, link: "" },
+        { img: swImg3, link: "" },
+       
+      ],
+      descLists: [
+        {
+          title: "2022年贺岁普通纪念币预约、兑换公告",
+          link: "https://www.boc.cn/custserv/bi2/bi2o/202201/t20220105_20540476.html",
+        },
+        {
+          title: "在售理财产品列表(2022年1月7日更新)",
+          link: "https://www.boc.cn/fimarkets/cs8/201109/t20110922_1532694.html",
+        },
+        {
+          title: "关于2022年1月2日系统升级期间暂停投资",
+          link: "https://www.boc.cn/fimarkets/bi2/202112/t20211231_20532750.html",
+        },
+      ],
+      serverLists: [
+        {
+          title: "手机客户端",
+          src:  serImg0,
+          link: "",
+        },
+        {
+          title: "服务价目表",
+          src: serImg1,
+          link: "",
+        },
+        {
+          title: "中银企E贷款",
+          src: serImg2,
+          link: "",
+        },
+        {
+          title: "申请信用卡",
+          src: serImg3,
+          link: "",
+        },
+      ],
+    };
   },
-  methods: {},
+  components: {
+    TopTip,
+    RateShow,
+    PureFooter,
+  },
 };
 </script>
 <style lang="less" scoped>

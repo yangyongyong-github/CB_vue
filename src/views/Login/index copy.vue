@@ -1,18 +1,18 @@
 <template>
   <div class="login-container">
-    <h3 class="page-title">用户登录页面</h3>
+  
     <div class="input-area">
-      <div class="indet">Login {{ loginFormData.flag }}</div>
+      <h3>Login {{ loginFormData.flag }}</h3>
       <p>
         <!-- autocomplete="new-password" -->
         <!-- 账号 -->
-        {{ language.Account[lang] }}
+        {{ language.Account[lang] }} :
         <input type="text" v-model="loginFormData.loginId" />
       </p>
       <p>
         <!-- 密码 -->
 
-        {{ language.PassWord[lang] }} 
+        {{ language.PassWord[lang] }}:
         <input type="password" v-model="loginFormData.loginPwd" />
       </p>
 
@@ -28,12 +28,10 @@
         </option>
       </select>
       <p class="btn">
-        
-        <button type="success" @click="toLogin">
+        <button @click="toLogin">
           <!-- 登录 -->
-          {{ language.Login[lang] }}</button
-        >
-  
+          {{ language.Login[lang] }}
+        </button>
         <button @click="toRegister">
           <!-- 注册 -->
           {{ language.Register[lang] }}
@@ -80,6 +78,12 @@ export default {
         // log in
         this.$router.push(`/${userObj.flag}`);
         console.log("user info :", user); // 从数据库中拿到了该用户的所有信息
+
+        // // 获取所有的用户信息
+        // if (userObj.flag === "admin") {
+        //   await this.$store.dispatch("getUsers");
+        // }
+
         try {
           this.$store.commit("setUserData", user);
         } catch (error) {
@@ -102,21 +106,17 @@ export default {
 
 .login-container {
   width: 100%;
-  height: 100%;
+
   .input-area {
-    .indet{
-      padding-left: 50px;
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-    padding: 50px;
-    border-radius: 30px;
-   .border-shadow-login-hover();
-    .self-center();
+    width: 100%;
+    height: 86%;
+    margin-top: 47px;
+    color: white;
+    font-weight: bold;
+  background-image: url("../../assets/bg.jpg");
+  .self-center();
     .btn {
       .to-flex();
-      margin-top: 20px;
     }
   }
 }

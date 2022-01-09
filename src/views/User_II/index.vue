@@ -1,11 +1,11 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="qq" tipText="存款，啦啦啦~" />
+    <TopTip IconType="pay-circle" tipText="存款，让财富无限增值~" />
 
     <header>
       <!-- header：基础信息部分 -->
-      <div class="title">userii_loginUser Center</div>
+      <div class="page-title">userii_loginUser Center</div>
 
       <p class="work-tit">用户基本信息</p>
 
@@ -71,11 +71,12 @@
     </header>
     <!-- ==================workarea======================== -->
     <!-- 用于动态的提示 是否冻结，只能并行，如果包含会导致 被套在Modal组件之间的数据不会渲染 -->
+
     <div class="workarea">
       <p class="work-tit">用户服务办理区域</p>
-      <div class="modal" v-show="false">
-        <Modal text="您的账户已被管理员冻结！"> </Modal>
-        <!-- { userFreezed } -->
+      
+     <div class="modal" v-show="userData.isFreezed">
+        <Modal Height='150%' text="您的账户已被管理员冻结！"> </Modal>
       </div>
 
       <div class="work-category">
@@ -110,7 +111,7 @@
           <!-- deposit -->
           <div class="depositWork">
             <!-- 1. 类型选择 -->
-            <h3>deposit page</h3>
+
             <div class="deposit">
               <!-- 大额存款表头 -->
               <div>
@@ -205,35 +206,34 @@
             <!-- 2. 用户输入存款金额 -->
             <div class="user-input">
               <span class="part">
-                <label> 存款金额(单位：元): </label>
+                存款金额
                 <input
                   type="number"
                   v-model="depositFormData.inputNumber"
                   @blur="rules_depoNum"
-                />
+                />(单位:元)
               </span>
 
               <span class="part">
-                <label> 相应的存款时间(单位：年): </label>
-
+                相应的存款时间
                 <input
                   type="number"
                   class="year"
                   v-model="depositFormData.inputYear"
                   @blur="rules_depoYear"
                 />
-
+                (单位:年)
                 <label class="year-tip"> (小数时，向下取整)</label>
               </span>
             </div>
-            <!-- 3. 计算本息 -->
-            <div class="part">
+            <div class="confirme" style="margin-top:20px">
               本此存款利息为
-              <label>{{ depositFormData.interest }}</label>
+              {{ depositFormData.interest }}
+              <b>确定开始本此存款？</b>
+             
             </div>
-            <div class="confirme">
-              确定开始本此存款？
-              <button @click="depositWorking" :disabled="isSubmiting">
+            <div class="part" style="text-align:center; margin-top:20px">
+               <button @click="depositWorking" :disabled="isSubmiting">
                 {{ isSubmiting ? "提交中..." : "提交" }}
               </button>
             </div>
@@ -245,17 +245,19 @@
         <div class="ser-take" v-else>
           <!-- 二（一）、take工作区 -->
           <div class="take">
-            <h3>take page</h3>
             <div class="take-box">
-              本此取款<input
+              本此取款
+              <input
                 type="number"
                 v-model="takeData.number"
                 @blur="rules_take"
               />
               元
-              <button @click="takeWorking" :disabled="isSubmiting">
-                {{ isSubmiting ? "提交中..." : "提交" }}
-              </button>
+              <div class="btn-sub">
+                <button @click="takeWorking" :disabled="isSubmiting">
+                  {{ isSubmiting ? "提交中..." : "提交" }}
+                </button>
+              </div>
             </div>
 
             <!-- {isSubmiting?disabled:none} -->
@@ -268,9 +270,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
-import rateData from "../../store/rateTemp"; // rate临时配置变量
 import { DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
 // import writeDB from "@/mixins/writeDB";
@@ -302,7 +302,6 @@ export default {
     };
   },
   components: {
-    Icon,
     TopTip,
     Modal,
   },

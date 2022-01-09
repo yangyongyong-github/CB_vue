@@ -1,8 +1,8 @@
 <template>
   <div class="top-banner-container">
     <div id="nav">
-      <div class="logo" @click="toIntroduce">
-        <img src="@/assets/bk-logo.png" alt="" />
+      <div @click="toIntroduce">
+        <img class="bank-logo" src="@/assets/bk-logo.png" alt="" />
       </div>
 
       <div class="middle">
@@ -29,10 +29,9 @@
         </template>
         <router-link v-else to="/login">
           <div class="log-div">
-            <Icon class="log" type="info" />
             <!-- 请先登录 -->
-            <span class="log-span indicate" >
-              {{ language.PleaseFirstLogin[lang] }}
+            <span class="log-span indicate">
+              {{ language.PleaseFirstLogin[lang] }}!
             </span>
           </div>
         </router-link>
@@ -61,11 +60,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Icon from "@/components/Icon";
 export default {
-  components: {
-    Icon,
-  },
   computed: mapState(["userData", "isLoading", "lang", "language"]),
   filters: {
     switchLang(value) {

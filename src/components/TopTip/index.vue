@@ -1,18 +1,19 @@
 <template>
   <div class="top-tip-container">
-    <div class="text"><Icon :type="IconType" />
-    {{ tipText }}</div>
+    <div class="text">
+      <a-icon :type="IconType" />
+      {{ tipText }}
+    </div>
   </div>
 </template>
 
 <script>
-import Icon from "@/components/Icon";
 export default {
   props: {
     //   图标类型
     IconType: {
       type: String,
-      default: "empty",
+      default: "yuque",
       required: false,
     },
     // 提示文字
@@ -22,24 +23,22 @@ export default {
       required: true,
     },
   },
-  components: {
-    Icon,
-  },
 };
 </script>
 
 <style lang="less" scoped>
 .top-tip-container {
-  width: 20%;
-  min-width: 100px;
-  height: 20px;
+  width: 15%;
+  min-width: 80px;
+  height: 25px;
+  line-height: 25px;
   // 左右居中
   position: absolute;
   margin: auto;
   left: 0;
   right: 0;
   top: 20px;
-  background-color: rgb(214, 190, 160);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   display: flex;
   padding-left: 30px;

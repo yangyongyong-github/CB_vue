@@ -1,5 +1,11 @@
 <template>
-  <div class="modal-container">
+  <div
+    class="modal-container"
+    :style="{
+      width: Width,
+      height: Height,
+    }"
+  >
     <div class="modal-area"></div>
     <!-- 这里一定要注意分开放置，否则会收opacity影响 字和使用者自己的字重叠在一起看不清 -->
     <span class="text">
@@ -11,6 +17,14 @@
 <script>
 export default {
   props: {
+    Width: {
+      type: String,
+      default: '100%',
+    },
+    Height: {
+      type: String,
+      default: '100%',
+    },
     text: {
       type: String,
       default: "无数据！",
@@ -25,8 +39,8 @@ export default {
 
 .modal-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // // height: 190%; // useri: 190 userii: 150 兼顾了max
   border: 18px solid;
   border-color: transparent;
   box-sizing: border-box;

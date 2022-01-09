@@ -43,9 +43,11 @@ export default {
         return resp.data;
     },
     async deleteUser({ commit }, { account, flag }) { // 参数1 即使不用也要写上去，因为是源码中的参数
+        commit("setIsLoading", true);
         // console.log('scan ', { account, flag });
         const resp = await userServ.deleteUserData(account, flag);
         commit('setUserQueryData', '');
+        commit("setIsLoading", false);
         return resp.data;
     },
     /**
@@ -79,7 +81,7 @@ export default {
     // 无论是deposit 还是take 无非是对这两个数的操做，而且只是写回db这两个数
     async update({ commit }, userObj) {
         commit("setIsLoading", true);
-        const resp = await userServ.updata(userObj);
+        const resp = await userServ.update(userObj);
         // commit("setUserData", resp.data); // 这里不必了，因为先写入store中再发送给db的
         commit("setIsLoading", false);
         return resp.data;
@@ -90,22 +92,4 @@ export default {
          */
     },
 
-    /**
-     * 得到所有的用户信息
-     */
-    async getAllUser({ commit }) {
-        const resp = await userServ.getAllUsersData();
-        // console.log('getAllUser resp :', resp.data)
-        commit("setusersData", resp.data);
-        return resp.data;
-    },
-
-    // /**
-    //  * admin alter user info
-    //  */
-    // async alterUserInfo({ commit }, userObj) {
-    //     const resp = await userServ.update(userObj);
-    //     commit('setAlter_UserData', resp.data);
-    //     return resp.data;
-    // }
 }

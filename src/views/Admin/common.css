@@ -12,3 +12,26 @@
   border: 1px dotted;
   padding: 10px;
 }
+
+.num1 {
+  font-size: 1.3em;
+  /* font-family: monospace; */
+  font-weight: bolder;
+
+}
+
+.num2 {
+  font-weight: bold;
+  font-family: serif;
+  font-size: 1.2em;
+}
+
+.num3 {
+  font-weight: bold;
+  color: chocolate;
+
+}
+
+.ml {
+  margin-left: 20px
+}

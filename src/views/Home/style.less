@@ -1,26 +1,86 @@
 @import '~@/styles/mixin.less';
 
 .home-container {
-    // .test{
-    //     border: 1px solid salmon;
-    //     width: 20%;
-    //     height: 50px;
-    //     .to-flex();
-    //     button{
-    //       height: 50%;
-    //     }
+    width: 100%;
+    margin-bottom: 100px;
 
-    // }
-    .rate-show {
-        width: 50%;
-        border: 1px solid seagreen;
+    .banner {
+        .to-flex();
 
-        table {
-            width: 100%;
-            box-sizing: border-box;
+        .swipper {
+            width: 60%;
+            margin-left: 8%;
+            margin-top: 10px;
 
-            border: 1px solid saddlebrown;
-            text-align: center;
+
+            .ant-carousel>.slick-slide {
+                text-align: center;
+                height: 160px;
+                line-height: 160px;
+                background: #364d79;
+                overflow: hidden;
+            }
+
+            .ant-carousel>.slick-slide h3 {
+                color: #fff;
+            }
+        }
+
+        aside {
+            .border-shadow-hover();
+            margin-right: 6%;
+            margin-top: 10px;
+            width: 24%;
+            // border: 1px solid;
+
+            h2 {
+                margin-left: 20px;
+                margin-bottom: 0;
+            }
+
+            .desc {
+                margin-top: 10px;
+            }
+
+            .hand-server {
+                width: 100%;
+
+                .items {
+                    margin-top: 10px;
+                    margin-left: 10px;
+                    .to-flex();
+
+                    .show {
+                        // border: 1px solid;
+                        font-size: .8em;
+                        width: 20%;
+                        cursor: pointer;
+                        img {
+                          
+                            width: 80%;
+                            // height: 70%;
+                        }
+                    }
+                }
+            }
         }
     }
+
+
+    .line {
+        width: 100%;
+        padding: 0 50px;
+        margin-top: 60px;
+        .to-flex();
+
+        .calendar {
+            width: 20%;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+        }
+
+
+    }
+
 }

@@ -3,7 +3,7 @@ import delay from "@/utils/delay";
 
 
 /**
- * login func 
+ * login
  * @param {*} loginId 
  * @param {*} loginPwd 
  * @param {*} flag : admin useri userii 
@@ -24,7 +24,7 @@ export function loginOut() {
 
 export async function whoAmI(flag) {
   // await delay(2000);
-  const resp = await request().get(`/api/${flag}/login`);
+  const resp = await request().post(`/api/${flag}/login`);
   return resp.data;
 }
 
@@ -58,12 +58,11 @@ export async function adduser(userObj) {
 // ================== [ useri & userii ] =======================
 
 /**
- *   deposit & take
+ *   update user all info
  */
-export async function updata(userObj) {
+export async function update(userObj) {
   await delay(2000);
-  // console.log("service : ", userObj);
-  const resp = await request().post(`/api/${userObj.flag}/updata`, userObj);
+  const resp = await request().post(`/api/${userObj.flag}/update`, userObj);
   return resp.data;
 }
 
@@ -71,6 +70,6 @@ export async function updata(userObj) {
 
 export async function getAllUsersData() {
   await delay(1000);
-  const resp = await request().post('/api/users');
+  const resp = await request().get('/api/users');// 没有传递任何的参数等，可以使用get
   return resp.data;
 }

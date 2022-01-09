@@ -1,6 +1,7 @@
 import request from "./request";
 import delay from "@/utils/delay";
 
+
 /**
  * 拿到 rate
  */
@@ -20,15 +21,7 @@ export async function getBankData(id) {
 }
 
 /**
- * set bank corpus
- */
-export async function updateBankCorpus(id,newCorpus){
-   await delay(1000);
-  const resp = await request().post(`/api/bank/update`, { id,newCorpus });
-  return resp.data;
-}
-/**
- * 拿到 users
+ * 拿到 users , 所有 useri userii 
  */
  export async function getUsersData(id) {
   await delay(1000);
@@ -36,15 +29,22 @@ export async function updateBankCorpus(id,newCorpus){
   return resp.data;
 }
 
+// ============ alter ============
 /**
- * 修改 rate中的数据
- * @param {*} id 
- * @param {*} rateObj 
- * @returns 
+ * alter bank
  */
 export async function updateRate(id, rateObj) {
-  await delay(2000);
-  const resp = await request().post("/api/rate/updata", { id, rateObj })
+  await delay(1000);
+  const resp = await request().post("/api/rate/update", { id, rateObj })
+  return resp.data;
+}
+
+/**
+ * alter bank
+ */
+ export async function updateBank(id, bankObj) {
+  await delay(1000);
+  const resp = await request().post("/api/bank/update", { id, bankObj })
   return resp.data;
 }
 

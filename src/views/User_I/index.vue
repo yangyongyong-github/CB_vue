@@ -1,11 +1,10 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="qq" tipText="贷款，让财富成倍增长~" />
-
+    <TopTip IconType="rise" tipText="贷款，让财富成倍增长~" />
     <header>
       <!-- header：基础信息部分 -->
-      <div class="title">User_I Center</div>
+      <div class="page-title">User_I Center</div>
       <!-- 基础信息 -->
       <div class="user-data-base tit">
         <div class="user-name">
@@ -75,171 +74,180 @@
       </div>
     </header>
 
-    <div class="work-category">
-      <Icon class="log" type="info" /> 请选择办理业务类型:
-      <div>
-        <label
-          >贷款
+    <div class="workarea">
+      <p class="work-tit">用户服务办理区域</p>
+
+      <div class="modal" v-show="userData.isFreezed">
+        <Modal Height='190%' text="您的账户已被管理员冻结！"> </Modal>
+      </div>
+
+      <div class="work-category">
+        请选择办理业务类型:
+        <div>
+          <label
+            >贷款
+            <input
+              type="radio"
+              name="workCategory"
+              v-model="serCategory"
+              value="loan"
+            />
+          </label>
+        </div>
+        <div>
+          <label>还款</label>
           <input
             type="radio"
             name="workCategory"
             v-model="serCategory"
-            value="loan"
+            value="repay"
           />
-        </label>
+        </div>
       </div>
-      <div>
-        <label>还款</label>
-        <input
-          type="radio"
-          name="workCategory"
-          v-model="serCategory"
-          value="repay"
-        />
-      </div>
-    </div>
 
-    <!-- 一、对应的办理内容 -->
-    <div class="work-content">
-      <!-- 借款loan -->
-      <div class="ser-loan" v-if="this.serCategory === 'loan'">
-        <!-- 贷款身份选择 -->
-        <div class="info-select">
-          <div class="ident-category">
-            <Icon class="log" type="info" /> 请选择身份类型:
-            <div>
-              <label
-                >个人
+      <!-- 一、对应的办理内容 -->
+      <div class="work-content">
+        <!-- 借款loan -->
+        <div class="ser-loan" v-if="this.serCategory === 'loan'">
+          <!-- 贷款身份选择 -->
+          <div class="info-select" style="height: 200px">
+            <div class="ident-category">
+              请选择身份类型:
+              <div>
+                <label
+                  >个人
+                  <input
+                    type="radio"
+                    name="identCategory"
+                    v-model="loanFormData.ident"
+                    value="1"
+                  />
+                </label>
+              </div>
+              <div>
+                <label>企业</label>
                 <input
                   type="radio"
                   name="identCategory"
                   v-model="loanFormData.ident"
-                  value="1"
+                  value="2"
                 />
-              </label>
+              </div>
             </div>
-            <div>
-              <label>企业</label>
+            <div class="cause-input">
+              请填写贷款原因:
+              <span class="tip">不少于5个字符</span>
+              <textarea
+                cols="30"
+                rows="5"
+                v-model="loanFormData.cause"
+                @blur="causeValidate"
+              ></textarea>
+            </div>
+            <div class="company-input" v-show="loanFormData.ident === '2'">
+              <!-- 1 个人 2 企业 -->
+              <a-icon type="check-circle" /> 请填写
+              {{ userData.ident === 1 ? "个人" : "企业" }} 单位(公司)名称:
+              <input type="text" v-model="loanFormData.company" />
+            </div>
+          </div>
+          <!-- 二（二）续贷工作区 -->
+          <div class="loan-work">
+            <!-- 1. 类型选择 -->
+            <!-- <h3>loan page</h3> -->
+            <p>请选择贷款利率类型:</p>
+            <div class="loan">
+              <div class="short">
+                <input
+                  type="radio"
+                  name="loan_category"
+                  value="short"
+                  v-model="loanFormData.loan_category"
+                />
+                <div class="title">短期(1-3)</div>
+
+                <div class="rate">
+                  利息：<span>{{ rateData.L_s }}</span>
+                </div>
+              </div>
+
+              <div class="middle">
+                <input
+                  type="radio"
+                  name="loan_category"
+                  value="middle"
+                  v-model="loanFormData.loan_category"
+                />
+                <div class="title">中期(3-5)</div>
+
+                <div class="rate">
+                  利息：<span>{{ rateData.L_m }}</span>
+                </div>
+              </div>
+
+              <div class="long">
+                <input
+                  type="radio"
+                  name="loan_category"
+                  value="long"
+                  v-model="loanFormData.loan_category"
+                />
+                <div class="title">长期(>5)</div>
+
+                <div class="rate">
+                  利息：<span>{{ rateData.L_l }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- 2. 用户输入续贷金额 -->
+            <div class="item">
+              <label> 续贷金额:(单位：元) </label>
               <input
-                type="radio"
-                name="identCategory"
-                v-model="loanFormData.ident"
-                value="2"
+                type="number"
+                v-model="loanFormData.inputNumber"
+                @blur="rules & computed_interest"
               />
             </div>
-          </div>
-          <div class="cause-input">
-            <Icon class="log" type="info" /> 请填写贷款原因:
-            <span class="tip">不少于5个字符</span>
-            <textarea
-              cols="30"
-              rows="5"
-              v-model="loanFormData.cause"
-              @blur="causeValidate"
-            ></textarea>
-          </div>
-          <div class="company-input" v-show="loanFormData.ident === '2'">
-            <!-- 1 个人 2 企业 -->
-            <Icon class="log" type="info" /> 请填写
-            {{ userData.ident === 1 ? "个人" : "企业" }} 单位(公司)名称:
-            <input type="text" v-model="loanFormData.company" />
+            <div class="item">
+              <label> 续贷年限(单位：年): </label>
+              <input
+                type="number"
+                v-model="loanFormData.inputYear"
+                @blur="rules"
+              />
+              <label class="year-tip"> (小数时，自动向上取整)</label>
+            </div>
+
+            <!-- 3. 计算本息 -->
+            <div class="item">
+              <span style="margin-right: 20px"
+                >本息贷款利息为:{{ loanFormData.interest }}</span
+              >
+              <b>确定开始本此贷款？</b>
+            </div>
+            <p style="text-align: center">
+              <button @click="loanWorking" :disabled="isSubmiting">
+                {{ isSubmiting ? "提交中..." : "提交" }}
+              </button>
+            </p>
+            <!-- 4. 异步执行还款操做 -->
           </div>
         </div>
-        <!-- 二（二）续贷工作区 -->
-        <div class="loan-work">
-          <!-- 1. 类型选择 -->
-          <h3>loan page</h3>
-          <div class="loan">
-            <div class="short">
-              <input
-                type="radio"
-                name="loan_category"
-                value="short"
-                v-model="loanFormData.loan_category"
-              />
-              <div class="title">短期(1-3)</div>
+        <!-- =========================== repay ======================= -->
+        <div class="ser-repay" v-else>
+          <!-- 二（一）、还款工作区 -->
+          <div class="repay">
+            <p><b>本此偿还</b></p>
 
-              <div class="rate">
-                利息：<span>{{ rateData.L_s }}</span>
-              </div>
-            </div>
-
-            <div class="middle">
-              <input
-                type="radio"
-                name="loan_category"
-                value="middle"
-                v-model="loanFormData.loan_category"
-              />
-              <div class="title">中期(3-5)</div>
-
-              <div class="rate">
-                利息：<span>{{ rateData.L_m }}</span>
-              </div>
-            </div>
-
-            <div class="long">
-              <input
-                type="radio"
-                name="loan_category"
-                value="long"
-                v-model="loanFormData.loan_category"
-              />
-              <div class="title">长期(>5)</div>
-
-              <div class="rate">
-                利息：<span>{{ rateData.L_l }}</span>
-              </div>
+            <input type="number" v-model="repayData.number" @blur="rules" />
+            元
+            <!-- {isSubmiting?disabled:none} -->
+            <div style="margin-top: 10px; padding-left: 30%">
+              <button @click="repayWorking" :disabled="isSubmiting">
+                {{ isSubmiting ? "提交中..." : "提交" }}
+              </button>
             </div>
           </div>
-          <!-- 2. 用户输入续贷金额 -->
-          <div>
-            <label> 续贷金额:(单位：元) </label>
-            <input
-              type="number"
-              v-model="loanFormData.inputNumber"
-              @blur="rules & computed_interest"
-            />
-
-            <label> 续贷年限(单位：年): </label>
-
-            <input
-              type="number"
-              v-model="loanFormData.inputYear"
-              @blur="rules"
-            />
-
-            <label class="year-tip"> (小数时，自动向上取整)</label>
-          </div>
-          <!-- 3. 计算本息 -->
-          <div>
-            本息贷款利息为:
-            <label>{{ loanFormData.interest }}</label>
-            确定开始本此贷款？
-
-            <button @click="loanWorking" :disabled="isSubmiting">
-              {{ isSubmiting ? "提交中..." : "提交" }}
-            </button>
-          </div>
-          <!-- 4. 异步执行还款操做 -->
-        </div>
-      </div>
-      <!-- =========================== repay ======================= -->
-      <div class="ser-repay" v-else>
-        <!-- 二（一）、还款工作区 -->
-        <div class="repay">
-          <h3>repay page</h3>
-          本此偿还<input
-            type="number"
-            v-model="repayData.number"
-            @blur="rules"
-          />
-          元
-          <!-- {isSubmiting?disabled:none} -->
-
-          <button @click="repayWorking" :disabled="isSubmiting">
-            {{ isSubmiting ? "提交中..." : "提交" }}
-          </button>
         </div>
       </div>
     </div>
@@ -248,8 +256,8 @@
 
 <script>
 import { mapState } from "vuex";
-import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
+import Modal from "@/components/Modal";
 import { DecimalPos } from "@/utils";
 
 export default {
@@ -278,8 +286,8 @@ export default {
     };
   },
   components: {
-    Icon,
     TopTip,
+    Modal,
   },
   computed: {
     ...mapState({
@@ -546,6 +554,19 @@ export default {
     /**
      * tip func
      */
+    // 清空用户输入的 inputNumber
+    clearInput() {
+      // repay
+      this.repayData.number = "";
+      this.loanFormData.inputNumber = "";
+      this.loanFormData.inputYear = "";
+      // loan extra
+      this.loanFormData.cause = "";
+      this.loanFormData.ident = 1;
+      this.loanFormData.company = "";
+      // 清空 计算的利息
+      this.loanFormData.interest = 0;
+    },
     tip() {
       this.$showMessage({
         content: "完成！", //successMsg
@@ -554,17 +575,7 @@ export default {
         container: this.$refs.from,
         callback: () => {
           this.isSubmiting = false;
-          // 清空用户输入的 inputNumber
-          // repay
-          this.repayData.number = "";
-          this.loanFormData.inputNumber = "";
-          this.loanFormData.inputYear = "";
-          // loan extra
-          this.loanFormData.cause = "";
-          this.loanFormData.ident = 1;
-          this.loanFormData.company = "";
-          // 清空 计算的利息
-          this.loanFormData.interest = 0;
+          this.clearInput();
         },
       });
     },
@@ -573,61 +584,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~@/styles/var.less";
-@import "~@/styles/mixin.less";
-// @import "./style.less";
-@import "~@/styles/user.less";
-
-.useri-container {
-  width: 100%;
-  min-width: 900px;
-  box-sizing: border-box;
-
-  header {
-    .user-data-base {
-    } // done
-    .user-data-account {
-    } // done
-    .user-loan {
-      .to-flex();
-    }
-  }
-  // 请选择办理业务类型
-  .work-category {
-    width: 300px;
-    margin-left: 38%;
-    text-align: center;
-    border: 1px solid;
-    .to-flex();
-  }
-
-  .work-content {
-    .ser-loan,
-    .ser-repay {
-      .info-select {
-        width: 300px;
-        margin: 0 50px;
-        padding: 10px;
-        border: 1px saddlebrown dotted;
-        .ident-category {
-          .to-flex();
-        }
-        .cause-input {
-          margin-top: 10px;
-        }
-      }
-      .to-flex();
-      .loan-work {
-        .loan {
-          width: 70%;
-          border: 2px solid gray;
-          border-radius: 20px;
-          & > div {
-            .to-flex();
-          }
-        }
-      }
-    }
-  }
-}
+@import "./self-style.less";
 </style>

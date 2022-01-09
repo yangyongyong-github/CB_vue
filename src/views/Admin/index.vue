@@ -1,6 +1,7 @@
 <template>
   <div class="admin-container">
-    <TopTip IconType="qq" tipText="银行有我来守护~" />
+    <TopTip IconType="team" tipText="银行有我来守护~" />
+
     <header>
       <!-- base info -->
       <!-- 不同的等级显示不同的提示语 -->
@@ -28,21 +29,135 @@
         </button>
       </div>
     </header>
+    <div class="page-title">银行管理员登录界面</div>
     <div class="main-operation">
       <!-- 主要的操做区域 -->
       <div class="high" v-if="userData.rank === 'h'">
+        <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
+        <!-- 【part-2 用户情况 】 -->
+        <div class="users-status">
+          <div class="user-status">
+            <div class="overall">
+              <span class="indicate">目前在账资金:</span>
+              <span class="num1"> {{ All_Fund }}</span>
+
+              <span class="indicate ml"> 银行流动资金:</span>
+              <span class="num1"> {{ All_FundWater }}</span>
+            </div>
+
+            <p class="users-nums">
+              <span class="tit ml">用户情况 </span>
+              <span class="indicate ml">用户总数:</span>
+              <span class="num2"> {{ All_Users }}</span>
+            </p>
+            <!-- useri 总数 -->
+            <div class="useri">
+              <span class="indicate">Loan 用户总数:</span>
+              <span class="num2"> {{ usersData[0].length }}</span>
+
+              <span class="indicate ml">用户总贷款:</span>
+              <b>{{ All_Loan_I }}</b>
+              <span class="indicate ml">用户总贷款利息:</span>
+              <b> {{ All_Interest_I }}</b>
+            </div>
+            <div class="userii">
+              <span class="indicate">Deposit 用户总数:</span>
+              <span class="num2"> {{ usersData[1].length }}</span>
+
+              <span class="indicate ml">用户总存款:</span>
+              <b> {{ All_Deposit_II }}</b>
+              <span class="indicate ml">用户总存款利息:</span>
+              <b>{{ All_Interest_II }}</b>
+            </div>
+
+            <div class="fund-alay">
+              <div>
+                <span class="indicate">存款用户-资金占比(在用户资金中):</span>
+                <span class="num3"> {{ Persent_Deposit_fund }}</span>
+                <span class="indicate ml">存款用户-人数占比:</span>
+                <span class="num3"> {{ Persent_Deposit_user }}</span>
+              </div>
+              <div>
+                <span class="indicate">贷款用户-资金占比(在用户资金中):</span>
+                <span class="num3"> {{ Persent_Loan_fund }}</span>
+                <span class="indicate ml">贷款用户-人数占比:</span>
+                <span class="num3"> {{ Persent_Loan_user }}</span>
+              </div>
+              <div>
+                <span class="indicate"> 银行本金-资金占比:</span>
+                <span class="num3"> {{ Persent_Bank_corpus }}</span>
+                <span class="indicate ml"> 用户资金-资金占比:</span>
+                <span class="num3"> {{ Persent_users_corpus }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="charts" ref="chart">
+            <!-- charts -->
+          </div>
+        </div>
+        <!-- 【part-3】 银行汇率控制 添加和增减 -->
+        <div class="rate-op">
+          <p>
+            银行汇率
+            <button @click="toOpRate">修改</button>
+          </p>
+
+          <!-- 查看 -->
+          <table>
+            <thead>
+              <tr>
+                <td>大额存款起薪(元)</td>
+                <td>中额存款起薪(元)</td>
+                <td>大额贷款限制数额(元)</td>
+                <td>大额存款(>3年)</td>
+                <td>大额存款(1-3年)</td>
+                <td>中额存款(>3年)</td>
+                <td>中额存款(1-3年)</td>
+                <td>长期贷款(>5年)</td>
+                <td>中期贷款(3-5年)</td>
+                <td>短期贷款(1-3年)</td>
+              </tr>
+            </thead>
+            <tbody>
+              <td>{{ rateData.A }}</td>
+              <td>{{ rateData.B }}</td>
+              <td>{{ rateData.C }}</td>
+              <td>{{ rateData.A_3 }}</td>
+              <td>{{ rateData.A_1 }}</td>
+              <td>{{ rateData.B_3 }}</td>
+              <td>{{ rateData.B_1 }}</td>
+              <td>{{ rateData.L_l }}</td>
+              <td>{{ rateData.L_m }}</td>
+              <td>{{ rateData.L_s }}</td>
+            </tbody>
+          </table>
+
+          <!-- 修改 -->
+          <div class="alter-rate" v-show="highFormData.alterRate_Flag">
+            <b class="guide">请选择需要修改的利率类型</b>
+            <select v-model="highFormData.rateCategory">
+              <option
+                v-for="(item, index) in rateDataLists"
+                :key="index"
+                :value="item.value"
+              >
+                {{ item.title }}
+              </option>
+            </select>
+            <label>
+              <b class="guide">请输入对应的利率/数额</b>
+              <input type="number" v-model="highFormData.rateInput"
+            /></label>
+            <button @click="toAlertRate">提交</button>
+          </div>
+        </div>
+
         <!--【part-1】 银行本金 : 操做-增减 -->
         <div class="corpus">
-          <h3>银行资金</h3>
+          <div>
+            <span class="tit">银行资金</span>
 
-          <div>
-            <!-- 目前银行在涨资金 = 本金  -->
-            <!-- 银行目前总共流动资金 -->
-            <!-- 使用e-cahrts? -->
-          </div>
-          <div>
-            <span class="guide-h">银行本金</span>
-            {{ bankData.corpus }} 元(人民币)
+            <span class="num1"> {{ bankData.corpus }}</span> 元(人民币)
             <button @click="toOpCorpus">修改</button>
           </div>
 
@@ -73,133 +188,8 @@
                   v-model="highFormData.corpusCategory"
               /></label>
 
-              <button @click="corpusSubmit">提交</button>
+              <button @click="toAlterCorpus">提交</button>
             </div>
-          </div>
-        </div>
-        <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
-        <!-- 【part-2 用户情况 】 -->
-        <div class="users-status">
-          <div class="user-status">
-            <div>
-              <div>
-                <span class="indicate">目前在账资金(流动资金-贷款本金):</span>
-                {{ All_Fund }}
-              </div>
-              <div>
-                <span class="indicate"> 银行流动资金:</span>
-                {{ All_FundWater }}
-              </div>
-            </div>
-
-            <div>
-              <b>用户情况</b>
-              <div class="user-num">
-                <div>
-                  <span class="indicate">用户总数:</span>
-                  {{ All_Users }}
-                </div>
-              </div>
-            </div>
-            <!-- useri 总数 -->
-            <div class="useri">
-              <div>
-                <span class="indicate">Loan 用户总数:</span>
-                {{ usersData[0].length }}
-              </div>
-              <div>
-                <span class="indicate">用户总贷款:</span> {{ All_Loan_I }}
-                <span class="indicate">用户总贷款利息:</span>
-                {{ All_Interest_I }}
-              </div>
-            </div>
-            <div class="userii">
-              <div>
-                <span class="indicate">Deposit 用户总数:</span>
-                {{ usersData[1].length }}
-              </div>
-              <div>
-                <span class="indicate">用户总存款:</span> {{ All_Deposit_II }}
-                <span class="indicate">用户总存款利息:</span>
-                {{ All_Interest_II }}
-              </div>
-              <div>
-                <span class="indicate">存款用户-资金占比(在用户资金中):</span>
-                {{ Persent_Deposit_fund }}
-                <span class="indicate">存款用户-人数占比:</span>
-                {{ Persent_Deposit_user }}
-              </div>
-              <div>
-                <span class="indicate">贷款用户-资金占比(在用户资金中):</span>
-                {{ Persent_Loan_fund }}
-                <span class="indicate">贷款用户-人数占比:</span>
-                {{ Persent_Loan_user }}
-              </div>
-              <div>
-                <span class="indicate"> 银行本金-资金占比:</span>
-                {{ Persent_Bank_corpus }}
-                <span class="indicate"> 用户资金-资金占比:</span>
-                {{ Persent_users_corpus }}
-              </div>
-            </div>
-          </div>
-          <div class="charts">
-            <div class="charts1">
-              <!-- <Charts /> -->
-            </div>
-            <div class="charts2" ref="chart2"></div>
-          </div>
-        </div>
-        <!-- 【part-3】 银行汇率控制 添加和增减 -->
-        <div class="rate-op">
-          <h3>银行汇率</h3>
-          <!-- 查看 -->
-          <table>
-            <thead>
-              <tr>
-                <td>大额存款起薪</td>
-                <td>中额存款起薪</td>
-                <td>大额贷款限制数额</td>
-                <td>大额存款(>3年)</td>
-                <td>大额存款(1-3年)</td>
-                <td>中额存款(>3年)</td>
-                <td>中额存款(1-3年)</td>
-                <td>长期贷款(>5年)</td>
-                <td>中期贷款(3-5年)</td>
-                <td>短期贷款(1-3年)</td>
-              </tr>
-            </thead>
-            <tbody>
-              <td>{{ rateData.A }}</td>
-              <td>{{ rateData.B }}</td>
-              <td>{{ rateData.C }}</td>
-              <td>{{ rateData.A_3 }}</td>
-              <td>{{ rateData.A_1 }}</td>
-              <td>{{ rateData.B_3 }}</td>
-              <td>{{ rateData.B_1 }}</td>
-              <td>{{ rateData.L_l }}</td>
-              <td>{{ rateData.L_m }}</td>
-              <td>{{ rateData.L_s }}</td>
-            </tbody>
-          </table>
-          <button @click="toOpRate">修改</button>
-          <!-- 修改 -->
-          <div class="alter-rate" v-show="highFormData.alterRate_Flag">
-            <b class="guide">请选择需要修改的利率类型:</b>
-            <select v-model="highFormData.rateCategory">
-              <option
-                v-for="(item, index) in rateDataLists"
-                :key="index"
-                :value="item.value"
-              >
-                {{ item.title }}
-              </option>
-            </select>
-            <label>
-              <b class="guide">请输入对应的利率/数额:</b>
-              <input type="number" v-model="highFormData.rateInput"
-            /></label>
-            <button @click="toAlertRate">提交</button>
           </div>
         </div>
       </div>
@@ -214,11 +204,11 @@
           <div class="query-user">
             <div><b>查找指定用户</b></div>
             <div>
-              <span class="guide">请输入待查用户账号:</span>
+              <span class="guide">请输入待查用户账号</span>
               <input type="text" v-model="com_OP_FormData.userAccount" />
             </div>
             <div>
-              <span class="guide">请选择用户的类型:</span>
+              <span class="guide">请选择用户的类型</span>
               <select v-model="com_OP_FormData.userCategory">
                 <option value="useri">I</option>
                 <option value="userii">II</option>
@@ -230,7 +220,7 @@
           <div class="query-result">
             <p class="guide tip-t">查询结果:</p>
 
-            <div class="useri" v-if="userQueryData.flag === 'useri'">
+            <div class="useri result" v-if="userQueryData.flag === 'useri'">
               <!-- useri -->
               <b>用户类型:I</b>
               <div class="line">
@@ -305,6 +295,15 @@
                 </span>
                 <span class="guide">
                   <button @click="toDeleteUser">删除用户</button>
+                  <!-- <a-popconfirm
+                    placement="top"
+                    ok-text="Yes"
+                    cancel-text="No"
+                    @confirm="confirm"
+                  >
+                   <button @click="toDeleteUser">删除用户</button>
+                  <p>确定要删除?</p>
+                  </a-popconfirm> -->
                 </span>
                 <span class="guide">
                   <button @click="toAlertUserInfo">修改用户信息</button>
@@ -336,9 +335,98 @@
                 <button @click="toSubmit_alterUserInfo">提交</button>
               </div>
             </div>
-            <div class="userii" v-else-if="userQueryData.flag === 'userii'">
+            <div
+              class="userii result"
+              v-else-if="userQueryData.flag === 'userii'"
+            >
               <!-- userii -->
               <b>用户类型:II</b>
+
+              <div class="line">
+                <div>
+                  <span class="guide">Name:</span>{{ userQueryData.name }}
+                </div>
+                <div>
+                  <span class="guide">Gender:</span
+                  >{{ userQueryData.sex | FilterSex }}
+                </div>
+                <div>
+                  <span class="guide">Birthday:</span
+                  >{{ userQueryData.birthday | FilterBirthday }}
+                </div>
+                <div>
+                  <span class="guide">Age:</span>{{ userQueryData.age }}
+                </div>
+                <div>
+                  <span class="guide">Account:</span>{{ userQueryData.account }}
+                </div>
+                <div>
+                  <span class="guide">LoginID:</span>{{ userQueryData.loginId }}
+                </div>
+                <div>
+                  <span class="guide">Mobile:</span>{{ userQueryData.mobile }}
+                </div>
+                <div>
+                  <span class="guide">Job:</span>{{ userQueryData.job }}
+                </div>
+
+                <div>
+                  <span class="guide">isFreezed:</span
+                  >{{ userQueryData.isFreezed }}
+                </div>
+              </div>
+              <div class="line">
+                <div>
+                  <span class="guide">deposit:</span>{{ userQueryData.deposit }}
+                </div>
+                <div>
+                  <span class="guide">Interest:</span
+                  >{{ userQueryData.interest }}
+                </div>
+                <div>
+                  <span class="guide">Flag:</span>{{ userQueryData.flag }}
+                </div>
+              </div>
+              <div class="line admin-op">
+                <span class="guide"
+                  >是否被冻结: {{ userQueryData.isFreezed }}
+                  <button @click="toFreezedUser">
+                    {{ userQueryData.isFreezed | FilterFreezed }}
+                  </button>
+                </span>
+
+                <span class="guide">
+                  <button @click="toDeleteUser">删除用户</button>
+                </span>
+                <span class="guide">
+                  <button @click="toAlertUserInfo">修改用户信息</button>
+                </span>
+              </div>
+              <!-- 管理员点击是否需要修改用户信息区域 style-common.css -->
+              <div
+                class="alter-user-info"
+                v-show="com_OP_FormData.userInfoAlert"
+              >
+                <b>修改用户信息</b>
+                <div>
+                  <!-- alter-pwd -->
+                  <b class="guide">修改密码</b>
+                  <label class="guide"> 请输入新密码: </label>
+                  <input type="text" v-model="alter_userInfo.newPsw" />
+                </div>
+                <div>
+                  <!-- alter-mobile --><b class="guide">修改联系电话</b>
+                  <label class="guide"> 请输入新联系电话: </label>
+                  <input type="number" v-model="alter_userInfo.newMobile" />
+                </div>
+                <div>
+                  <!-- alter-job -->
+                  <b class="guide">修改工作</b>
+                  <label class="guide"> 请输入新工作: </label>
+                  <input type="text" v-model="alter_userInfo.newJob" />
+                </div>
+                <button @click="toSubmit_alterUserInfo">提交</button>
+              </div>
             </div>
             <div v-else></div>
           </div>
@@ -347,8 +435,8 @@
         <div class="mt"><!-- 占位，拉开间距 margin-top --></div>
         <!-- 展示用户信息,动态渲染 -->
         <div class="users-show">
-          <p class="guide tip-t">
-            ------------------ 部分用户信息(前5条)------------------------
+          <p class="users-show-title">
+            存/贷款 <span class="nums">前3位</span> 用户信息
           </p>
           <!-- I -->
           <h4>User_I Loan user</h4>
@@ -442,10 +530,8 @@
 
 <script>
 import { mapState } from "vuex";
-import Icon from "@/components/Icon";
 import TopTip from "@/components/TopTip";
 import * as MATH from "@/utils";
-import Charts from "@/components/Echarts";
 const echarts = require("echarts");
 export default {
   inject: ["reload"], // 友好的刷新界面
@@ -455,9 +541,9 @@ export default {
        * admin alter rate
        */
       rateDataLists: [
-        { title: "大额存款起薪	", value: "A" },
-        { title: "中额存款起薪	", value: "B" },
-        { title: "大额贷款限制	", value: "C" },
+        { title: "大额存款起薪", value: "A" },
+        { title: "中额存款起薪", value: "B" },
+        { title: "大额贷款限制", value: "C" },
         { title: "大额存款(>3年)", value: "A_3" },
         { title: "大额存款(1-3年)", value: "A_1" },
         { title: "中额存款(>3年)", value: "B_3" },
@@ -500,12 +586,10 @@ export default {
     };
   },
   components: {
-    Icon,
     TopTip,
-    Charts,
   },
   mounted() {
-    // this.initCharts();
+    this.initCharts();
   },
   computed: {
     ...mapState({
@@ -558,10 +642,13 @@ export default {
     },
     // 银行本金资金占比
     Persent_Bank_corpus() {
-      const num =
-        MATH.DecimalPos((this.bankData.corpus * 1) / this.All_FundWater, 2) *
-        100;
-      return `${num} % `;
+      // 小数点后太多？
+      // const num =
+      //   MATH.DecimalPos(+this.bankData.corpus / this.All_FundWater, 2) *
+      //   100;
+
+      // return `${num} % `;
+      return MATH.Persent(+this.bankData.corpus / +this.All_FundWater);
     },
     // 银行用户资金占比
     Persent_users_corpus() {
@@ -689,14 +776,6 @@ export default {
       }
     },
   },
-  watch: {
-    /**
-     * 监听echarts中依赖的数据变化
-     */
-    // (newV,oldV){
-    //   this.initCharts();
-    // }
-  },
   methods: {
     /**
      * writeDB
@@ -722,17 +801,17 @@ export default {
     // delete user
     async toDeleteUser() {
       const resu = confirm("comfire to delete ?");
-      if (!resu) {
-        return;
-      }
+      if (!resu)  return;
+
       const deleResu = await this.$store.dispatch("deleteUser", {
         account: this.userQueryData.account,
         flag: this.userQueryData.flag,
       });
       if (deleResu) {
         alert("delete done");
-        this.reload();
-        console.log("after delete :", this.userQueryData);
+        // 重新获取所有用户数据
+       await this.GetUsers();
+       this.reload();
       } else {
         alert("delete user fail");
       }
@@ -805,10 +884,10 @@ export default {
      */
     async toQueryUser() {
       if (!this.com_OP_FormData.userAccount) {
-        alert("please input user account !");
+        alert("Account is lack !");
         return;
       } else if (!this.com_OP_FormData.userCategory) {
-        alert("please check user category !");
+        alert("Category is lack !");
         return;
       }
       console.log("query...");
@@ -818,8 +897,6 @@ export default {
       });
       if (result) {
         console.log("query result : ", result);
-        console.log("store : ", this.userQueryData);
-        this.reload(); // 刷新页面
       } else {
         console.log("query result : null");
         return;
@@ -844,6 +921,7 @@ export default {
      * admin-high to alter rate
      */
     async toAlertRate() {
+      // 1.1 输入验证
       if (
         this.highFormData.rateInput <= 0 ||
         this.highFormData.rateCategory === ""
@@ -851,10 +929,29 @@ export default {
         alert("值缺失！");
         return;
       }
-      // 1. this.highFormData.rateInput -> rateData(store) 2. write to db
-      console.log(
-        ` alter rate :  ${this.highFormData.rateCategory} = ${this.highFormData.rateInput}`
+
+      // 1.2 提交前的确认
+      const resu = confirm(
+        `comfirme to alter rate  ${this.highFormData.rateCategory} = ${this.highFormData.rateInput}`
       );
+      if (!resu) return; // 取消则不做操做
+
+      // 2.1. this.highFormData.rateInput -> rateData(store)
+      const categroy = this.highFormData.rateCategory; // rate category
+      const value = this.highFormData.rateInput;
+      this.rateData[categroy] = value;
+      console.log("> rate alter of store : ", this.rateData);
+
+      // 2.2 write to db
+      const writeResult = await this.$store.dispatch("updateRate", {
+        id: 1,
+        rateObj: this.rateData,
+      });
+      if (writeResult) {
+        alert("alter rate done ");
+      } else {
+        alert("alter rate fail ");
+      }
 
       // clear
       this.highFormData.rateInput === 0;
@@ -864,7 +961,15 @@ export default {
      * 点击提交进行curpos操做
      * 追加，而非替换
      */
-    async corpusSubmit() {
+    async toAlterCorpus() {
+      if (
+        this.highFormData.corpusCategory === "" ||
+        this.highFormData.corpus <= 0
+      ) {
+        alert("值缺失！");
+        return;
+      }
+
       const confirme = window.confirm(
         `再次确定 [${this.highFormData.corpusCategory}] : ${this.highFormData.corpus}元吗? `
       );
@@ -872,24 +977,39 @@ export default {
       if (!confirme) {
         // 如果选择取消，则不予操做
         this.highFormData.corpusFlag = false;
+        // clear input
+        this.highFormData.corpus = 0;
+        this.highFormData.corpusCategory = null;
         return;
       }
 
       try {
-        console.log("开始执行操做...");
-
+        /**
+         * 区分增减操做
+         */
         if (this.highFormData.corpusCategory === "increase") {
-          const newCorpus = +this.bankData.corpus + +this.highFormData.corpus;
-          this.$store.dispatch("setBankCorpus", newCorpus);
+          this.bankData.corpus = MATH.DecimalPos(
+            +this.bankData.corpus + +this.highFormData.corpus,
+            2
+          );
         } else if (this.highFormData.corpusCategory === "decrease") {
-          const newCorpus = +this.bankData.corpus - +this.highFormData.corpus;
-          this.$store.dispatch("setBankCorpus", newCorpus);
+          this.bankData.corpus = MATH.DecimalPos(
+            +this.bankData.corpus - +this.highFormData.corpus,
+            2
+          );
         } else {
           return;
         }
 
-        alert("set corpus done.");
-        console.log("执行操作完成!");
+        const alterResult = await this.$store.dispatch("updateBank", {
+          id: "cb1", // bankId
+          obj: this.bankData,
+        });
+        if (alterResult) {
+          alert("bank alter done ");
+        } else {
+          alert("bank alter fail ");
+        }
 
         // clear input
         this.highFormData.corpus = 0;
@@ -900,26 +1020,27 @@ export default {
         console.log(error);
       }
     },
-    /*
-     * 得到全部用户信息
-     */
-    async getAllUsers() {
-      const Users = await this.$store.dispatch("getAllUser");
-      if (Users) {
-        console.log(Users);
+    // 获取部分用户信息
+     async GetUsers() {
+      console.log('重新获取所有用户数据...')
+      const usersInfo = await this.$store.dispatch("getUsers");
+      if (usersInfo) {
+        // 通过该id 拿到了对应的 数据
+        console.log("init [users] data : ", usersInfo);
       }
     },
+  
     /**
      * charts
      */
     initCharts() {
-      let myChart = echarts.init(this.$refs.chart2);
+      let myChart = echarts.init(this.$refs.chart);
       // 绘制图表
       myChart.setOption({
         title: {
           // title style
-          text: "ChinaBank All_Fund",
-          subtext: "CB",
+          text: "中国银行 资金组成部分",
+          subtext: "",
           left: "center",
         },
         tooltip: {
@@ -937,10 +1058,10 @@ export default {
             radius: "50%",
             data: [
               { value: this.bankData.corpus, name: "银行本金" },
-              { value: this.All_Loan_I, name: "贷款用户-总贷款(本金)" },
-              { value: this.All_Interest_I, name: "贷款用户-总贷款(利息)" },
-              { value: this.All_Deposit_II, name: "存款用户-总存款(本金)" },
-              { value: this.All_Interest_II, name: "存款用户-总存款(利息)" },
+              { value: this.All_Loan_I, name: "贷款用户-总贷款" },
+              { value: this.All_Interest_I, name: "贷款用户-总利息" },
+              { value: this.All_Deposit_II, name: "存款用户-总存款" },
+              { value: this.All_Interest_II, name: "存款用户-总利息" },
             ],
             emphasis: {
               itemStyle: {
