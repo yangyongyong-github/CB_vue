@@ -5,67 +5,50 @@
 
     <header>
       <!-- header：基础信息部分 -->
-      <div class="page-title">userii_loginUser Center</div>
-
-      <p class="work-tit">用户基本信息</p>
-
+      <div class="page-title">II Center</div>
       <!-- 基础信息 -->
       <div class="user-data-base tit">
-        <div class="user-name">
-          <span class="guide"> 姓名 : </span>{{ userData.name }}
-        </div>
-        <div class="user-sex">
-          <span class="guide"> 性别 : </span>
-          {{ userData.sex === "true" ? "男" : "女" }}
-        </div>
-        <div class="user-age">
-          <span class="guide"> 年龄 : </span>
-          {{ userData.age }} 岁
-        </div>
-        <div class="user-job">
-          <span class="guide"> 职业 : </span>
-          {{ userData.job }}
-        </div>
-        <div class="user-mobile">
-          <span class="guide"> 联系电话 : </span>
-          {{ userData.mobile }}
-        </div>
-      </div>
-
-      <!-- 业务信息 -->
-      <div class="user-data-account tit">
-        <!-- 身份 loan ? deposit -->
-        <div class="user-cage">
-          <span class="guide"> 用户类别 : </span>
-          {{ userData.flag }}
-          {{ userData.flag === "I" ? "贷款" : "存款" }}用户
-        </div>
-        <div class="user-account">
-          <span class="guide"> 账号 : </span>
-          {{ userData.account }}
-        </div>
-        <div class="user-login-id">
-          <span class="guide"> LoginId : </span>
-          {{ userData.account }}
-        </div>
-      </div>
-
-      <!-- 用户存款信息 -->
-      <div class="user-deposit tit">
-        <!-- 存款额度总计 -->
-        <div class="user-deposit">
-          <span class="guide"> 存款总额-本金 : </span>
-          {{ userData.deposit }}元
-        </div>
-        <!-- 存款利息总结 -->
-        <div class="user-interest">
-          <span class="guide"> 存款总额-利息 : </span>
-          {{ userData.interest }}元
+        <div class="base-info">
+          <div><span class="guide">Name: </span> {{ userData.name }}</div>
+          <div>
+            <span class="guide">Gender : </span>
+            {{ +userData.sex === 1 ? "男" : "女" }}
+          </div>
+          <div>
+            <span class="guide">Age : </span>
+            {{ userData.age }}
+          </div>
+          <div>
+            <span class="guide"> 职业: </span>
+            {{ userData.job }}
+          </div>
+          <div><span class="guide"> 联系电话: </span>{{ userData.mobile }}</div>
+        
         </div>
 
-        <div>
-          <span class="guide"> 本息共计 : </span>
-          {{ depositTotal }}
+        <div class="person-account">
+          <div>
+            <span class="guide"> 用户类别: </span>
+            {{ userData.flag === "useri" ? "贷款" : "存款" }}用户 ({{
+              userData.flag
+            }})
+          </div>
+          <div><span class="guide">账号 : </span> {{ userData.account }}</div>
+          <div>
+            <span class="guide"> LoginID : </span>
+            {{ userData.loginId }}
+          </div>
+        </div>
+
+        <div class="person-fund">
+          <div>
+            <span class="guide"> 存款本金: </span> {{ userData.deposit }}元
+          </div>
+          <!-- 贷款利息总结 -->
+          <div>
+            <span class="guide"> 存款利息: </span>{{ userData.interest }}元
+          </div>
+          <div><span class="guide"> 本息共计: </span>{{ depositTotal }}元</div>
         </div>
       </div>
     </header>
@@ -74,9 +57,9 @@
 
     <div class="workarea">
       <p class="work-tit">用户服务办理区域</p>
-      
-     <div class="modal" v-show="userData.isFreezed">
-        <Modal Height='150%' text="您的账户已被管理员冻结！"> </Modal>
+
+      <div class="modal" v-show="userData.isFreezed">
+        <Modal Height="150%" text="您的账户已被管理员冻结！"> </Modal>
       </div>
 
       <div class="work-category">
@@ -94,13 +77,14 @@
           </label>
         </div>
         <div>
-          <label>取款</label>
-          <input
-            type="radio"
-            name="workCategory"
-            v-model="serCategory"
-            value="take"
-          />
+          <label
+            >取款
+            <input
+              type="radio"
+              name="workCategory"
+              v-model="serCategory"
+              value="take"
+          /></label>
         </div>
       </div>
       <!-- =================deposit========================== -->
@@ -133,7 +117,7 @@
                 <div class="title">短期：</div>
                 <div class="time">时间：1-3years</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_1 }}</span>
+                  利息：<span>{{ rateData.A_1 }}%</span>
                 </div>
               </div>
 
@@ -144,10 +128,10 @@
                   value="A_3"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">中长期：</div>
-                <div class="time">时间：>=3 yrears</div>
+                <div class="title">长期：</div>
+                <div class="time">时间：>3 yrears</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_3 }}</span>
+                  利息：<span>{{ rateData.A_3 }}%</span>
                 </div>
               </div>
 
@@ -172,7 +156,7 @@
                 <div class="title">短期：</div>
                 <div class="time">时间：1-3years</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_1 }}</span>
+                  利息：<span>{{ rateData.B_1 }}%</span>
                 </div>
               </div>
 
@@ -183,10 +167,10 @@
                   value="B_3"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">中长期：</div>
-                <div class="time">时间：>=3 yrears</div>
+                <div class="title">长期：</div>
+                <div class="time">时间：>3 yrears</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_3 }}</span>
+                  利息：<span>{{ rateData.B_3 }}%</span>
                 </div>
               </div>
               <hr />
@@ -198,9 +182,9 @@
                   value="other"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">其他</div>
-                <div class="time">时间：不限</div>
-                <div class="rate">利息：无</div>
+                <div class="title">其他:</div>
+                <div class="time">时间：不限年限</div>
+                <div class="rate">利息：无利息</div>
               </div>
             </div>
             <!-- 2. 用户输入存款金额 -->
@@ -211,29 +195,28 @@
                   type="number"
                   v-model="depositFormData.inputNumber"
                   @blur="rules_depoNum"
-                />(单位:元)
+                />(元)
               </span>
 
               <span class="part">
                 相应的存款时间
                 <input
                   type="number"
-                  class="year"
+                  class="input-year"
                   v-model="depositFormData.inputYear"
                   @blur="rules_depoYear"
                 />
-                (单位:年)
-                <label class="year-tip"> (小数时，向下取整)</label>
+                (年)
+                <label class="year-tip"> (小数时向下取整)</label>
               </span>
             </div>
-            <div class="confirme" style="margin-top:20px">
+            <div class="confirme">
               本此存款利息为
               {{ depositFormData.interest }}
               <b>确定开始本此存款？</b>
-             
             </div>
-            <div class="part" style="text-align:center; margin-top:20px">
-               <button @click="depositWorking" :disabled="isSubmiting">
+            <div class="part">
+              <button @click="depositWorking" :disabled="isSubmiting">
                 {{ isSubmiting ? "提交中..." : "提交" }}
               </button>
             </div>
@@ -246,7 +229,7 @@
           <!-- 二（一）、take工作区 -->
           <div class="take">
             <div class="take-box">
-              本此取款
+              <p><b>本此取款</b></p>
               <input
                 type="number"
                 v-model="takeData.number"
@@ -291,7 +274,7 @@ export default {
       depositFormData: {
         deposit_category: "A_1", // A_1,A_3,B_1,B_3, other // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
         inputNumber: "",
-        inputYear: "",
+        inputYear: '',
         // 通过用户输入的信息，计算后的数据
         interest: 0,
         total: 0,
@@ -324,7 +307,7 @@ export default {
         return this.depositFormData.inputNumber;
       }
       // 大额、中额存款(带利息收益)
-      const deposit_time = Math.floor(this.depositFormData.inputYear); // 年数先向下取整
+      const deposit_time = Math.floor(+this.depositFormData.inputYear); // 年数先向下取整
       const result =
         (this.depositFormData.inputNumber *
           deposit_time *
@@ -600,8 +583,5 @@ export default {
 @import "~@/styles/var.less";
 @import "~@/styles/mixin.less";
 @import "~@/styles/user.less";
-.useri-container {
-  width: 100%;
-  min-width: 850px;
-}
+@import "./self-style.less";
 </style>

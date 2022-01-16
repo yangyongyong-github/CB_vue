@@ -4,11 +4,6 @@
     <div class="top-banner"><TopBanner /></div>
     <RouterView v-if="isRouterAlive" />
     <ToTop /> 
-     <!-- <a-back-top>
-      <div class="ant-back-top-inner to-top">
-        UP
-      </div>
-    </a-back-top> -->
   </div>
 </template>
 

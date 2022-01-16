@@ -7,70 +7,67 @@
       <div class="page-title">User_I Center</div>
       <!-- 基础信息 -->
       <div class="user-data-base tit">
-        <div class="user-name">
-          <span class="guide">Name: </span> {{ userData.name }}
+        <div class="base-info">
+          <div><span class="guide">Name: </span> {{ userData.name }}</div>
+          <div>
+            <span class="guide">Gender : </span>
+            <!-- {{ userData.sex === "true" ? "男" : "女" }} -->
+            {{ +userData.sex === 1 ? "男" : "女" }}
+          </div>
+          <div>
+            <span class="guide">Age : </span>
+            {{ userData.age }}
+          </div>
+          <div>
+            <span class="guide"> 职业: </span>
+            {{ userData.job }}
+          </div>
+          <div><span class="guide"> 联系电话: </span>{{ userData.mobile }}</div>
+          <div>
+            <span class="guide"> 单位/公司: </span> {{ userData.company }}
+          </div>
         </div>
-        <div class="user-sex">
-          <span class="guide">Gender : </span>
-          {{ userData.sex === "true" ? "男" : "女" }}
-        </div>
-        <div class="user-age">
-          <span class="guide">Age : </span>
-          {{ userData.age }}
-        </div>
-        <div class="user-job">
-          <span class="guide"> 职业: </span>
-          {{ userData.job }}
-        </div>
-        <div class="user-mobile">
-          <span class="guide"> 联系电话: </span>{{ userData.mobile }}
-        </div>
-        <div class="user-company">
-          <span class="guide"> 单位/公司: </span> {{ userData.company }}
-        </div>
-      </div>
 
-      <!-- 业务信息 -->
-      <div class="user-data-account tit">
-        <!-- 身份 loan ? deposit -->
-        <div class="user-cage">
-          <span class="guide"> 用户类别: </span> {{ userData.flag }}
-          {{ userData.flag === "useri" ? "贷款" : "存款" }}用户
+        <div class="person-account">
+          <div>
+            <span class="guide"> 用户类别: </span>
+            {{ userData.flag === "useri" ? "贷款" : "存款" }}用户 ({{
+              userData.flag
+            }})
+          </div>
+          <div><span class="guide">账号 : </span> {{ userData.account }}</div>
+          <div>
+            <span class="guide"> LoginID : </span>
+            {{ userData.loginId }}
+          </div>
         </div>
-        <div class="user-account">
-          <span class="guide">账号 : </span> {{ userData.account }}
-        </div>
-        <div class="user-login-id">
-          <span class="guide"> LoginID : </span>
-          {{ userData.loginId }}
-        </div>
-      </div>
 
-      <!-- 用户贷款信息 -->
-      <div class="user-loan tit">
-        <!-- 贷款额度总计 -->
-        <div class="user-loan-num">
-          <span class="guide"> 贷款总额-本金: </span> {{ userData.loan }}元
-        </div>
-        <!-- 贷款利息总结 -->
-        <div class="user-interest">
-          <span class="guide"> 贷款总额-利息: </span>{{ userData.interest }}元
-        </div>
-        <div><span class="guide"> 本息共计: </span>{{ loanTotal }}</div>
-        <div><span class="guide"> 上次贷款类别 : </span></div>
-        <!-- 上次贷类别:1个人2企业 -->
-        <div class="user-ident">
-          {{ userData.ident === 1 ? "个人" : "企业" }}
-        </div>
-        <div>
-          <span class="guide"> 上次贷款原因: </span>
-        </div>
-        <!-- 这里由于db存储原因，只能存储最近的一次 -->
-        <div class="user-cause">{{ userData.cause }}</div>
+        <div class="person-fund">
+          <div><span class="guide"> 贷款本金:</span> {{ userData.loan }}元</div>
+          <!-- userData.loan userLoanTrim-->
 
-        <!-- 有待扩展 -->
-        <!-- 还款日期,还剩多少天 -->
-        <!-- 是否拖欠还款, 未还款,不予续贷 -->
+          <!-- 贷款利息总结 -->
+          <div>
+            <span class="guide"> 贷款利息: </span>{{ userData.interest }}元
+          </div>
+          <div><span class="guide"> 本息共计: </span>{{ loanTotal }}元</div>
+        </div>
+
+        <div class="lately">
+          <div>
+            <span class="guide"> 上次贷款类别 : </span>
+            {{ userData.ident === 1 ? "个人" : "企业" }}
+          </div>
+          <div>
+            <span class="guide"> 上次贷款原因: </span>
+            <textarea
+              cols="20"
+              rows="4"
+              :placeholder="userData.cause"
+              disabled
+            ></textarea>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -78,7 +75,7 @@
       <p class="work-tit">用户服务办理区域</p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <Modal Height='190%' text="您的账户已被管理员冻结！"> </Modal>
+        <Modal Height="190%" text="您的账户已被管理员冻结！"> </Modal>
       </div>
 
       <div class="work-category">
@@ -95,13 +92,14 @@
           </label>
         </div>
         <div>
-          <label>还款</label>
-          <input
-            type="radio"
-            name="workCategory"
-            v-model="serCategory"
-            value="repay"
-          />
+          <label
+            >还款
+            <input
+              type="radio"
+              name="workCategory"
+              v-model="serCategory"
+              value="repay"
+          /></label>
         </div>
       </div>
 
@@ -110,7 +108,7 @@
         <!-- 借款loan -->
         <div class="ser-loan" v-if="this.serCategory === 'loan'">
           <!-- 贷款身份选择 -->
-          <div class="info-select" style="height: 200px">
+          <div class="info-select">
             <div class="ident-category">
               请选择身份类型:
               <div>
@@ -125,13 +123,14 @@
                 </label>
               </div>
               <div>
-                <label>企业</label>
-                <input
-                  type="radio"
-                  name="identCategory"
-                  v-model="loanFormData.ident"
-                  value="2"
-                />
+                <label
+                  >企业
+                  <input
+                    type="radio"
+                    name="identCategory"
+                    v-model="loanFormData.ident"
+                    value="2"
+                /></label>
               </div>
             </div>
             <div class="cause-input">
@@ -146,7 +145,7 @@
             </div>
             <div class="company-input" v-show="loanFormData.ident === '2'">
               <!-- 1 个人 2 企业 -->
-              <a-icon type="check-circle" /> 请填写
+              请填写
               {{ userData.ident === 1 ? "个人" : "企业" }} 单位(公司)名称:
               <input type="text" v-model="loanFormData.company" />
             </div>
@@ -156,7 +155,7 @@
             <!-- 1. 类型选择 -->
             <!-- <h3>loan page</h3> -->
             <p>请选择贷款利率类型:</p>
-            <div class="loan">
+            <div class="loan adjust">
               <div class="short">
                 <input
                   type="radio"
@@ -164,10 +163,10 @@
                   value="short"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">短期(1-3)</div>
+                <div class="title">短期(1-3)年</div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_s }}</span>
+                  利息：<span>{{ rateData.L_s }}%</span>
                 </div>
               </div>
 
@@ -178,10 +177,10 @@
                   value="middle"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">中期(3-5)</div>
+                <div class="title">中期(4-5)年</div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_m }}</span>
+                  利息：<span>{{ rateData.L_m }}%</span>
                 </div>
               </div>
 
@@ -192,44 +191,47 @@
                   value="long"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">长期(>5)</div>
+                <div class="title">长期(>5)年</div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_l }}</span>
+                  利息：<span>{{ rateData.L_l }}%</span>
                 </div>
               </div>
             </div>
             <!-- 2. 用户输入续贷金额 -->
             <div class="item">
-              <label> 续贷金额:(单位：元) </label>
+              <label> 续贷金额:(元) </label>
               <input
                 type="number"
                 v-model="loanFormData.inputNumber"
-                @blur="rules & computed_interest"
+                @blur="rules_loanNum"
               />
             </div>
             <div class="item">
-              <label> 续贷年限(单位：年): </label>
+              <label> 续贷年限(年): </label>
               <input
                 type="number"
                 v-model="loanFormData.inputYear"
-                @blur="rules"
+                class="input-year"
+                @blur="rules_loanYear"
               />
-              <label class="year-tip"> (小数时，自动向上取整)</label>
+              <label class="year-tip"> (小数自动向上取整)</label>
             </div>
 
             <!-- 3. 计算本息 -->
-            <div class="item">
-              <span style="margin-right: 20px"
-                >本息贷款利息为:{{ loanFormData.interest }}</span
-              >
-              <b>确定开始本此贷款？</b>
+            <div class="item item-bottom">
+              利息为:{{ loanFormData.interest }}
+              <!-- <b>确定开始本此贷款？</b> -->
             </div>
-            <p style="text-align: center">
-              <button @click="loanWorking" :disabled="isSubmiting">
+            <div class="sbt">
+              <button
+                @click="loanWorking"
+                :disabled="isSubmiting"
+                @blur="rules"
+              >
                 {{ isSubmiting ? "提交中..." : "提交" }}
               </button>
-            </p>
+            </div>
             <!-- 4. 异步执行还款操做 -->
           </div>
         </div>
@@ -239,14 +241,20 @@
           <div class="repay">
             <p><b>本此偿还</b></p>
 
-            <input type="number" v-model="repayData.number" @blur="rules" />
+            <input
+              type="number"
+              v-model="repayData.number"
+              @blur="rules_repay"
+            />
             元
-            <!-- {isSubmiting?disabled:none} -->
-            <div style="margin-top: 10px; padding-left: 30%">
-              <button @click="repayWorking" :disabled="isSubmiting">
-                {{ isSubmiting ? "提交中..." : "提交" }}
-              </button>
-            </div>
+            <br />
+            <button
+              class="reapy-btn"
+              @click="repayWorking"
+              :disabled="isSubmiting"
+            >
+              {{ isSubmiting ? "提交中..." : "提交" }}
+            </button>
           </div>
         </div>
       </div>
@@ -261,6 +269,9 @@ import Modal from "@/components/Modal";
 import { DecimalPos } from "@/utils";
 
 export default {
+  // created(){
+  //   console.log( typeof +this.userData.interest)
+  // },
   data() {
     return {
       serCategory: "loan", // 默认值, 用户选择的服务类型：loan ? repay
@@ -294,6 +305,9 @@ export default {
       userData: (state) => state.userData,
       rateData: (state) => state.rateData,
     }),
+    // userLoanTrim() {
+    //   return this.userData.loan.trim();
+    // },
     // 本息共计，每次通过计算获得
     loanTotal() {
       return DecimalPos(+this.userData.loan + +this.userData.interest, 2);
@@ -335,21 +349,50 @@ export default {
         return;
       }
     },
-    // 验证规则(repay&loan 同时验证，同一时间满足一个即可)
-    rules() {
-      // 正数
-      if (this.repayData.number <= 0 && this.loanFormData.inputNumber <= 0) {
-        // 1. 数字，正数
-        this.repayData.number = 0;
+    // 单个验证 input loan number
+    rules_loanNum() {
+      if (this.loanFormData.inputNumber <= 0) {
+        alert("input number no effect !"); // 死递归
         this.loanFormData.inputNumber = 0;
-        // 无效数字，不做任何操做
+        return;
+      } else {
+        return 1;
+      }
+    },
+    // 单个验证 input loan year
+    rules_loanYear() {
+      if (this.loanFormData.inputYear <= 0) {
+        alert("input year no effect !"); // 死递归
+        this.loanFormData.inputYear = 0;
+        return;
+      } else {
+        return 1;
+      }
+    },
+    /**
+     * 集中调用 rules(){ this.rules_inputRear() !== 1}
+     * 这种很容易造成递归死循环
+     * 还是多写点代码，各个验证的方式
+     *  - 首先用户输入的时候 alert
+     *  - 集中sumbit时，再去写代码验证 input(只是省去了alert,直接return即可)
+     */
+    // 贷款验证规则 集体验证
+    rules() {
+      // 再次验证
+      if (this.loanFormData.inputNumber <= 0) {
+        this.loanFormData.inputNumber = 0;
+        return;
+      }
+
+      if (this.loanFormData.inputYear <= 0) {
+        this.loanFormData.inputYear = 0;
         return;
       }
 
       // loan run validate
       if (this.serCategory === "loan") {
         // indent === 2 & company
-        if (this.loanFormData.ident == 2 && this.loanFormData.company === "") {
+        if (this.loanFormData.ident === 2 && this.loanFormData.company === "") {
           alert("please input company name !");
           return;
         }
@@ -359,25 +402,21 @@ export default {
           alert("please input cause !");
           return;
         } else if (this.loanFormData.cause.length < 5) {
-          alert("Cause mist be more five !");
+          alert("Cause must be more five !");
           return;
         }
-      }
-
-      // 2. repay <= loan
-      if (+this.repayData.number > this.loanTotal) {
-        alert("还多啦！(还款数超过了贷款数)");
-        this.repayData.number = "";
-        return;
       }
 
       // 贷款时间匹配判断
       if (
         (this.loanFormData.loan_category === "long" &&
-          this.loanFormData.inputYear < 5) || // loan year < 5 选择了long
+          +this.loanFormData.inputYear < 5) ||
+        // loan year <= 5 选择了long
         (this.loanFormData.loan_category === "middle" &&
-          this.loanFormData.inputYear > 5 &&
-          this.loanFormData.inputYear < 3) || // loan year > 5 选择了 middle
+          this.loanFormData.inputYear > 5) ||
+        (this.loanFormData.loan_category === "middle" &&
+          this.loanFormData.inputYear < 4) ||
+        // loan year > 5  选择了 middle
         (this.loanFormData.loan_category === "short" &&
           this.loanFormData.inputYear > 3) // year > 3 选择了 short
       ) {
@@ -409,20 +448,9 @@ export default {
     // loan main func
     async loanWorking() {
       // 先要通过input框中的验证
-      if (
-        this.rules() !== "passRules"
-        // ||
-        // this.companyValidate !== "company-pass" ||
-        // this.causeValidate !== "cause-pass"
-      ) {
-        alert("输入框未通过验证！");
-        this.loanFormData.inputNumber = "";
-        //  console.log("test validate : ", this.companyValidate, this.causeValidate);
-        return;
-      }
-
-      this.isSubmiting = true; // 正在提交，防止重复点击
+      if (this.rules() !== "passRules") return;
       this.loanFormData.interest = this.loanInterest;
+      this.isSubmiting = true; // 正在提交，防止重复点击
 
       console.log(
         `本此贷款 : ${this.loanFormData.inputNumber}, 本此利息为: ${this.loanFormData.interest}
@@ -431,25 +459,44 @@ export default {
         公司名称:${this.loanFormData.company}`
       );
 
+      this.$store.commit("setUserILoan", this.loanFormData.inputNumber);
+      this.$store.commit("setUserInterest", this.loanFormData.interest);
+
       this.$store.commit("setUserIIdent", this.loanFormData.ident);
       this.$store.commit("setUserICause", this.loanFormData.cause);
-      this.$store.commit("setUserICompany", this.loanFormData.company);
-
-      this.$store.commit("setUserILoan", this.loanFormData.inputNumber);
-      this.$store.commit("setUserInterest", this.loanFormData.inputNumber);
+      if (this.loanFormData.company) {
+        // 有值了才写入
+        this.$store.commit("setUserICompany", this.loanFormData.company);
+      }
 
       // this.writeDB(); // write db
       this.prepareDB("loan");
+    },
+
+    // ======== repay part=================
+    // 还款输入验证
+    rules_repay() {
+      if (+this.repayData.number <= 0) {
+        alert("无效输入");
+        this.repayData.number = 0;
+        return;
+      }
+      // 2. repay <= loan
+      if (+this.repayData.number > this.loanTotal) {
+        alert("还多啦！(还款数超过了贷款数)");
+        this.repayData.number = "";
+        return;
+      }
+      return 1; // pass rules valiable
     },
 
     // 点击按钮进行还款
     // repay main func
     async repayWorking() {
       // 先要通过input框中的验证
-      if (this.rules() !== "passRules") {
-        alert("输入框未通过验证！");
+      if (this.rules_repay() !== 1) {
         this.repayData.number = "";
-        // return;
+        return;
       }
 
       // pass validate to repay
@@ -457,23 +504,20 @@ export default {
 
       /**
        * 1
-       * status :  loan + interset > 还款额 > loan
+       * status :  total > 还款额 > loan
        * resolve : 先用利息去削弱它
        */
       if (this.repayData.number > this.userData.loan) {
         // this.userData.interest=0; 先用利息去削弱它
         this.$store.commit("setUserInterest", 0); // 利息归0
+        const remnants = this.repayData.number - this.userData.interest; // 剩余
         const loanValue = Math.abs(
-          DecimalPos(
-            this.userData.loan -
-              (this.repayData.number - this.userData.interest),
-            2
-          )
+          DecimalPos(this.userData.loan - remnants, 2)
         );
 
         this.$store.commit("setUserILoan", loanValue);
       } else if (
-        this.repayData.number > this.userData.loan &&
+        // this.repayData.number < this.userData.loan ||
         this.repayData.number < this.userData.interest
       ) {
         /**
@@ -545,7 +589,7 @@ export default {
      */
     async writeDB(userObj) {
       try {
-        await this.$store.dispatch("updata", userObj);
+        await this.$store.dispatch("update", userObj);
         this.tip(); // showMesage
       } catch (error) {
         console.log(error);

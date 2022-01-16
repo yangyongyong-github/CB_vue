@@ -18,12 +18,6 @@ import "./eventBus";
 
 
 
-/**
- * use echarts
- */
-// import echarts from 'echarts'
-// Vue.prototype.$echarts = echarts
-
 /* 注册全局指令 */ 
 // vLoading
 import vLoading from "./directives/loading";

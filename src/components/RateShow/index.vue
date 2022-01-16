@@ -31,11 +31,11 @@
           </tr>
           <tr>
             <!-- 大额 -->
-            <td>{{ rateData.A_1 }}</td>
-            <td>{{ rateData.A_3 }}</td>
+            <td>{{ rateData.A_1 }}%</td>
+            <td>{{ rateData.A_3 }}%</td>
             <!-- 中额 -->
-            <td>{{ rateData.B_1 }}</td>
-            <td>{{ rateData.B_3 }}</td>
+            <td>{{ rateData.B_1 }}%</td>
+            <td>{{ rateData.B_3 }}%</td>
           </tr>
         </tbody>
       </table>
@@ -62,13 +62,13 @@
         <tbody>
           <tr>
             <td class="guide">>5年</td>
-            <td class="guide">3-5年</td>
+            <td class="guide">4-5年</td>
             <td class="guide">1-3年</td>
           </tr>
           <tr>
-            <td>{{ rateData.L_l }}</td>
-            <td>{{ rateData.L_m }}</td>
-            <td>{{ rateData.L_s }}</td>
+            <td>{{ rateData.L_l }}%</td>
+            <td>{{ rateData.L_m }}%</td>
+            <td>{{ rateData.L_s }}%</td>
           </tr>
         </tbody>
       </table>

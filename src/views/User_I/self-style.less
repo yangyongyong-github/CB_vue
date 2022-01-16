@@ -1,65 +1,96 @@
-
 @import "~@/styles/var.less";
 @import "~@/styles/mixin.less";
 @import "~@/styles/user.less";
 
 .useri-container {
   width: 100%;
-  min-width: 900px;
+  min-width: 1000px;
   box-sizing: border-box;
 
   header {
-    .user-data-base {
-    } // done
-    .user-data-account {
-    } // done
+    .user-data-base {}
+
+    // done
+    .user-data-account {}
+
+    // done
     .user-loan {
       .to-flex();
     }
   }
+
   // 请选择办理业务类型
   .work-category {
-    width: 300px;
-    margin-left: 34%;
-    margin-bottom: 50px;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-  
-    .border-shadow();
     .to-flex();
   }
 
   .work-content {
+
     .ser-loan,
     .ser-repay {
-      padding: 0 150px;
+      padding: 0 100px;
+
       .info-select {
         width: 300px;
-        margin: 0 50px;
+        height: 250px;
+        margin: 0 27px;
         .border-shadow-hover();
 
         .ident-category {
           .to-flex();
         }
+
         .cause-input {
           margin-left: 20px;
           margin-top: 20px;
         }
+        .company-input{
+          margin-left: 20px;
+        }
       }
+
       .to-flex();
+
       .loan-work {
         .loan {
-          width: 70%;
+          width: 120%;
+          padding: 10px;
           border: 2px solid gray;
           border-radius: 20px;
           margin-bottom: 20px;
-          & > div {
+         
+          &>div {
             .to-flex();
           }
         }
+        .adjust{
+          input{
+            margin-top: 5px;
+          }
+        }
+
         .item {
-          margin-bottom: 20px;
+          margin-bottom: 15px;
+        }
+        .sbt{
+          margin-left: 30%;
+        }
+        .item-bottom{
+          margin-right: 20px;
+        }
+      }
+
+      .repay {
+        margin-left: 35%;
+
+        b {
+          margin-left: 15%;
+
+        }
+
+        .reapy-btn {
+          margin-top: 20px;
+          margin-left: 17%;
         }
       }
     }

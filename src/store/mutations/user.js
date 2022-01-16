@@ -17,6 +17,9 @@ export default {
     setUserILoan(state, payload) { // loan
         state.userData.loan = payload;
     },
+    // setUserInterest(state, payload) { // interest
+    //     state.userData.interest = payload;
+    // },
     setUserIIdent(state, payload) {
         state.userData.ident = payload;
     },
@@ -30,13 +33,13 @@ export default {
     /**
      * II
      */
-    setUserInterest(state, payload) { // interest
-        state.userData.interest = payload;
-    },
-    // deposit
     setUserIIDeposit(state, payload) {
         state.userData.deposit = payload;
     },
+    // setUserIInterest(state, payload) { // interest
+    //     state.userData.interest = payload;
+    // },
+
 
     /**
      * other

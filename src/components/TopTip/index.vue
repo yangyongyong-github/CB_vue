@@ -29,7 +29,7 @@ export default {
 <style lang="less" scoped>
 .top-tip-container {
   width: 15%;
-  min-width: 80px;
+  min-width: 200px;
   height: 25px;
   line-height: 25px;
   // 左右居中

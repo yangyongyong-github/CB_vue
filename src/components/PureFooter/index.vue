@@ -1,7 +1,7 @@
 <template>
   <div class="footer-container">
     <div class="game">
-      <h3 class="title">2020北京冬奥会: 一起上冰雪 携手向未来</h3>
+      <h3 class="title">2022北京冬奥会: 一起上冰雪 携手向未来</h3>
       <div class="img">
         <img src="@/assets/introduce/game.jpg" alt="" />
       </div>

@@ -12,7 +12,7 @@
       <p>
         <!-- 密码 -->
 
-        {{ language.PassWord[lang] }} 
+        {{ language.PassWord[lang] }}
         <input type="password" v-model="loginFormData.loginPwd" />
       </p>
 
@@ -28,12 +28,11 @@
         </option>
       </select>
       <p class="btn">
-        
         <button type="success" @click="toLogin">
           <!-- 登录 -->
-          {{ language.Login[lang] }}</button
-        >
-  
+          {{ language.Login[lang] }}
+        </button>
+
         <button @click="toRegister">
           <!-- 注册 -->
           {{ language.Register[lang] }}
@@ -65,7 +64,8 @@ export default {
         !this.loginFormData.loginPwd ||
         !this.loginFormData.flag
       ) {
-        alert("值缺失！");
+        // alert("值缺失！");
+        this.openNotificationWithIcon("warning"); // msg type
         return;
       }
       const userObj = {
@@ -86,12 +86,32 @@ export default {
           new Error("store write fail .");
         }
       } else {
-        alert("账号密码、类型不匹配");
+        // alert("账号密码、类型不匹配");
+        this.openNotificationWithIcon("error"); // msg type
       }
     },
     // 去注册
     toRegister() {
       this.$router.push("/register");
+    },
+
+    // msg info (from antd)
+    openNotificationWithIcon(type) {
+      // 根据消息类型定义提示语
+      var msg = "";
+      if (type === "success") {
+        msg = "Login Done"; // 登录成功实际上不用提示，自动跳转页面
+      } else if (type === "error") {
+        msg = "账号密码、类型不匹配";
+      } else if (type === "warning") {
+        msg = "值缺失";
+      }
+
+      // 提示
+      this.$notification[type]({
+        message: "Login Tip",
+        description: msg + " !",
+      });
     },
   },
 };
@@ -104,7 +124,7 @@ export default {
   width: 100%;
   height: 100%;
   .input-area {
-    .indet{
+    .indet {
       padding-left: 50px;
       font-weight: bold;
       font-size: 1.2em;
@@ -112,7 +132,7 @@ export default {
     }
     padding: 50px;
     border-radius: 30px;
-   .border-shadow-login-hover();
+    .border-shadow-login-hover();
     .self-center();
     .btn {
       .to-flex();

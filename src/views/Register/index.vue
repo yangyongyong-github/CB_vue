@@ -97,19 +97,19 @@
           <!-- indet 1 person /2 -->
           <!-- loan = 0 = none-input -->
           <!-- interest = 0 = none-input -->
-          <div class="item">
+          <div class="item company">
             <!-- company -->
-            <label>所在单位（学校或公司）</label>
+            <label>所在单位</label>
             <input type="text" v-model="userInfo.company" />
           </div>
           <!-- cause = none-input - -->
         </div>
         <!-- --------------- user_ii----------------- -->
-        <div class="userii" v-else>
+        <!-- <div class="userii" v-else> -->
           <!-- isFreezed  =  none-input  -->
           <!-- loan = 0 = none-input -->
           <!-- interest = 0 = none-input -->
-        </div>
+        <!-- </div> -->
         <button class="submit-btn" @click="submit">提交</button>
       </div>
     </div>
@@ -372,6 +372,9 @@ export default {
         display: inline-block;
       }
     }
+    .company{
+      margin-bottom: 20px;
+    }
     .last {
       margin-bottom: 20px;
     }
@@ -381,7 +384,8 @@ export default {
       margin-top: 20px;
     }
     button {
-      margin-left: 100px;
+      margin-top: 10px;
+      margin-left: 10%;
     }
   }
 }
