@@ -106,9 +106,9 @@
         </div>
         <!-- --------------- user_ii----------------- -->
         <!-- <div class="userii" v-else> -->
-          <!-- isFreezed  =  none-input  -->
-          <!-- loan = 0 = none-input -->
-          <!-- interest = 0 = none-input -->
+        <!-- isFreezed  =  none-input  -->
+        <!-- loan = 0 = none-input -->
+        <!-- interest = 0 = none-input -->
         <!-- </div> -->
         <button class="submit-btn" @click="submit">提交</button>
       </div>
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -148,6 +149,7 @@ export default {
       // },
     };
   },
+  computed: mapState(["lottery"]),
   filters: {
     /**
      * 过滤用户选择的身份类型
@@ -303,6 +305,7 @@ export default {
         try {
           const user = await this.$store.dispatch("adduser", userIIObj);
           alert("adduser II done ");
+          this.lottery.auth = true; // 赋予一次抽奖的机会
 
           // 注册完成后，直接 跳转到 个人中心页面
           const goto = window.confirm("to enter center page II ?");
@@ -372,7 +375,7 @@ export default {
         display: inline-block;
       }
     }
-    .company{
+    .company {
       margin-bottom: 20px;
     }
     .last {

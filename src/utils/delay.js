@@ -10,3 +10,6 @@ export default function (duration) {
         }, duration)
     })
 }
+
+// or
+// const delay = ms => new Promise(resolve => setTimeout(resolve, ms))

@@ -1,11 +1,12 @@
 <template>
   <div class="introduce-container" ref="mainContainer">
-    <h3 class="page-title">中国银行 简介 China Bank Introduce</h3>
+    <h3 class="page-title">
+      {{ language.BankIntroducePage[lang] }}
+    </h3>
 
     <div class="base">
       <div class="img-brief">
         <div class="text">
-         
           <div class="left">
             <div class="item">
               <div class="tit">公司名称</div>
@@ -139,17 +140,17 @@
 </template>
 
 <script>
-import mainScroll from '@/mixins/mainScroll'
+import { mapState } from "vuex";
 import PureFooter from "@/components/PureFooter";
 export default {
   data() {
     return {};
   },
+  computed: mapState(['lang','language']),
   components: {
     PureFooter,
   },
   methods: {},
-  mixins:[mainScroll("mainContainer")]
 };
 </script>
 

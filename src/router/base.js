@@ -11,4 +11,18 @@ export default [
         path: '/introduce',
         component: () => import("@/views/Introduce")
     },
+    // lottery private
+    {
+        name: 'lottery',
+        path: '/lottery',
+        component: () => import("@/views/Lottery"),
+        beforeEnter(to, from, next) {
+            if (store.state.lottery.auth) {
+                next();
+            } else {
+                alert('请先拿取权限(注册或办理存款业务)！');
+                next("/")
+            }
+        }
+    }
 ]

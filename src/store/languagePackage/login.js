@@ -32,6 +32,7 @@ export default {
 
 
     // login pager
+   
     Account: {
         cn: '账号',
         en: 'Account'
@@ -46,7 +47,7 @@ export default {
     },
     SelectYouLoginIdentify: {
         cn: '选择登录身份',
-        en: 'Select You Login Identify'
+        en: 'Select Login Identify'
     },
     Login: {
         cn: '登录',
@@ -56,12 +57,8 @@ export default {
         cn: '注册',
         en: 'Register'
     },
-
     // Register page
-    UserRegisterPage: {
-        cn: '用户注册页面',
-        en: 'User Register Page'
-    },
+    
     SelectUserIdent: {
         cn: '请选择用户身份',
         en: 'Select User Identify'
@@ -90,6 +87,10 @@ export default {
         cn: '女',
         en: 'Female'
     },
+    Age: {
+        cn: '年龄',
+        en: 'Age'
+    },
     Birthday: {
         cn: '出生日期',
         en: 'Birthday'
@@ -103,7 +104,7 @@ export default {
         en: 'Mobile'
     },
     Company: {
-        cn: '所在单位',
+        cn: '企业',
         en: 'Company'
     },
     Submit: {

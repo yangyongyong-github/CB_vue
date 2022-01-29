@@ -14,9 +14,6 @@ import "./styles/global.less";
 import "./styles/common.css"
 Vue.config.productionTip = false;
 
-import "./eventBus";
-
-
 
 /* 注册全局指令 */ 
 // vLoading
@@ -31,6 +28,8 @@ import 'ant-design-vue/dist/antd.css';
 
 Vue.use(Antd)
 
+import VueLuckyCanvas from '@lucky-canvas/vue'
+Vue.use(VueLuckyCanvas)
 
 new Vue({
   router,

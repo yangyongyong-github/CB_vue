@@ -5,53 +5,20 @@
 
     <header>
       <!-- header：基础信息部分 -->
-      <div class="page-title">II Center</div>
-      <!-- 基础信息 -->
-      <div class="user-data-base tit">
-        <div class="base-info">
-          <div><span class="guide">Name: </span> {{ userData.name }}</div>
-          <div>
-            <span class="guide">Gender : </span>
-            {{ +userData.sex === 1 ? "男" : "女" }}
-          </div>
-          <div>
-            <span class="guide">Age : </span>
-            {{ userData.age }}
-          </div>
-          <div>
-            <span class="guide"> 职业: </span>
-            {{ userData.job }}
-          </div>
-          <div><span class="guide"> 联系电话: </span>{{ userData.mobile }}</div>
-        
-        </div>
-
-        <div class="person-account">
-          <div>
-            <span class="guide"> 用户类别: </span>
-            {{ userData.flag === "useri" ? "贷款" : "存款" }}用户 ({{
-              userData.flag
-            }})
-          </div>
-          <div><span class="guide">账号 : </span> {{ userData.account }}</div>
-          <div>
-            <span class="guide"> LoginID : </span>
-            {{ userData.loginId }}
-          </div>
-        </div>
-
-        <div class="person-fund">
-          <div>
-            <span class="guide"> 存款本金: </span> {{ userData.deposit }}元
-          </div>
-          <!-- 贷款利息总结 -->
-          <div>
-            <span class="guide"> 存款利息: </span>{{ userData.interest }}元
-          </div>
-          <div><span class="guide"> 本息共计: </span>{{ depositTotal }}元</div>
-        </div>
+      <div class="page-title">
+        {{ language.User_IIPage[lang] }}
       </div>
+      <!-- 基础信息 -->
+      <UserBaseInfo />
     </header>
+
+    <div class="other-server">
+      <!-- div : 修改个人信息 -->
+      <!-- <AlterInfo /> -->
+      <!-- div : lottery -->
+      <Lottery text="办理存款业务即可参与抽奖！" />
+    </div>
+
     <!-- ==================workarea======================== -->
     <!-- 用于动态的提示 是否冻结，只能并行，如果包含会导致 被套在Modal组件之间的数据不会渲染 -->
 
@@ -213,7 +180,7 @@
             <div class="confirme">
               本此存款利息为
               {{ depositFormData.interest }}
-              <b>确定开始本此存款？</b>
+              <!-- <b>确定开始本此存款？</b> -->
             </div>
             <div class="part">
               <button @click="depositWorking" :disabled="isSubmiting">
@@ -256,7 +223,9 @@ import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import { DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
-// import writeDB from "@/mixins/writeDB";
+import UserBaseInfo from "@/components/UserBaseInfo";
+import AlterInfo from "@/components/AlterInfo";
+import Lottery from "@/components/Lottery";
 
 export default {
   inject: ["reload"], // 刷新界面
@@ -274,7 +243,7 @@ export default {
       depositFormData: {
         deposit_category: "A_1", // A_1,A_3,B_1,B_3, other // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
         inputNumber: "",
-        inputYear: '',
+        inputYear: "",
         // 通过用户输入的信息，计算后的数据
         interest: 0,
         total: 0,
@@ -287,6 +256,9 @@ export default {
   components: {
     TopTip,
     Modal,
+    AlterInfo,
+    UserBaseInfo,
+    Lottery,
   },
   created() {
     console.log("rateData : ", this.rateData);
@@ -294,7 +266,10 @@ export default {
   computed: {
     ...mapState({
       userData: (state) => state.userData,
+      lang: (state) => state.lang,
+      language: (state) => state.language,
       rateData: (state) => state.rateData,
+      lottery: (state) => state.lottery,
     }),
     // 本息共计，每次通过计算获得
     depositTotal() {
@@ -318,6 +293,15 @@ export default {
     },
   },
   methods: {
+    // -------修改用户信息-------------
+    alterInfo() {
+      console.log(this.alter_area);
+      this.alter_area = !this.alter_area;
+    },
+    alterPsw() {},
+    alterOther() {},
+
+    // ---------------------------------
     /**
      *Assist func:  当用户输入未通过验证时，全部清空重填
      */
@@ -363,11 +347,15 @@ export default {
 
     /* deposit: 起存金额判断 */
     rules_depoNum() {
+      if (+this.depositFormData.inputNumber < 100) {
+        alert("存款100元起!");
+        return;
+      }
       // 1. 大额存款，起存金额不够
       if (
         (this.depositFormData.deposit_category === "A_1" ||
           this.depositFormData.deposit_category === "A_3") &&
-        this.depositFormData.inputNumber < this.rateData.A
+        +this.depositFormData.inputNumber < +this.rateData.A
       ) {
         alert(`大额存款，起存金额：${this.rateData.A}`);
         this.clearInput_deposit();
@@ -378,7 +366,7 @@ export default {
       if (
         (this.depositFormData.deposit_category === "B_1" ||
           this.depositFormData.deposit_category === "B_3") &&
-        this.depositFormData.inputNumber < this.rateData.B
+        +this.depositFormData.inputNumber < +this.rateData.B
       ) {
         alert(`中额存款，起存金额：${this.rateData.B}`);
         this.clearInput_deposit();
@@ -395,12 +383,16 @@ export default {
      * -  低利率类型可以存长时间，但是高利率类型不可以存短时间
      */
     rules_depoYear() {
+      if (this.depositFormData.inputYear <= 0) {
+        alert("无效输入！");
+        return;
+      }
       // 低利率类型可以存长时间，但是高利率类型不可以存短时间
       if (
         (this.depositFormData.deposit_category === "A_3" &&
-          this.depositFormData.inputYear < 3) ||
+          this.depositFormData.inputYear <= 3) ||
         (this.depositFormData.deposit_category === "B_3" &&
-          this.depositFormData.inputYear < 3)
+          this.depositFormData.inputYear <= 3)
       ) {
         alert("高利率类型不可以存短时间");
         this.depositFormData.inputYear = "";
@@ -476,6 +468,7 @@ export default {
         帐户最新存款共计：${this.userData.deposit} ，帐户最新利息共计：${this.userData.interest} `);
 
       this.writeDB();
+      this.lottery.auth = true; // 赋予一次抽奖的机会
     },
 
     // ===============================================
@@ -498,18 +491,16 @@ export default {
        * userData.deposit 减少
        * userData.interst 清零
        */
-      if (+this.takeData.number >= +this.userData.deposit) {
+      if (+this.takeData.number > +this.userData.deposit) {
         // console.log("deposit < take < deposit + interest");
 
-        this.userData.interest = 0;
-        this.userData.deposit = Math.abs(
-          DecimalPos(
-            +this.takeData.number -
-              this.userData.deposit -
-              this.userData.interest,
-            2
-          )
+        const remains = this.takeData.number - this.userData.deposit; // 剩余
+        // console.log('remains :' ,remains)
+        const newValue = Math.abs(
+          DecimalPos(this.userData.interest - remains, 2)
         );
+        this.userData.deposit = 0;
+        this.userData.interest = newValue;
       } else if (
         +this.takeData.number >= +this.userData.deposit &&
         +this.takeData.number <= this.userData.interest
@@ -569,7 +560,7 @@ export default {
        * 2. 写入db
        */
       try {
-        await this.$store.dispatch("updata", userObj);
+        await this.$store.dispatch("update", userObj);
         this.tip(); // showMesage
       } catch (error) {
         console.log(error);

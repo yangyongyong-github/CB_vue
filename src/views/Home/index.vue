@@ -5,7 +5,12 @@
     <div class="banner">
       <div class="swipper">
         <a-carousel autoplay>
-          <img :src="item.img" alt="" v-for="(item, index) in swiperImgs" :key="index">
+          <img
+            :src="item.img"
+            alt=""
+            v-for="(item, index) in swiperImgs"
+            :key="index"
+          />
         </a-carousel>
       </div>
       <aside>
@@ -21,8 +26,11 @@
           <h2>便捷服务</h2>
           <div class="items">
             <div class="show" v-for="(item, index) in serverLists" :key="index">
-              <img :src="item.src" :alt="item.title" /><br>
-              <a :href="item.link">{{ item.title }}</a>
+              <a :href="item.link">
+                <img :src="item.src" :alt="item.title" /><br />{{
+                  item.title
+                }}</a
+              >
             </div>
           </div>
         </div>
@@ -48,17 +56,16 @@ import TopTip from "@/components/TopTip";
 import PureFooter from "@/components/PureFooter";
 import RateShow from "@/components/RateShow";
 // server imgs
-import serImg0  from "@/assets/home/server-price-icon.gif"
-import serImg1  from '@/assets/home/client-icon.gif'
-import serImg2  from '@/assets/home/e-icon.gif'
-import serImg3  from '@/assets/home/application-icon.gif'
+import serImg0 from "@/assets/home/server-price-icon.gif";
+import serImg1 from "@/assets/home/client-icon.gif";
+import serImg2 from "@/assets/home/e-icon.gif";
+import serImg3 from "@/assets/home/application-icon.gif";
 
 // swiper imgs
-import swImg0 from '@/assets/home-img0.jpg';
-import swImg1 from '@/assets/home-img1.jpg';
-import swImg2 from '@/assets/home-img2.jpg';
-import swImg3 from '@/assets/home-img3.jpg';
-
+import swImg0 from "@/assets/home-img0.jpg";
+import swImg1 from "@/assets/home-img1.jpg";
+import swImg2 from "@/assets/home-img2.jpg";
+import swImg3 from "@/assets/home-img3.jpg";
 
 export default {
   data() {
@@ -68,7 +75,6 @@ export default {
         { img: swImg1, link: "" },
         { img: swImg2, link: "" },
         { img: swImg3, link: "" },
-       
       ],
       descLists: [
         {
@@ -87,23 +93,23 @@ export default {
       serverLists: [
         {
           title: "手机客户端",
-          src:  serImg0,
-          link: "",
+          src: serImg0,
+          link: "https://www.bankofchina.com/ebanking/service/cs1/201009/t20100921_1151946.html",
         },
         {
-          title: "服务价目表",
+          title: "服务价目",
           src: serImg1,
-          link: "",
+          link: "https://www.bankofchina.com/custserv/fd5/202006/t20200629_18057046.html",
         },
         {
           title: "中银企E贷款",
           src: serImg2,
-          link: "",
+          link: "https://www.bank-of-china.com/ebanking/online/202101/t20210105_18941711.html",
         },
         {
           title: "申请信用卡",
           src: serImg3,
-          link: "",
+          link: "https://www.bank-of-china.com/ebanking/online/201310/t20131024_2567778.html",
         },
       ],
     };

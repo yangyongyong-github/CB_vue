@@ -21,7 +21,14 @@ export default {
         cn: '还款',
         en: 'Repay'
     },
-
+    Deposit:{
+        cn:'存款',
+        en:'Deposit'
+    },
+    Take:{
+        cn:'取款',
+        en:'Take'
+    },
     Person: {
         cn: '个人',
         en: 'Person'
@@ -37,7 +44,7 @@ export default {
 
   
     Short: {
-        en: '短期',
+        cn: '短期',
         en: 'Short'
     },
     Middle: {
@@ -48,17 +55,25 @@ export default {
         cn: '长期',
         en: 'Long'
     },
-    Number: {
+    Numbers: {
         cn: '数额',
-        en: 'Number'
+        en: 'Numbers'
     },
     Year: {
         cn: '年',
         en: 'Year'
     },
+    Years:{
+        cn:'年限',
+        en:'Years'
+    },
     Yuan: {
         cn: '元',
-        en: 'doller'
+        en: '￥'
     },
+    Doller:{
+        cn:'美元',
+        en:'$'
+    }
 
 }

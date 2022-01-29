@@ -1,88 +1,34 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="rise" tipText="贷款，让财富成倍增长~" />
+    <TopTip IconType="rise" tipText=language.TopTip_Loan[lang] />
     <header>
       <!-- header：基础信息部分 -->
-      <div class="page-title">User_I Center</div>
-      <!-- 基础信息 -->
-      <div class="user-data-base tit">
-        <div class="base-info">
-          <div><span class="guide">Name: </span> {{ userData.name }}</div>
-          <div>
-            <span class="guide">Gender : </span>
-            <!-- {{ userData.sex === "true" ? "男" : "女" }} -->
-            {{ +userData.sex === 1 ? "男" : "女" }}
-          </div>
-          <div>
-            <span class="guide">Age : </span>
-            {{ userData.age }}
-          </div>
-          <div>
-            <span class="guide"> 职业: </span>
-            {{ userData.job }}
-          </div>
-          <div><span class="guide"> 联系电话: </span>{{ userData.mobile }}</div>
-          <div>
-            <span class="guide"> 单位/公司: </span> {{ userData.company }}
-          </div>
-        </div>
-
-        <div class="person-account">
-          <div>
-            <span class="guide"> 用户类别: </span>
-            {{ userData.flag === "useri" ? "贷款" : "存款" }}用户 ({{
-              userData.flag
-            }})
-          </div>
-          <div><span class="guide">账号 : </span> {{ userData.account }}</div>
-          <div>
-            <span class="guide"> LoginID : </span>
-            {{ userData.loginId }}
-          </div>
-        </div>
-
-        <div class="person-fund">
-          <div><span class="guide"> 贷款本金:</span> {{ userData.loan }}元</div>
-          <!-- userData.loan userLoanTrim-->
-
-          <!-- 贷款利息总结 -->
-          <div>
-            <span class="guide"> 贷款利息: </span>{{ userData.interest }}元
-          </div>
-          <div><span class="guide"> 本息共计: </span>{{ loanTotal }}元</div>
-        </div>
-
-        <div class="lately">
-          <div>
-            <span class="guide"> 上次贷款类别 : </span>
-            {{ userData.ident === 1 ? "个人" : "企业" }}
-          </div>
-          <div>
-            <span class="guide"> 上次贷款原因: </span>
-            <textarea
-              cols="20"
-              rows="4"
-              :placeholder="userData.cause"
-              disabled
-            ></textarea>
-          </div>
-        </div>
+      <div class="page-title">
+        {{language.User_IPage[lang]}}
       </div>
+      <!-- 基础信息: 组件化 -->
+      <UserBaseInfo />
     </header>
 
     <div class="workarea">
-      <p class="work-tit">用户服务办理区域</p>
+      <p class="work-tit">
+        <!-- 用户服务办理区域 -->
+        {{ language.UserServerArea[lang] }}
+      </p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <Modal Height="190%" text="您的账户已被管理员冻结！"> </Modal>
+        <!-- <Modal Height="190%" text=language.AccountBeenFreezed[lang]> </Modal> -->
       </div>
 
       <div class="work-category">
-        请选择办理业务类型:
+        <!-- 请选择办理业务类型 -->
+        {{ language.SelectWorkCategory[lang] }}
+        :
         <div>
-          <label
-            >贷款
+          <label>
+            <!-- 贷款 -->
+            {{ language.Loan[lang] }}
             <input
               type="radio"
               name="workCategory"
@@ -92,8 +38,9 @@
           </label>
         </div>
         <div>
-          <label
-            >还款
+          <label>
+            <!-- 还款 -->
+            {{ language.Repay[lang] }}
             <input
               type="radio"
               name="workCategory"
@@ -110,10 +57,13 @@
           <!-- 贷款身份选择 -->
           <div class="info-select">
             <div class="ident-category">
-              请选择身份类型:
+              <!-- 请选择身份类型 -->
+              {{ language.SelectIdentCategoty[lang] }}
+              :
               <div>
-                <label
-                  >个人
+                <label>
+                  <!-- 个人 -->
+                  {{ language.Person[lang] }}
                   <input
                     type="radio"
                     name="identCategory"
@@ -123,8 +73,9 @@
                 </label>
               </div>
               <div>
-                <label
-                  >企业
+                <label>
+                  <!-- 企业 -->
+                  {{ language.Company[lang] }}
                   <input
                     type="radio"
                     name="identCategory"
@@ -134,8 +85,13 @@
               </div>
             </div>
             <div class="cause-input">
-              请填写贷款原因:
-              <span class="tip">不少于5个字符</span>
+              <!-- 请填写贷款原因 -->
+              {{ language.LoanCause[lang] }}
+              :
+              <span class="tip">
+                <!-- 不少于5个字符 -->
+                ({{ language.MoreFiveCode[lang] }})
+              </span>
               <textarea
                 cols="30"
                 rows="5"
@@ -145,8 +101,13 @@
             </div>
             <div class="company-input" v-show="loanFormData.ident === '2'">
               <!-- 1 个人 2 企业 -->
-              请填写
-              {{ userData.ident === 1 ? "个人" : "企业" }} 单位(公司)名称:
+              <!-- 请填写 -->
+              {{ language.PleaseInput[lang] }}
+              <!-- {{ userData.ident === 1 ? "个人" : "企业" }}  -->
+              <!-- 单位(公司)名称 -->
+              {{ language.Company[lang] }}
+              {{ language.Name[lang] }}
+              :
               <input type="text" v-model="loanFormData.company" />
             </div>
           </div>
@@ -154,7 +115,11 @@
           <div class="loan-work">
             <!-- 1. 类型选择 -->
             <!-- <h3>loan page</h3> -->
-            <p>请选择贷款利率类型:</p>
+            <p>
+              <!-- 请选择贷款利率类型 -->
+              {{ language.RateCategory[lang] }}
+              :
+            </p>
             <div class="loan adjust">
               <div class="short">
                 <input
@@ -163,10 +128,15 @@
                   value="short"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">短期(1-3)年</div>
+                <div class="title">
+                  <!-- 短期(1-3)年 -->
+                  {{ language.Short[lang] }}(1-3){{ language.Year[lang] }}
+                </div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_s }}%</span>
+                  <!-- 利息 -->
+                  {{ language.Interest[lang] }}
+                  :<span>{{ rateData.L_s }}%</span>
                 </div>
               </div>
 
@@ -177,10 +147,15 @@
                   value="middle"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">中期(4-5)年</div>
+                <div class="title">
+                  <!-- 中期(4-5)年 -->
+                  {{ language.Middle[lang] }}
+                  (4-5){{ language.Year[lang] }}
+                </div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_m }}%</span>
+                  {{ language.Interest[lang] }}
+                  :<span>{{ rateData.L_m }}%</span>
                 </div>
               </div>
 
@@ -191,16 +166,24 @@
                   value="long"
                   v-model="loanFormData.loan_category"
                 />
-                <div class="title">长期(>5)年</div>
+                <div class="title">
+                  <!-- 长期(>5)年 -->
+                  {{ language.Long[lang] }}(>5){{ language.Year[lang] }}
+                </div>
 
                 <div class="rate">
-                  利息：<span>{{ rateData.L_l }}%</span>
+                  <!-- 利息 -->
+                  {{ language.Interest[lang] }}
+                  :<span>{{ rateData.L_l }}%</span>
                 </div>
               </div>
             </div>
             <!-- 2. 用户输入续贷金额 -->
             <div class="item">
-              <label> 续贷金额:(元) </label>
+              <label>
+                <!-- 续贷金额:(元) -->
+                 {{ language.Input[lang] }}{{ language.Numbers[lang] }}:({{ language.Yuan[lang] }})
+              </label>
               <input
                 type="number"
                 v-model="loanFormData.inputNumber"
@@ -208,19 +191,29 @@
               />
             </div>
             <div class="item">
-              <label> 续贷年限(年): </label>
+              <label>
+                <!-- 续贷年限(年) -->
+                {{ language.Input[lang] }}{{ language.Years[lang] }}:({{
+                  language.Yuan[lang]
+                }})
+              </label>
               <input
                 type="number"
                 v-model="loanFormData.inputYear"
                 class="input-year"
                 @blur="rules_loanYear"
               />
-              <label class="year-tip"> (小数自动向上取整)</label>
+              <label class="year-tip">
+                <!-- (小数自动向上取整) -->
+                ( {{ language.DecimalAutoToInt[lang] }})
+              </label>
             </div>
 
             <!-- 3. 计算本息 -->
             <div class="item item-bottom">
-              利息为:{{ loanFormData.interest }}
+              <!-- 利息为 -->
+              {{ language.Interest[lang] }}
+              :{{ loanFormData.interest }}
               <!-- <b>确定开始本此贷款？</b> -->
             </div>
             <div class="sbt">
@@ -229,7 +222,12 @@
                 :disabled="isSubmiting"
                 @blur="rules"
               >
-                {{ isSubmiting ? "提交中..." : "提交" }}
+                <!-- {{ isSubmiting ? '提交中...' : '提交' }} -->
+                {{
+                  isSubmiting
+                    ? language.Sumbit[lang] + "..."
+                    : language.Submit[lang]
+                }}
               </button>
             </div>
             <!-- 4. 异步执行还款操做 -->
@@ -239,21 +237,32 @@
         <div class="ser-repay" v-else>
           <!-- 二（一）、还款工作区 -->
           <div class="repay">
-            <p><b>本此偿还</b></p>
+            <p>
+              <b>
+                <!-- 本此偿还 -->
+                {{ language.Repay[lang] }}
+              </b>
+            </p>
 
             <input
               type="number"
               v-model="repayData.number"
               @blur="rules_repay"
             />
-            元
+            <!-- 元 -->
+            {{ language.Yuan[lang] }}
             <br />
             <button
               class="reapy-btn"
               @click="repayWorking"
               :disabled="isSubmiting"
             >
-              {{ isSubmiting ? "提交中..." : "提交" }}
+              {{
+                isSubmiting
+                  ? language.Submit[lang] + "..."
+                  : language.Submit[lang]
+              }}
+              <!-- {{ isSubmiting ? '提交中...' : '提交' }} -->
             </button>
           </div>
         </div>
@@ -267,13 +276,14 @@ import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import Modal from "@/components/Modal";
 import { DecimalPos } from "@/utils";
-
+import UserBaseInfo from '@/components/UserBaseInfo'
 export default {
   // created(){
   //   console.log( typeof +this.userData.interest)
   // },
   data() {
     return {
+      alter_area: false,
       serCategory: "loan", // 默认值, 用户选择的服务类型：loan ? repay
 
       // 还款数据对象
@@ -299,11 +309,15 @@ export default {
   components: {
     TopTip,
     Modal,
+    UserBaseInfo
   },
   computed: {
     ...mapState({
       userData: (state) => state.userData,
       rateData: (state) => state.rateData,
+      lang: (state) => state.lang,
+      language: (state) => state.language,
+      // lottery: (state) => state.lottery,
     }),
     // userLoanTrim() {
     //   return this.userData.loan.trim();
@@ -505,19 +519,20 @@ export default {
       /**
        * 1
        * status :  total > 还款额 > loan
-       * resolve : 先用利息去削弱它
+       * resolve :
        */
       if (this.repayData.number > this.userData.loan) {
-        // this.userData.interest=0; 先用利息去削弱它
-        this.$store.commit("setUserInterest", 0); // 利息归0
-        const remnants = this.repayData.number - this.userData.interest; // 剩余
+        const remnants = this.repayData.number - this.userData.loan; // 剩余
+        // console.log('status : this.repayData.number > this.userData.loan')
+        // console.log(' remnants(to decrease interest) : ',remnants)
         const loanValue = Math.abs(
-          DecimalPos(this.userData.loan - remnants, 2)
+          DecimalPos(this.userData.interest - remnants, 2)
         );
-
-        this.$store.commit("setUserILoan", loanValue);
+        // console.log('loanValue : ', loanValue)
+        this.$store.commit("setUserILoan", 0);
+        this.$store.commit("setUserInterest", loanValue);
       } else if (
-        // this.repayData.number < this.userData.loan ||
+        // this.repayData.number > this.userData.loan &&
         this.repayData.number < this.userData.interest
       ) {
         /**
@@ -526,10 +541,11 @@ export default {
          * resolve : loanTotal - 还款额， 然后把剩余的钱全部存到Loan中(把interest->loan)
          */
         const loanValue = Math.abs(
-          DecimalPos(this.loanTotal - this.repayData.number, 2)
+          DecimalPos(this.userData.interest - this.repayData.number, 2)
         );
-        this.$store.commit("setUserInterest", 0); // 利息归0
-        this.$store.commit("setUserILoan", loanValue);
+        // console.log('this.repayData.number < this.userData.interest')
+        // console.log('loanValue to interest' , loanValue)
+        this.$store.commit("setUserInterest", loanValue);
       } else {
         /**
          * 3 还款额 < loan , 绝大部分情况

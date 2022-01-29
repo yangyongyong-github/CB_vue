@@ -29,7 +29,7 @@
         </button>
       </div>
     </header>
-    <div class="page-title">银行管理员登录界面</div>
+    <div class="page-title">{{ language.AdminPage[lang] }}</div>
     <div class="main-operation">
       <!-- 主要的操做区域 -->
       <div class="high" v-if="userData.rank === 'h'">
@@ -295,15 +295,6 @@
                 </span>
                 <span class="guide">
                   <button @click="toDeleteUser">删除用户</button>
-                  <!-- <a-popconfirm
-                    placement="top"
-                    ok-text="Yes"
-                    cancel-text="No"
-                    @confirm="confirm"
-                  >
-                   <button @click="toDeleteUser">删除用户</button>
-                  <p>确定要删除?</p>
-                  </a-popconfirm> -->
                 </span>
                 <span class="guide">
                   <button @click="toAlertUserInfo">修改用户信息</button>
@@ -533,6 +524,8 @@ import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import * as MATH from "@/utils";
 const echarts = require("echarts");
+import ToChat from "@/components/ToChat";
+
 export default {
   inject: ["reload"], // 友好的刷新界面
   data() {
@@ -587,6 +580,7 @@ export default {
   },
   components: {
     TopTip,
+    ToChat,
   },
   mounted() {
     this.initCharts();
@@ -596,6 +590,8 @@ export default {
       userData: (state) => state.userData,
       usersData: (state) => state.usersData,
       rateData: (state) => state.rateData,
+      lang: (state) => state.lang,
+      language: (state) => state.language,
       bankData: (state) => state.bankData,
       userQueryData: (state) => state.userQueryData,
     }),
@@ -801,7 +797,7 @@ export default {
     // delete user
     async toDeleteUser() {
       const resu = confirm("comfire to delete ?");
-      if (!resu)  return;
+      if (!resu) return;
 
       const deleResu = await this.$store.dispatch("deleteUser", {
         account: this.userQueryData.account,
@@ -810,8 +806,8 @@ export default {
       if (deleResu) {
         alert("delete done");
         // 重新获取所有用户数据
-       await this.GetUsers();
-       this.reload();
+        await this.GetUsers();
+        this.reload();
       } else {
         alert("delete user fail");
       }
@@ -898,6 +894,8 @@ export default {
       if (result) {
         console.log("query result : ", result);
       } else {
+        alert(`${this.com_OP_FormData.userAccount} not exits !`);
+        this.$store.commit("setUserQueryData", null);
         console.log("query result : null");
         return;
       }
@@ -1021,15 +1019,15 @@ export default {
       }
     },
     // 获取部分用户信息
-     async GetUsers() {
-      console.log('重新获取所有用户数据...')
+    async GetUsers() {
+      console.log("重新获取所有用户数据...");
       const usersInfo = await this.$store.dispatch("getUsers");
       if (usersInfo) {
         // 通过该id 拿到了对应的 数据
         console.log("init [users] data : ", usersInfo);
       }
     },
-  
+
     /**
      * charts
      */

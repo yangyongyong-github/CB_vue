@@ -1,6 +1,9 @@
 <template>
   <div class="login-container">
-    <h3 class="page-title">用户登录页面</h3>
+    <h3 class="page-title">
+      <!-- 用户登录页面 -->
+      {{language.UserLoginPage[lang]}}
+      </h3>
     <div class="input-area">
       <div class="indet">Login {{ loginFormData.flag }}</div>
       <p>
@@ -11,7 +14,6 @@
       </p>
       <p>
         <!-- 密码 -->
-
         {{ language.PassWord[lang] }}
         <input type="password" v-model="loginFormData.loginPwd" />
       </p>

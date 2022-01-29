@@ -27,8 +27,8 @@ export default [
             }
         }
     },
-     // User_II Center pages , private
-     {
+    // User_II Center pages , private
+    {
         name: "useri",
         path: "/useri",
         component: () => import("@/views/User_I"),
@@ -54,5 +54,5 @@ export default [
                 next("/login")
             }
         }
-    }
+    },
 ]

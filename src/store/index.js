@@ -25,6 +25,10 @@ const store = new Vuex.Store({
     usersData: null, // 保存所有的用户信息, admin 之用
     bankData: null,
     rateData: null,
+    lottery: { // 用户抽奖
+      auth: false,// 用户是否可以抽象
+      value: ''// 奖品 number
+    },
     userQueryData: '', // 管理员点击查询用户后，从db中拿到的结果
     // UsersData: users, // temp
     // bankData: bank, // temp
