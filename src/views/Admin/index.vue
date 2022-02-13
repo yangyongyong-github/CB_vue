@@ -524,7 +524,6 @@ import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import * as MATH from "@/utils";
 const echarts = require("echarts");
-import ToChat from "@/components/ToChat";
 
 export default {
   inject: ["reload"], // 友好的刷新界面
@@ -580,7 +579,6 @@ export default {
   },
   components: {
     TopTip,
-    ToChat,
   },
   mounted() {
     this.initCharts();

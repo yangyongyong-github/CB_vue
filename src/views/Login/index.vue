@@ -2,24 +2,24 @@
   <div class="login-container">
     <h3 class="page-title">
       <!-- 用户登录页面 -->
-      {{language.UserLoginPage[lang]}}
-      </h3>
-    <div class="input-area">
+      {{ language.UserLoginPage[lang] }}
+    </h3>
+    <div class="input-area adjust-en">
       <div class="indet">Login {{ loginFormData.flag }}</div>
       <p>
         <!-- autocomplete="new-password" -->
         <!-- 账号 -->
-        {{ language.Account[lang] }}
+        <label class="name"> {{ language.Account[lang] }}</label>
         <input type="text" v-model="loginFormData.loginId" />
       </p>
       <p>
         <!-- 密码 -->
-        {{ language.PassWord[lang] }}
+        <label class="name"> {{ language.PassWord[lang] }} </label>
         <input type="password" v-model="loginFormData.loginPwd" />
       </p>
 
       <!-- 选择登录身份 -->
-      {{ language.SelectYouLoginIdentify[lang] }}
+      <label class="name-select"> {{ language.SelectYouLoginIdentify[lang] }}</label>
       <select v-model="loginFormData.flag">
         <option
           v-for="(item, index) in userLists"
@@ -127,7 +127,7 @@ export default {
   height: 100%;
   .input-area {
     .indet {
-      padding-left: 50px;
+      text-align: center;
       font-weight: bold;
       font-size: 1.2em;
       margin-bottom: 10px;
@@ -140,6 +140,15 @@ export default {
       .to-flex();
       margin-top: 20px;
     }
+  }
+}
+.adjust-en {
+  label.name {
+    display: inline-block;
+    width: 65px;
+  }
+  label.name-select{
+    margin-right: 10px;
   }
 }
 </style>

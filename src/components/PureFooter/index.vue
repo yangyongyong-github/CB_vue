@@ -74,7 +74,7 @@
     // border: 1px dotted;
     box-sizing: border-box;
     overflow: hidden;
-    padding-left: 200px;
+    padding-left: 20%;
     font-size: 0.9em;
     margin-top: 80px;
 
