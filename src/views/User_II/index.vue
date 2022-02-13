@@ -1,7 +1,7 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="pay-circle" tipText="存款，让财富无限增值~" />
+    <TopTip IconType="pay-circle" :tipText="language.TopTip_Deposit[lang] " />
 
     <header>
       <!-- header：基础信息部分 -->
@@ -26,7 +26,7 @@
       <p class="work-tit">用户服务办理区域</p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <Modal Height="150%" text="您的账户已被管理员冻结！"> </Modal>
+        <Modal Height="160%" :text="language.AccountBeenFreezed[lang]"> </Modal>
       </div>
 
       <div class="work-category">
@@ -180,6 +180,7 @@
             <div class="confirme">
               本此存款利息为
               {{ depositFormData.interest }}
+              元
               <!-- <b>确定开始本此存款？</b> -->
             </div>
             <div class="part">

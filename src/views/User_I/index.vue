@@ -1,7 +1,7 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="rise" tipText=language.TopTip_Loan[lang] />
+    <TopTip IconType="rise" :tipText=language.TopTip_Loan[lang] />
     <header>
       <!-- header：基础信息部分 -->
       <div class="page-title">
@@ -18,7 +18,7 @@
       </p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <!-- <Modal Height="190%" text=language.AccountBeenFreezed[lang]> </Modal> -->
+        <Modal Height="135%" :text=language.AccountBeenFreezed[lang]> </Modal>
       </div>
 
       <div class="work-category">

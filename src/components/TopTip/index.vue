@@ -28,7 +28,7 @@ export default {
 
 <style lang="less" scoped>
 .top-tip-container {
-  width: 15%;
+  width: 13%;
   min-width: 200px;
   height: 25px;
   line-height: 25px;
@@ -41,9 +41,10 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   display: flex;
-  padding-left: 30px;
+  text-align: center;
   box-sizing: border-box;
   .text {
+    width: 100%;
     text-align: center;
   }
 }

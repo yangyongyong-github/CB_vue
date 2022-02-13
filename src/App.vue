@@ -1,9 +1,12 @@
 <template>
   <div id="app-container" ref="mainContainer">
-    <!-- v-loading="isLoading" -->
-    <div class="top-banner"><TopBanner /></div>
-    <RouterView v-if="isRouterAlive" />
-    <ToTop /> 
+    <div class="main" v-show="webLoaded">
+      <!-- v-loading="isLoading" -->
+      <div class="top-banner"><TopBanner /></div>
+      <RouterView v-if="isRouterAlive" />
+      <ToTop />
+    </div>
+    <WebLoading v-show="!webLoaded" />
   </div>
 </template>
 
@@ -12,24 +15,24 @@ import { mapState } from "vuex";
 import TopBanner from "@/components/TopBanner";
 import ToTop from "@/components/ToTop";
 import Home from "@/views/Home";
-import mainScroll from "@/mixins/mainScroll";
+import WebLoading from "@/components/WebLoading";
 
 export default {
   // name: App,
   data() {
     return {
+      webLoaded: false, // 初始网站数据是否加载完毕
       isRouterAlive: true, //控制视图是否显示的变量
     };
   },
-  mixins: [mainScroll("mainContainer")],
   created() {
-    this.init();
-    console.log("store  : ", this.$store.state);
+    this.webLoad();
   },
   components: {
     Home,
     TopBanner,
     ToTop,
+    WebLoading,
   },
   computed: mapState(["isLoading"]),
   /**友好的界面（数据）刷新 */
@@ -40,6 +43,16 @@ export default {
     };
   },
   methods: {
+    /**
+     * 初始化加载网站的数据
+     */
+    async webLoad() {
+      // this.webLoaded = true;
+      await this.init();
+      this.webLoaded = true;
+      console.log("store  : ", this.$store.state);
+      if (this.webLoaded) console.log("网站数据加载完成");
+    },
     reload() {
       this.isRouterAlive = false; //先关闭，
       this.$nextTick(function () {
@@ -82,12 +95,13 @@ export default {
 #app-container {
   width: 100%;
   overflow-x: hidden;
-
-  .to-top{
+  .main {
+    // display: none;
+  }
+  .to-top {
     font-size: 1.4em;
     font-weight: border;
     color: skyblue;
-    
   }
 }
 </style>

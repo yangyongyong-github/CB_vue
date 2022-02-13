@@ -1,6 +1,10 @@
 // 组件中用到的语言类型
 export default {
     // TopTip
+    TopTip_Home:{
+        cn:'欢迎来到中国银行！',
+        en:'Welcome to BANKOFCHINA!'
+    },
     TopTip_Loan:{
         cn:'贷款，让财富成倍增长',
         en:'Loan, let wealth more fast ~'

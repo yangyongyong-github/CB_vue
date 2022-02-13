@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <TopTip IconType="yuque" tipText="欢迎来到 中国银行！" />
+    <TopTip IconType="yuque" :tipText="language.TopTip_Home[lang]" />
 
     <div class="banner">
       <div class="swipper">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import PureFooter from "@/components/PureFooter";
 import RateShow from "@/components/RateShow";
@@ -119,6 +120,7 @@ export default {
     RateShow,
     PureFooter,
   },
+  computed: mapState(["language", "lang"]),
 };
 </script>
 <style lang="less" scoped>

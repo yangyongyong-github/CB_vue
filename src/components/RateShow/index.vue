@@ -1,10 +1,18 @@
 <template>
   <div class="rate-show">
+    <!-- <div class="main" v-if="rateData">
+    </div>
+    <div class="no-data">
+
+    </div>
+    <div class="loading">
+      数据加载中
+    </div> -->
     <div>
       <h3 class="title">我要存/贷款，利率展示区</h3>
     </div>
     <!-- deposit-table -->
-    <div class="table table-deposit">
+    <div class="table table-deposit" >
       <b>Deposit 存款</b>
       <table class="deposit">
         <thead>
