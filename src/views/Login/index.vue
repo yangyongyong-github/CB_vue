@@ -19,7 +19,9 @@
       </p>
 
       <!-- 选择登录身份 -->
-      <label class="name-select"> {{ language.SelectYouLoginIdentify[lang] }}</label>
+      <label class="name-select">
+        {{ language.SelectYouLoginIdentify[lang] }}</label
+      >
       <select v-model="loginFormData.flag">
         <option
           v-for="(item, index) in userLists"
@@ -67,7 +69,8 @@ export default {
         !this.loginFormData.flag
       ) {
         // alert("值缺失！");
-        this.openNotificationWithIcon("warning"); // msg type
+        // this.openNotificationWithIcon("warning"); // msg type
+        this.tipMsg("warn", "值缺失！");
         return;
       }
       const userObj = {
@@ -89,7 +92,7 @@ export default {
         }
       } else {
         // alert("账号密码、类型不匹配");
-        this.openNotificationWithIcon("error"); // msg type
+        this.tipMsg("error", "账号密码、类型不匹配");
       }
     },
     // 去注册
@@ -113,6 +116,22 @@ export default {
       this.$notification[type]({
         message: "Login Tip",
         description: msg + " !",
+      });
+    },
+
+    /**
+     * 消息提示
+     */
+    tipMsg(type, msg) {
+      this.$showMessage({
+        content: msg, //successMsg
+        type: type,
+        duration: 1000,
+        container: this.$refs.from,
+        callback: () => {
+          this.isSubmiting = false;
+          // this.clearInput();
+        },
       });
     },
   },
@@ -147,7 +166,7 @@ export default {
     display: inline-block;
     width: 65px;
   }
-  label.name-select{
+  label.name-select {
     margin-right: 10px;
   }
 }

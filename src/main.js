@@ -15,21 +15,20 @@ import "./styles/common.css"
 Vue.config.productionTip = false;
 
 
-/* 注册全局指令 */ 
+/* 注册全局指令 */
 // vLoading
 import vLoading from "./directives/loading";
 Vue.directive("loading", vLoading);
 
 /**
- * global use antd-vue
+ * 全局使用部分组件 antd-vue
  */
-import Antd from 'ant-design-vue';
+import { Carousel, Calendar, Icon } from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+Vue.use(Carousel)
+Vue.use(Icon)
+Vue.use(Calendar)
 
-Vue.use(Antd)
-
-import VueLuckyCanvas from '@lucky-canvas/vue'
-Vue.use(VueLuckyCanvas)
 
 new Vue({
   router,

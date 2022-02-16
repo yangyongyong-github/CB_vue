@@ -1,0 +1,58 @@
+
+
+.user-container {
+  width: 100%;
+  position: relative;
+  // common
+  .format-tip {
+    color: @gray;
+    margin-left: 10px;
+    font-size: 0.8em;
+  }
+
+  // top 下拉框
+  .select-indent {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .img-show {
+    width: 200px;
+    position: absolute;
+    top: 180px;
+    left: 235px;
+    img {
+      width: 100%;
+    }
+  }
+  // middle input
+  .input-area {
+    min-width: 50%;
+    padding: 20px 50px;
+
+    padding-left: 40%;
+    .item {
+      margin-top: 10px;
+
+      label {
+        width: 70px;
+        display: inline-block;
+      }
+    }
+    .company {
+      margin-bottom: 20px;
+    }
+    .last {
+      margin-bottom: 20px;
+    }
+
+    // 涉及到不同的具体独有的业务类型部分
+    .different {
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 10px;
+      margin-left: 10%;
+    }
+  }
+}

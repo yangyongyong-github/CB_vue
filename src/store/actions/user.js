@@ -40,6 +40,7 @@ export default {
     async queryUser({ commit }, { account, flag }) { // 参数1 即使不用也要写上去，因为是源码中的参数
         // console.log('scan ', { account, flag });
         const resp = await userServ.query(account, flag);
+        // console.log(22, resp.data)
         return resp.data;
     },
     async deleteUser({ commit }, { account, flag }) { // 参数1 即使不用也要写上去，因为是源码中的参数

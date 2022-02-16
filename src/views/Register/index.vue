@@ -122,7 +122,7 @@ export default {
   data() {
     return {
       userInfo: {
-        flag: "userii",
+        flag: "useri",
         account: "", // 需要验证 数据库中验证通过后一起赋值
         loginId: "", // 需要验证
         loginPwd: "", // 需要验证
@@ -192,9 +192,9 @@ export default {
         account: this.userInfoTemp.account,
         flag: this.userInfo.flag,
       });
-
       if (userr) {
-        alert("该账号已被注册，请重新填写！");
+        // alert("该账号已被注册，请重新填写！");
+        this.tipMsg("warn", "该账号已被注册，请重新填写！");
         this.userInfoTemp.account = "";
         this.userInfoTemp.ps1 = "";
         this.userInfoTemp.ps2 = "";
@@ -207,7 +207,7 @@ export default {
     //   密码确认
     rules_passwordConfirme() {
       if (this.userInfoTemp.ps1 !== this.userInfoTemp.ps2) {
-        alert("密码不一致,请重新填写！");
+        this.tipMsg("warn", "密码不一致,请重新填写！");
         this.userInfoTemp.ps1 = "";
         this.userInfoTemp.ps2 = "";
         return;
@@ -215,21 +215,18 @@ export default {
       // return this.userInfoTemp.ps2;
       this.userInfo.loginPwd = this.userInfoTemp.ps2;
     },
-    //   联系电话 验证
+    //   联系电话 验证(规则:1开头，11位数)
     rules_mobile() {
-      // const result =
-      //   /^1(3[0-9]|4[01456879]|5[0-3,5-9]|6[2567]|7[0-8]|8[0-9]|9[0-3,5-9])d{8}$/.test(
-      //     this.userInfoTemp.mobile
-      //   );
-      // console.log(result);
+      const result = /^1\d{10}$/.test(this.userInfoTemp.mobile);
+      console.log("mobile validate : ", result);
       // 暂时不予验证
-      // if (result) {
-      this.userInfo.mobile = this.userInfoTemp.mobile;
-      // } else {
-      //   alert("电话号码有问题，请重新填写！");
-      //   this.userInfoTemp.mobile = "";
-      //   return;
-      // }
+      if (result) {
+        this.userInfo.mobile = this.userInfoTemp.mobile;
+      } else {
+        this.tipMsg("warn", "电话号码有问题，请重新填写！");
+        this.userInfoTemp.mobile = "";
+        return;
+      }
     },
     // 提交按钮
     async submit() {
@@ -264,7 +261,8 @@ export default {
 
         try {
           const user = await this.$store.dispatch("adduser", userIObj);
-          alert("adduser I done ");
+          // alert("adduser I done ");
+          this.tipMsg("success", "adduser I done ");
 
           // 注册完成后，直接 跳转到 个人中心页面
           const goto = window.confirm("to enter center page I ?");
@@ -304,7 +302,8 @@ export default {
 
         try {
           const user = await this.$store.dispatch("adduser", userIIObj);
-          alert("adduser II done ");
+          // alert("adduser II done ");
+          this.tipMsg("success", "adduser II done !");
           this.lottery.auth = true; // 赋予一次抽奖的机会
 
           // 注册完成后，直接 跳转到 个人中心页面
@@ -329,67 +328,32 @@ export default {
         方式二：try catch 没有出错则证明 done
       */
     },
+    /**
+     * 消息提示
+     */
+    tipMsg(type, msg) {
+      this.$showMessage({
+        content: msg, //successMsg
+        type: type,
+        duration: 1000,
+        container: this.$refs.from,
+        callback: () => {
+          this.isSubmiting = false;
+          // this.clearInput();
+        },
+      });
+    },
   },
+  watch:{
+    'userInfo.flag'(oldV,newV){
+      console.log('watch',oldV,newV)
+      this.accountIsUseable();//用户改变flag后重新进行验证，防止用户耍滑，(即使混过去了也进入不了数据库)
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
 @import "~@/styles/var.less";
-
-.user-container {
-  width: 100%;
-  position: relative;
-  // common
-  .format-tip {
-    color: @gray;
-    margin-left: 10px;
-    font-size: 0.8em;
-  }
-
-  // top 下拉框
-  .select-indent {
-    width: 100%;
-    margin-top: 30px;
-    text-align: center;
-  }
-  .img-show {
-    width: 200px;
-    position: absolute;
-    top: 180px;
-    left: 235px;
-    img {
-      width: 100%;
-    }
-  }
-  // middle input
-  .input-area {
-    min-width: 50%;
-    padding: 20px 50px;
-
-    padding-left: 40%;
-    .item {
-      margin-top: 10px;
-
-      label {
-        width: 70px;
-        display: inline-block;
-      }
-    }
-    .company {
-      margin-bottom: 20px;
-    }
-    .last {
-      margin-bottom: 20px;
-    }
-
-    // 涉及到不同的具体独有的业务类型部分
-    .different {
-      margin-top: 20px;
-    }
-    button {
-      margin-top: 10px;
-      margin-left: 10%;
-    }
-  }
-}
+@import "./index.less";
 </style>

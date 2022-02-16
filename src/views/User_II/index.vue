@@ -1,7 +1,7 @@
 <template>
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
-    <TopTip IconType="pay-circle" :tipText="language.TopTip_Deposit[lang] " />
+    <TopTip IconType="pay-circle" :tipText="language.TopTip_Deposit[lang]" />
 
     <header>
       <!-- header：基础信息部分 -->
@@ -323,7 +323,7 @@ export default {
      */
     rules_base_take() {
       if (this.takeData.number <= 0) {
-        alert("无效输入！");
+        this.tipMsg('warn',"无效输入！");
         this.clearInput_take();
         return;
       }
@@ -340,7 +340,7 @@ export default {
       ) {
         // 1. 数字，正数
         // this.clearInput_deposit();
-        alert("缺失：金额或年份！");
+        this.tipMsg('info',"缺失：金额或年份！");
         return;
       }
       return "passRulesOfBase_deposit";
@@ -349,7 +349,7 @@ export default {
     /* deposit: 起存金额判断 */
     rules_depoNum() {
       if (+this.depositFormData.inputNumber < 100) {
-        alert("存款100元起!");
+        this.tipMsg('warn',"存款100元起!");
         return;
       }
       // 1. 大额存款，起存金额不够
@@ -358,7 +358,7 @@ export default {
           this.depositFormData.deposit_category === "A_3") &&
         +this.depositFormData.inputNumber < +this.rateData.A
       ) {
-        alert(`大额存款，起存金额：${this.rateData.A}`);
+        this.tipMsg('warn',`大额存款，起存金额：${this.rateData.A}`);
         this.clearInput_deposit();
         return;
       }
@@ -369,7 +369,7 @@ export default {
           this.depositFormData.deposit_category === "B_3") &&
         +this.depositFormData.inputNumber < +this.rateData.B
       ) {
-        alert(`中额存款，起存金额：${this.rateData.B}`);
+        this.tipMsg('warn',`中额存款，起存金额：${this.rateData.B}`);
         this.clearInput_deposit();
         return;
       }
@@ -385,7 +385,7 @@ export default {
      */
     rules_depoYear() {
       if (this.depositFormData.inputYear <= 0) {
-        alert("无效输入！");
+        this.tipMsg('warn',"无效输入！");
         return;
       }
       // 低利率类型可以存长时间，但是高利率类型不可以存短时间
@@ -395,7 +395,7 @@ export default {
         (this.depositFormData.deposit_category === "B_3" &&
           this.depositFormData.inputYear <= 3)
       ) {
-        alert("高利率类型不可以存短时间");
+        this.tipMsg('warn',"高利率类型不可以存短时间");
         this.depositFormData.inputYear = "";
         return;
       }
@@ -412,7 +412,7 @@ export default {
       }
       // 2. take <= deposit
       if (+this.takeData.number > this.depositTotal) {
-        alert("余额不足！");
+        this.tipMsg('error',"余额不足！");
         this.takeData.number = "";
         return;
       }
@@ -566,6 +566,21 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    /**
+     * 消息提示
+     */
+    tipMsg(type, msg) {
+      this.$showMessage({
+        content: msg, //successMsg
+        type: type,
+        duration: 1000,
+        container: this.$refs.from,
+        callback: () => {
+          this.isSubmiting = false;
+          // this.clearInput();
+        },
+      });
     },
   },
 };

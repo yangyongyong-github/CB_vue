@@ -1,5 +1,6 @@
 @import "../styles/var.less";
 @import "../styles/mixin.less";
+
 .message {
   .self-center();
   z-index: 999;
@@ -10,25 +11,31 @@
   display: flex;
   align-items: center;
   color: #fff;
+  font-weight: bold;
   transition: 0.4s;
   transform: translate(-50%, -50%) translateY(25px);
   opacity: 0;
   white-space: nowrap;
+
   &-info {
     background: @primary;
   }
+
   &-success {
     background: @success;
   }
+
   &-warn {
     background: @warn;
   }
+
   &-error {
     background: @danger;
   }
 }
 
 .icon {
+  font-weight: normal;
   font-size: 20px;
   margin-right: 7px;
 }
