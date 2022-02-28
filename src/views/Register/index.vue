@@ -1,9 +1,15 @@
 <template>
   <div class="user-container">
     <div class="select-indent">
-      <h3 class="page-title">用户注册页面</h3>
+      <h3 class="page-title">
+        <!-- 用户注册页面 -->
+        {{ language.UserRegisterPage[lang] }}
+      </h3>
 
-      <b>请选择用户身份 </b>
+      <b>
+        <!-- 请选择用户身份  -->
+        {{ language.SelectYouLoginIdentify[lang] }}
+      </b>
       <select v-model="userInfo.flag">
         <option value="useri">I</option>
         <option value="userii">II</option>
@@ -21,29 +27,34 @@
     </div>
 
     <div class="input-area">
-      <p><b>业务部分</b></p>
+      <p>
+        <b>{{ language.BusinessPart[lang] }}</b>
+      </p>
       <!-- 业务部分 -->
       <div class="item">
-        <label> 账号 </label
+        <label>{{ language.Account[lang] }} </label
         ><input
           type="text"
           v-model="userInfoTemp.account"
-          @blur="accountIsUseable"
+          @blur="vali_account"
           autocomplete="new-password"
+          readonly
+          onfocus="this.removeAttribute('readonly');"
+          onblur="this.setAttribute('readonly',true);"
         />
         <!-- 去数据库中验证 -->
         <!-- <span class="format-tip">格式为 【{{ formatData.account }}】</span> -->
       </div>
       <!-- 业务部分 -->
       <div class="item">
-        <label> 密码 </label>
+        <label> {{ language.PassWord[lang] }} </label>
         <!-- 先存储在temp中，验证通过了再存储到信息中 -->
         <input type="password" v-model="userInfoTemp.ps1" />
         <!-- <span class="format-tip">格式为【 {{ formatData.loginPwd }}】</span> -->
       </div>
       <!-- 业务部分 -->
       <div class="item last">
-        <label> 确认密码</label
+        <label> {{ language.ConfirmePsw[lang] }}</label
         ><input
           type="password"
           v-model="userInfoTemp.ps2"
@@ -51,36 +62,50 @@
         />
       </div>
 
-      <p><b>个人信息部分</b></p>
+      <p>
+        <b>
+          <!-- 个人信息部分 -->
+          {{ language.PersonInfomationPart[lang] }}
+        </b>
+      </p>
 
       <!-- 个人信息部分 -->
       <div class="item">
-        <label> 姓名： </label><input type="text" v-model="userInfo.name" />
+        <label> {{ language.Name[lang] }} </label
+        ><input type="text" v-model="userInfo.name" @blur="vali_name" />
       </div>
 
       <div class="item">
-        <label>性别</label>
-        男
+        <label>
+          {{ language.Gender[lang] }}
+        </label>
+        {{ language.Male[lang] }}
         <input type="radio" name="sex" v-model="userInfo.sex" value="true" />
         <label>
           <!-- 占位距离 -->
         </label>
-        女
+        {{ language.Female[lang] }}
         <input type="radio" name="sex" v-model="userInfo.sex" value="false" />
       </div>
 
       <div class="item">
-        <label>出生日期</label>
+        <label>
+          {{ language.Birthday[lang] }}
+        </label>
         <input type="date" v-model="userInfo.birthday" />
       </div>
 
       <div class="item">
-        <label for="">工作 </label>
+        <label for="">
+          {{ language.Job[lang] }}
+        </label>
         <input type="text" v-model="userInfo.job" />
       </div>
 
       <div class="item">
-        <label for="">联系电话</label>
+        <label for="">
+          {{ language.Mobile[lang] }}
+        </label>
         <input
           type="number"
           v-model="userInfoTemp.mobile"
@@ -99,7 +124,7 @@
           <!-- interest = 0 = none-input -->
           <div class="item company">
             <!-- company -->
-            <label>所在单位</label>
+            <label>{{ language.Company[lang] }}</label>
             <input type="text" v-model="userInfo.company" />
           </div>
           <!-- cause = none-input - -->
@@ -110,7 +135,9 @@
         <!-- loan = 0 = none-input -->
         <!-- interest = 0 = none-input -->
         <!-- </div> -->
-        <button class="submit-btn" @click="submit">提交</button>
+        <button class="submit-btn" @click="submit">
+          {{ language.Submit[lang] }}
+        </button>
       </div>
     </div>
   </div>
@@ -118,6 +145,8 @@
 
 <script>
 import { mapState } from "vuex";
+import { rules_1, rules_2, rules_phone } from "@/utils";
+
 export default {
   data() {
     return {
@@ -149,7 +178,7 @@ export default {
       // },
     };
   },
-  computed: mapState(["lottery"]),
+  computed: mapState(["lottery", "language", "lang"]),
   filters: {
     /**
      * 过滤用户选择的身份类型
@@ -165,11 +194,31 @@ export default {
     },
   },
   methods: {
-    /*  验证必须是可用字符，通用
-      英文单词，数字下划线组成
-   */
-    compliance() {
-      // 符合性
+    /**
+     * account validate : 字母+数字
+     */
+    vali_account() {
+      console.log(this.userInfo.account);
+      console.log(!rules_1(this.userInfo.account));
+      // 这里取反怎么就思路混乱了呢
+      if (rules_1(this.userInfo.account)) {
+        this.tipMsg("info", "字母+数字");
+        this.userInfo.account = "";
+        return;
+      }
+      // 数据库中查找去重
+      this.accountIsUseable();
+    },
+    /**
+     * name validate : 字母/汉字
+     */
+    vali_name() {
+      // console.log(rules_2(this.userInfo.name))
+      if (!rules_2(this.userInfo.name)) {
+        this.tipMsg("info", "英文字母 或者 中文汉字");
+        this.userInfo.name = "";
+        return;
+      }
     },
     // 用户注册完成后，清空输入框
     clearInput() {
@@ -217,10 +266,8 @@ export default {
     },
     //   联系电话 验证(规则:1开头，11位数)
     rules_mobile() {
-      const result = /^1\d{10}$/.test(this.userInfoTemp.mobile);
-      console.log("mobile validate : ", result);
-      // 暂时不予验证
-      if (result) {
+      // console.log(rules_phone(this.userInfoTemp.mobile))
+      if (rules_phone(this.userInfoTemp.mobile)) {
         this.userInfo.mobile = this.userInfoTemp.mobile;
       } else {
         this.tipMsg("warn", "电话号码有问题，请重新填写！");
@@ -235,6 +282,21 @@ export default {
       if (this.userInfo.flag === "useri") {
         // ================ useri to register=====================
         console.log("register : I");
+        // 判空验证
+        if (
+          !this.userInfo.account ||
+          !this.userInfo.loginPwd ||
+          !this.userInfo.name ||
+          !this.userInfo.sex ||
+          !this.userInfo.birthday ||
+          !this.userInfo.job ||
+          !this.userInfo.mobile ||
+          !this.userInfo.company
+        ) {
+          // alert("value is Miss of user i");
+          this.tipMsg("error", "Miss Value");
+          return;
+        }
 
         const userIObj = {
           account: this.userInfo.account,
@@ -281,6 +343,21 @@ export default {
         // =========== userii to register ==================
       } else if (this.userInfo.flag === "userii") {
         console.log("register : II");
+
+        // 判空验证
+        if (
+          !this.userInfo.account ||
+          !this.userInfo.loginPwd ||
+          !this.userInfo.name ||
+          !this.userInfo.sex ||
+          !this.userInfo.birthday ||
+          !this.userInfo.job ||
+          !this.userInfo.mobile
+        ) {
+          // alert("value is Miss of user i");
+          this.tipMsg("error", "Miss Value");
+          return;
+        }
 
         const userIIObj = {
           account: this.userInfo.account,
@@ -344,12 +421,12 @@ export default {
       });
     },
   },
-  watch:{
-    'userInfo.flag'(oldV,newV){
-      console.log('watch',oldV,newV)
-      this.accountIsUseable();//用户改变flag后重新进行验证，防止用户耍滑，(即使混过去了也进入不了数据库)
-    }
-  }
+  watch: {
+    "userInfo.flag"(oldV, newV) {
+      console.log("watch", oldV, newV);
+      this.accountIsUseable(); //用户改变flag后重新进行验证，防止用户耍滑，(即使混过去了也进入不了数据库)
+    },
+  },
 };
 </script>
 

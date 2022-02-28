@@ -13,46 +13,47 @@ header {
     // 
     .user-data-base {
         .to-flex();
-      
+
         .base-info,
         .person-fund,
         .person-account,
         .lately {
-          // border: 1px solid;
-          font-weight: bold;
-          padding: 5px;
-          // .border-shadow();
-      
-          & > div {
-            width: 250px;
-            margin-top: 5px;
-      
-            .guide {
-              display: inline-block;
-              width: 100px;
+            // border: 1px solid;
+            font-weight: bold;
+            padding: 5px;
+            // .border-shadow();
+
+            &>div {
+                width: 250px;
+                margin-top: 5px;
+
+                .guide {
+                    display: inline-block;
+                    width: 100px;
+                }
+
+                textarea {
+                    outline: none;
+                    border: none;
+                    margin-left: 20px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                }
             }
-      
-            textarea {
-              outline: none;
-              border: none;
-              margin-left: 20px;
-              padding: 5px;
-              box-sizing: border-box;
-            }
-          }
         }
-      }
+    }
 
 }
 
-.other-server{
+.other-server {
     width: 100%;
     // border: 1px solid slateblue;
-   padding-right: 200px;
+    padding-right: 200px;
     display: flex;
     justify-content: end;
     margin-bottom: 30px;
-    .alter-info{
+
+    .alter-info {
         margin-right: 150px;
     }
 }
@@ -110,7 +111,6 @@ apply:isFreezed
                 .tit {
                     font-weight: bold;
                 }
-
             }
 
             // 这里仅仅作为样式出现，无语意义
@@ -118,6 +118,13 @@ apply:isFreezed
             .middle,
             .long {
                 .to-flex();
+            }
+        }
+
+        .deposit {
+            .rate {
+                width: 100px;
+                // border: 1px solid;
             }
         }
 

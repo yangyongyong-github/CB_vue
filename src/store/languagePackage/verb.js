@@ -17,4 +17,8 @@ export default {
         cn: '欢迎使用',
         en: 'Welcome Use'
     },
+    Done:{
+        cn:'完成',
+        en:'Done'
+    }
 }

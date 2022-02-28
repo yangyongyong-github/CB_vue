@@ -16,25 +16,30 @@
       <!-- div : 修改个人信息 -->
       <!-- <AlterInfo /> -->
       <!-- div : lottery -->
-      <Lottery text="办理存款业务即可参与抽奖！" />
+      <Lottery :tipMsg="language.PleaseToDeposit[lang]" :text="language.lotteryFirstDeposit[lang]" />
     </div>
 
     <!-- ==================workarea======================== -->
     <!-- 用于动态的提示 是否冻结，只能并行，如果包含会导致 被套在Modal组件之间的数据不会渲染 -->
 
     <div class="workarea">
-      <p class="work-tit">用户服务办理区域</p>
+      <p class="work-tit">
+        <!-- 用户服务办理区域 -->
+        {{ language.UserServerArea[lang] }}
+      </p>
 
       <div class="modal" v-show="userData.isFreezed">
         <Modal Height="160%" :text="language.AccountBeenFreezed[lang]"> </Modal>
       </div>
 
       <div class="work-category">
-        请选择办理业务类型:
-
+        <!-- 请选择办理业务类型 -->
+        {{ language.SelectWorkCategory[lang] }}
+        :
         <div>
-          <label
-            >存款
+          <label>
+            <!-- 存款 -->
+            {{ language.Deposit[lang] }}
             <input
               type="radio"
               name="workCategory"
@@ -44,8 +49,9 @@
           </label>
         </div>
         <div>
-          <label
-            >取款
+          <label>
+            <!-- 取款 -->
+            {{ language.Take[lang] }}
             <input
               type="radio"
               name="workCategory"
@@ -67,8 +73,15 @@
               <!-- 大额存款表头 -->
               <div>
                 <div class="head-tip">
-                  <div class="tit">大额存款</div>
-                  <div class="start">起存金额(元) {{ rateData.A }}</div>
+                  <div class="tit">
+                    <!-- 大额存款 -->
+                    {{ language.Deposit_large[lang] }}
+                  </div>
+                  <div class="start">
+                    <!-- 起存金额(元) -->
+                    {{ language.min_amount_deposit[lang] }}
+                    {{ rateData.A }}
+                  </div>
                 </div>
 
                 <hr />
@@ -81,10 +94,11 @@
                   value="A_1"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">短期：</div>
-                <div class="time">时间：1-3years</div>
+                <div class="title">{{ language.Short[lang] }}</div>
+                <div class="time">1-3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_1 }}%</span>
+                  {{ language.Interest[lang] }}:
+                  <span>{{ rateData.A_1 }}%</span>
                 </div>
               </div>
 
@@ -95,18 +109,20 @@
                   value="A_3"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">长期：</div>
-                <div class="time">时间：>3 yrears</div>
+                <div class="title">{{ language.Long[lang] }}</div>
+                <div class="time">>3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.A_3 }}%</span>
+                  {{ language.Interest[lang] }}:<span>{{ rateData.A_3 }}%</span>
                 </div>
               </div>
 
               <!-- 中额存款表头 -->
               <div>
                 <div class="head-tip mt-15">
-                  <div class="tit">中额存款</div>
-                  <div class="start">起存金额(元) {{ rateData.B }}</div>
+                  <div class="tit">{{ language.Deposit_middle[lang] }}</div>
+                  <div class="start">
+                    {{ language.min_amount_deposit[lang] }} {{ rateData.B }}
+                  </div>
                 </div>
 
                 <hr />
@@ -120,10 +136,11 @@
                   value="B_1"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">短期：</div>
-                <div class="time">时间：1-3years</div>
+                <div class="title">{{ language.Short[lang] }}</div>
+                <div class="time">1-3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_1 }}%</span>
+                  {{ language.Interest[lang] }}:
+                  <span>{{ rateData.B_1 }}%</span>
                 </div>
               </div>
 
@@ -134,10 +151,10 @@
                   value="B_3"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">长期：</div>
-                <div class="time">时间：>3 yrears</div>
+                <div class="title">{{ language.Long[lang] }}</div>
+                <div class="time">>3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  利息：<span>{{ rateData.B_3 }}%</span>
+                  {{ language.Interest[lang] }}:<span>{{ rateData.B_3 }}%</span>
                 </div>
               </div>
               <hr />
@@ -149,43 +166,54 @@
                   value="other"
                   v-model="depositFormData.deposit_category"
                 />
-                <div class="title">其他:</div>
-                <div class="time">时间：不限年限</div>
-                <div class="rate">利息：无利息</div>
+                <div class="title">{{ language.Other[lang] }}</div>
+                <div class="time">{{ language.none_limited_time[lang] }}</div>
+                <div class="rate">{{ language.none_interest[lang] }}</div>
               </div>
             </div>
             <!-- 2. 用户输入存款金额 -->
             <div class="user-input">
               <span class="part">
-                存款金额
+                <!-- 存款金额 -->
+                {{ language.Deposit[lang] }}{{ language.Numbers[lang] }}
                 <input
                   type="number"
                   v-model="depositFormData.inputNumber"
                   @blur="rules_depoNum"
-                />(元)
+                />({{ language.Yuan[lang] }})
               </span>
 
               <span class="part">
-                相应的存款时间
+                <!-- 相应的存款时间 -->
+                {{ language.Deposit[lang] }}{{ language.Years[lang] }}
                 <input
                   type="number"
                   class="input-year"
                   v-model="depositFormData.inputYear"
                   @blur="rules_depoYear"
                 />
-                (年)
-                <label class="year-tip"> (小数时向下取整)</label>
+                ({{ language.Year[lang] }})
+                <label class="year-tip">
+                  <!-- (小数时向下取整) -->
+                  ( {{ language.DecimalAutoToInt_less[lang] }})
+                </label>
               </span>
             </div>
             <div class="confirme">
-              本此存款利息为
+              <!-- 本此存款利息为 -->
+              {{ language.Interest[lang] }}:
               {{ depositFormData.interest }}
-              元
+              {{ language.Yuan[lang] }}
               <!-- <b>确定开始本此存款？</b> -->
             </div>
             <div class="part">
               <button @click="depositWorking" :disabled="isSubmiting">
-                {{ isSubmiting ? "提交中..." : "提交" }}
+                <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
+                {{
+                  isSubmiting
+                    ? language.Sumbit[lang] + "..."
+                    : language.Submit[lang]
+                }}
               </button>
             </div>
 
@@ -197,16 +225,27 @@
           <!-- 二（一）、take工作区 -->
           <div class="take">
             <div class="take-box">
-              <p><b>本此取款</b></p>
+              <p>
+                <b>
+                  <!-- 本此取款 -->
+                  {{ language.Take[lang] }}
+                </b>
+              </p>
               <input
                 type="number"
                 v-model="takeData.number"
                 @blur="rules_take"
               />
-              元
+              <!-- 元 -->
+              {{ language.Yuan[lang] }}
               <div class="btn-sub">
                 <button @click="takeWorking" :disabled="isSubmiting">
-                  {{ isSubmiting ? "提交中..." : "提交" }}
+                  <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
+                  {{
+                    isSubmiting
+                      ? language.Submit[lang] + "..."
+                      : language.Submit[lang]
+                  }}
                 </button>
               </div>
             </div>
@@ -323,7 +362,7 @@ export default {
      */
     rules_base_take() {
       if (this.takeData.number <= 0) {
-        this.tipMsg('warn',"无效输入！");
+        this.tipMsg("warn", this.language.InputNoEffect[lang]); //无效输入
         this.clearInput_take();
         return;
       }
@@ -334,13 +373,17 @@ export default {
      * 基础输入验证：deposit
      */
     rules_base_deposit() {
+      if(this.depositFormData.inputYear<1){
+        this.tipMsg("info", this.language.LessYear_1[this.lang]); //最少1年起
+        return;
+      }
       if (
         this.depositFormData.inputNumber <= 0 ||
-        this.depositFormData.inputYear <= 0
+        this.depositFormData.inputYear <=0
       ) {
         // 1. 数字，正数
         // this.clearInput_deposit();
-        this.tipMsg('info',"缺失：金额或年份！");
+        this.tipMsg("info", this.language.MissMoneyOrYear[this.lang]); //"缺失：金额或年份！"
         return;
       }
       return "passRulesOfBase_deposit";
@@ -349,7 +392,7 @@ export default {
     /* deposit: 起存金额判断 */
     rules_depoNum() {
       if (+this.depositFormData.inputNumber < 100) {
-        this.tipMsg('warn',"存款100元起!");
+        this.tipMsg("warn", this.language.Deposit_min_100[this.lang]); //"存款100元起!"
         return;
       }
       // 1. 大额存款，起存金额不够
@@ -358,7 +401,12 @@ export default {
           this.depositFormData.deposit_category === "A_3") &&
         +this.depositFormData.inputNumber < +this.rateData.A
       ) {
-        this.tipMsg('warn',`大额存款，起存金额：${this.rateData.A}`);
+        this.tipMsg(
+          "warn",
+          ` ${this.language.min_amount_deposit[this.lang]} Of ${
+            this.language.Deposit_large[this.lang]
+          } : ${this.rateData.A}`
+        ); // 大额存款，起存金额：Large deposit of Min is
         this.clearInput_deposit();
         return;
       }
@@ -369,7 +417,12 @@ export default {
           this.depositFormData.deposit_category === "B_3") &&
         +this.depositFormData.inputNumber < +this.rateData.B
       ) {
-        this.tipMsg('warn',`中额存款，起存金额：${this.rateData.B}`);
+        this.tipMsg(
+          "warn",
+          ` ${this.language.min_amount_deposit[this.lang]} Of ${
+            this.language.Deposit_middle[this.lang]
+          } : ${this.rateData.B}`
+        );
         this.clearInput_deposit();
         return;
       }
@@ -385,7 +438,7 @@ export default {
      */
     rules_depoYear() {
       if (this.depositFormData.inputYear <= 0) {
-        this.tipMsg('warn',"无效输入！");
+        this.tipMsg("warn", this.language.InputNoEffect[lang]);
         return;
       }
       // 低利率类型可以存长时间，但是高利率类型不可以存短时间
@@ -395,7 +448,7 @@ export default {
         (this.depositFormData.deposit_category === "B_3" &&
           this.depositFormData.inputYear <= 3)
       ) {
-        this.tipMsg('warn',"高利率类型不可以存短时间");
+        this.tipMsg("warn", this.language.Mismatch_RateTime[this.lang]); // Mismatch of rate with time "高利率类型不可以存短时间"
         this.depositFormData.inputYear = "";
         return;
       }
@@ -412,7 +465,7 @@ export default {
       }
       // 2. take <= deposit
       if (+this.takeData.number > this.depositTotal) {
-        this.tipMsg('error',"余额不足！");
+        this.tipMsg("error", this.language.SurplusDeficiency[this.lang]); //"余额不足！"
         this.takeData.number = "";
         return;
       }
@@ -535,7 +588,7 @@ export default {
 
     tip() {
       this.$showMessage({
-        content: "完成！", //successMsg
+        content: this.language.Done[this.lang], //successMsg
         type: "success",
         duration: 1000,
         container: this.$refs.from,

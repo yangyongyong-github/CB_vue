@@ -9,3 +9,5 @@ export { default as debounce } from "./debounce";
 export { default as delay } from './delay'
 
 export { DecimalPos, Sum, Persent, opposite, uuid, toThousand } from "./math"
+
+export {rules_1, rules_2, rules_phone} from './reg'

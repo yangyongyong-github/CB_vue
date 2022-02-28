@@ -4,7 +4,9 @@
     @mouseenter="showLotteryTips"
     @mouseleave="hideLotteryTips"
   >
-    <button :disabled="!lottery.auth" @click="lotteryHandle">抽奖</button>
+    <button :disabled="!lottery.auth" @click="lotteryHandle">
+      {{ language.lottery[lang] }}
+    </button>
 
     <!-- 阻拦 提示消息 -->
     <div class="buiness-tips" ref="lotterTips">{{ tipMsg }}</div>
@@ -30,7 +32,7 @@ export default {
       default: "办理业务可以抽奖哦，最高可以免除贷款利息/存款利息翻倍！",
     },
   },
-  computed: mapState(["lottery"]),
+  computed: mapState(["lottery", "language", "lang"]),
   methods: {
     // 抽奖---------------
     showLotteryTips() {
@@ -53,7 +55,7 @@ export default {
     lotteryHandle() {
       console.log(this.lottery.auth);
       // window.open("/lottery"); // 新开窗口后store中的值全部不能使用？
-      this.$router.push('/lottery')
+      this.$router.push("/lottery");
     },
     // 用户点击'X', 去掉显示msg
     dropLotteryMsg() {

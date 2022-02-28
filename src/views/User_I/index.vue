@@ -182,22 +182,19 @@
             <div class="item">
               <label>
                 <!-- 续贷金额:(元) -->
-                {{ language.Input[lang] }}{{ language.Numbers[lang] }}:({{
-                  language.Yuan[lang]
-                }})
+                {{ language.Loan[lang] }}{{ language.Numbers[lang] }}
               </label>
               <input
                 type="number"
                 v-model="loanFormData.inputNumber"
                 @blur="rules_loanNum"
               />
+              {{ language.Yuan[lang] }}
             </div>
             <div class="item">
               <label>
                 <!-- 续贷年限(年) -->
-                {{ language.Input[lang] }}{{ language.Years[lang] }}:({{
-                  language.Yuan[lang]
-                }})
+                {{ language.Loan[lang] }}{{ language.Years[lang] }}
               </label>
               <input
                 type="number"
@@ -205,9 +202,10 @@
                 class="input-year"
                 @blur="rules_loanYear"
               />
-              <label class="year-Msg">
+              {{ language.Year[lang] }}
+              <label class="year-Msg year-tip">
                 <!-- (小数自动向上取整) -->
-                ( {{ language.DecimalAutoToInt[lang] }})
+                ( {{ language.DecimalAutoToInt_more[lang] }})
               </label>
             </div>
 
@@ -359,11 +357,11 @@ export default {
     causeValidate() {
       if (this.loanFormData.cause === null) {
         // alert("please input cause !");
-        this.tipMsg('info',"请填写贷款原因!")
+        this.tipMsg("info", this.language.MissCause[this.lang]);
         return;
       } else if (this.loanFormData.cause.length < 5) {
         // alert("Cause mist be more five !");
-        this.tipMsg('warn','必须大于5个字符!')
+        this.tipMsg("warn", this.language.More5Code[this.lang]);
         return;
       }
     },
@@ -371,7 +369,7 @@ export default {
     rules_loanNum() {
       if (this.loanFormData.inputNumber <= 0) {
         // alert("input number no effect !"); // 死递归
-        this.tipMsg("warn", "无效");
+        this.tipMsg("warn", this.language.InputNoEffect[lang]); //"无效"
         this.loanFormData.inputNumber = 0;
         return;
       } else {
@@ -382,7 +380,7 @@ export default {
     rules_loanYear() {
       if (this.loanFormData.inputYear <= 0) {
         // alert("input year no effect !"); // 死递归
-         this.tipMsg("warn", "无效");
+        this.tipMsg("warn", this.language.InputNoEffect[lang]); //"无效"
         this.loanFormData.inputYear = 0;
         return;
       } else {
@@ -414,18 +412,18 @@ export default {
         // indent === 2 & company
         if (this.loanFormData.ident === 2 && this.loanFormData.company === "") {
           // alert("please input company name !");
-          this.tipMsg("warn", "company name miss !");
+          this.tipMsg("warn", this.language.MissCompany[this.lang]);
           return;
         }
 
         // cause
         if (this.loanFormData.cause === null) {
           // alert("please input cause !");
-          this.tipMsg("warn", "cause miss !");
+          this.tipMsg("warn", this.language.MissCause[this.lang]);
           return;
         } else if (this.loanFormData.cause.length < 5) {
           // alert("Cause must be more five !");
-          this.tipMsg("warn", "Cause must be more five !");
+          this.tipMsg("warn", this.language.More5Code[this.lang]);
           return;
         }
       }
@@ -444,7 +442,7 @@ export default {
           this.loanFormData.inputYear > 3) // year > 3 选择了 short
       ) {
         // alert("贷款和利率的年限不匹配！");
-        this.tipMsg("error", "贷款和利率的年限不匹配！");
+        this.tipMsg("error", this.language.Mismatch_RateTime[this.lang]); //"贷款和利率的年限不匹配！"
         this.loanFormData.inputYear = ""; // 清空时间即可，让用户重现填写
         return;
       }
@@ -457,10 +455,7 @@ export default {
         // alert(
         //   "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
         // );
-        this.tipMsg(
-          "error",
-          "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
-        );
+        this.tipMsg("error", this.language.LoanIsLimited[this.lang]); // "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
         this.loanFormData.inputNumber = "";
         return;
       }
@@ -505,13 +500,13 @@ export default {
     // 还款输入验证
     rules_repay() {
       if (+this.repayData.number <= 0) {
-        this.tipMsg('info',"无效输入");
+        this.tipMsg("info", this.language.InputNoEffect[lang]); //"无效输入"
         this.repayData.number = 0;
         return;
       }
       // 2. repay <= loan
       if (+this.repayData.number > this.loanTotal) {
-        this.tipMsg('error',"还多啦！(还款数超过了贷款数)");
+        this.tipMsg("error", this.language.MoreThan[lang]); // "还多啦！(还款数超过了贷款数)"
         this.repayData.number = "";
         return;
       }
@@ -620,7 +615,7 @@ export default {
     async writeDB(userObj) {
       try {
         await this.$store.dispatch("update", userObj);
-        this.tipMsg("success", "完成!"); // showMesage
+        this.tipMsg("success", this.language.Done[this.lang]); // showMesage
       } catch (error) {
         console.log(error);
       }

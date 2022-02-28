@@ -15,9 +15,13 @@ export default {
         cn: '不少于5个字符',
         en: 'MoreFiveCode'
     },
-    DecimalAutoToInt: {
+    DecimalAutoToInt_more: {
         cn: '小数自动向上取整',
-        en: 'DecimalAutoToInt'
+        en: 'DecimalAutoToInt(More)'
+    },
+    DecimalAutoToInt_less: {
+        cn: '小数自动向下取整',
+        en: 'DecimalAutoToInt(Less)'
     },
     LatelyLoanCategory: {
         cn: '上次贷款类别',
