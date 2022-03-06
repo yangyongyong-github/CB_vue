@@ -95,9 +95,6 @@ export default {
 #app-container {
   width: 100%;
   overflow-x: hidden;
-  .main {
-    // display: none;
-  }
   .to-top {
     font-size: 1.4em;
     font-weight: border;

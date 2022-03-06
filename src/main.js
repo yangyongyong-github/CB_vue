@@ -23,11 +23,12 @@ Vue.directive("loading", vLoading);
 /**
  * 全局使用部分组件 antd-vue
  */
-import { Carousel, Calendar, Icon } from 'ant-design-vue';
+import { Carousel, Calendar, Icon, Result } from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(Carousel)
 Vue.use(Icon)
 Vue.use(Calendar)
+Vue.use(Result)
 
 
 new Vue({

@@ -111,4 +111,8 @@ export default {
         cn: '提交',
         en: 'Submit'
     },
+     Submiting: {
+        cn: '提交中...',
+        en: 'Submiting...'
+    },
 }

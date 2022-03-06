@@ -70,7 +70,7 @@ export default {
       ) {
         // alert("值缺失！");
         // this.openNotificationWithIcon("warning"); // msg type
-        this.tipMsg("warn", "值缺失！");
+        this.tipMsg("warn", this.language.MissValue[this.lang]);
         return;
       }
       const userObj = {
@@ -92,7 +92,7 @@ export default {
         }
       } else {
         // alert("账号密码、类型不匹配");
-        this.tipMsg("error", "账号密码、类型不匹配");
+        this.tipMsg("error", this.language.AccountPswTypeError[this.lang]);
       }
     },
     // 去注册
@@ -100,24 +100,24 @@ export default {
       this.$router.push("/register");
     },
 
-    // msg info (from antd)
-    openNotificationWithIcon(type) {
-      // 根据消息类型定义提示语
-      var msg = "";
-      if (type === "success") {
-        msg = "Login Done"; // 登录成功实际上不用提示，自动跳转页面
-      } else if (type === "error") {
-        msg = "账号密码、类型不匹配";
-      } else if (type === "warning") {
-        msg = "值缺失";
-      }
+    // // msg info (from antd)
+    // openNotificationWithIcon(type) {
+    //   // 根据消息类型定义提示语
+    //   var msg = "";
+    //   if (type === "success") {
+    //     msg = "Login Done"; // 登录成功实际上不用提示，自动跳转页面
+    //   } else if (type === "error") {
+    //     msg = "账号密码、类型不匹配";
+    //   } else if (type === "warning") {
+    //     msg = "值缺失";
+    //   }
 
-      // 提示
-      this.$notification[type]({
-        message: "Login Tip",
-        description: msg + " !",
-      });
-    },
+    //   // 提示
+    //   this.$notification[type]({
+    //     message: "Login Tip",
+    //     description: msg + " !",
+    //   });
+    // },
 
     /**
      * 消息提示

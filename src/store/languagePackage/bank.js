@@ -29,6 +29,10 @@ export default {
         cn: '取款',
         en: 'Take'
     },
+    User: {
+        cn: '用户',
+        en: 'user'
+    },
     Person: {
         cn: '个人',
         en: 'Person'
@@ -76,5 +80,5 @@ export default {
         en: '$'
     },
 
-   
+
 }

@@ -202,7 +202,7 @@ export default {
       console.log(!rules_1(this.userInfo.account));
       // 这里取反怎么就思路混乱了呢
       if (rules_1(this.userInfo.account)) {
-        this.tipMsg("info", "字母+数字");
+        this.tipMsg("info", this.language.Grapheme_Num[this.lang]); // "字母+数字"
         this.userInfo.account = "";
         return;
       }
@@ -215,7 +215,7 @@ export default {
     vali_name() {
       // console.log(rules_2(this.userInfo.name))
       if (!rules_2(this.userInfo.name)) {
-        this.tipMsg("info", "英文字母 或者 中文汉字");
+        this.tipMsg("info", this.language.GraphemeOrChinese[lang]); //"英文字母 或者 中文汉字"
         this.userInfo.name = "";
         return;
       }
@@ -243,7 +243,7 @@ export default {
       });
       if (userr) {
         // alert("该账号已被注册，请重新填写！");
-        this.tipMsg("warn", "该账号已被注册，请重新填写！");
+        this.tipMsg("warn", this.language.AlreadyRegister[this.lang]); // "该账号已被注册，请重新填写！"
         this.userInfoTemp.account = "";
         this.userInfoTemp.ps1 = "";
         this.userInfoTemp.ps2 = "";
@@ -256,7 +256,7 @@ export default {
     //   密码确认
     rules_passwordConfirme() {
       if (this.userInfoTemp.ps1 !== this.userInfoTemp.ps2) {
-        this.tipMsg("warn", "密码不一致,请重新填写！");
+        this.tipMsg("warn", this.language.PswDifferent[this.lang]); // 密码不一致,请重新填写！
         this.userInfoTemp.ps1 = "";
         this.userInfoTemp.ps2 = "";
         return;
@@ -270,7 +270,7 @@ export default {
       if (rules_phone(this.userInfoTemp.mobile)) {
         this.userInfo.mobile = this.userInfoTemp.mobile;
       } else {
-        this.tipMsg("warn", "电话号码有问题，请重新填写！");
+        this.tipMsg("warn", this.language.PhoneError[this.lang]); // 电话号码有问题，请重新填写
         this.userInfoTemp.mobile = "";
         return;
       }
@@ -294,7 +294,7 @@ export default {
           !this.userInfo.company
         ) {
           // alert("value is Miss of user i");
-          this.tipMsg("error", "Miss Value");
+          this.tipMsg("error", this.language.MissValue[this.lang]);
           return;
         }
 
@@ -324,7 +324,7 @@ export default {
         try {
           const user = await this.$store.dispatch("adduser", userIObj);
           // alert("adduser I done ");
-          this.tipMsg("success", "adduser I done ");
+          this.tipMsg("success", this.language.AddDone_I[this.lang]);
 
           // 注册完成后，直接 跳转到 个人中心页面
           const goto = window.confirm("to enter center page I ?");
@@ -355,7 +355,7 @@ export default {
           !this.userInfo.mobile
         ) {
           // alert("value is Miss of user i");
-          this.tipMsg("error", "Miss Value");
+          this.tipMsg("error",this.language.MissValue[this.lang]);
           return;
         }
 
@@ -380,7 +380,7 @@ export default {
         try {
           const user = await this.$store.dispatch("adduser", userIIObj);
           // alert("adduser II done ");
-          this.tipMsg("success", "adduser II done !");
+          this.tipMsg("success", this.language.AddDone_II[this.lang]);
           this.lottery.auth = true; // 赋予一次抽奖的机会
 
           // 注册完成后，直接 跳转到 个人中心页面

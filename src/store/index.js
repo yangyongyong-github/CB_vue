@@ -35,7 +35,15 @@ const store = new Vuex.Store({
     // rateData: rate, // temp
     isLoading: false,
     lang: 'cn',
-    language: LanguagePackage
+    language: LanguagePackage,
+    // 用户业务办理成功后的提示信息
+    workDone_status: false,
+    workDone_content: "",
+    buiss_flag: "", // 业务办理标志 deposit take loan repay
+    // workDone: { // vue无法检测对象深度
+    //   status: false,
+    //   content: "",
+    // },
   },
   // 同步
   mutations: {

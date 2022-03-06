@@ -1,15 +1,26 @@
 <template>
   <div class="lottery-container">
-    <TopTip tipMsg="请先办理存款业务!" tipText="您有一次抽奖机会可用" />
+    <TopTip :tipText="this.language.OnceLottery[lang]" />
+    <div class="retsult-tip" v-show="workDone_status">
+      <a-result status="success" :title="workDone_content" />
+    </div>
+    <!-- <ResultTip
+      :v-show="workDone_status"
+      :status="success"
+      :title="workDone_content"
+    /> -->
     <div class="box" ref="box"></div>
-    <button v-show="lottery.auth" @click="startHandle">Start</button>
+    <button v-show="lottery.auth" @click="startHandle">
+      {{ language.Start[lang] }}
+    </button>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import delay from "@/utils/delay";
+import { delay } from "@/utils";
 import TopTip from "@/components/TopTip";
+import ResultTip from "@/components/ResultTip";
 
 export default {
   data() {
@@ -23,12 +34,16 @@ export default {
         "#80e3f7",
         "#d781f9",
       ],
+      workDone_status: false,
+      workDone_content: "",
+      buiss_flag: "",
     };
   },
   components: {
     TopTip,
+    ResultTip,
   },
-  computed: mapState(["lottery", "userData"]),
+  computed: mapState(["language", "lang", "lottery", "userData"]),
   methods: {
     getRandom(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
@@ -43,12 +58,12 @@ export default {
       await this.preRandom();
       this.lottery.value = this.randomArrs[this.randomArrs.length - 1]; // last
       console.log("抽奖结果为:", this.lottery.value);
-      alert(`抽奖结果为 ${this.lottery.value}元 将会自动进入您的存款中!`);
+      this.showTask();
       // write store
-      console.log('抽奖之前的本金 ',this.userData.deposit)
+      console.log("抽奖之前的本金 ", this.userData.deposit);
       const newValue = +this.userData.deposit + +this.lottery.value;
       this.userData.deposit = newValue;
-      console.log( this.lottery.value, this.userData.deposit);
+      console.log(this.lottery.value, this.userData.deposit);
       //  back
       this.$router.go(-1);
     },
@@ -69,6 +84,23 @@ export default {
         this.randomFunc();
         await delay(400);
       }
+    },
+    async showTask() {
+      if (this.lang === "cn") {
+        this.workDone_content = `抽奖结果为 ${this.lottery.value}元 将会自动进入您的存款中!`;
+      } else if (this.lang === "en") {
+        this.workDone_content = `Lottery result ${this.lottery.value}￥, become deposit !`;
+      }
+      await this.delayShow_result();
+    },
+    /**
+     * 展示给用户一定的时间
+     */
+    async delayShow_result() {
+      this.workDone_status = true;
+      await delay(3000);
+      this.workDone_status = false;
+      this.workDone_content = "";
     },
   },
 };
@@ -98,6 +130,10 @@ export default {
   button {
     margin-left: 50%;
     margin-top: 5%;
+  }
+  .retsult-tip {
+    background-color: white;
+    .self-fill();
   }
 }
 </style>

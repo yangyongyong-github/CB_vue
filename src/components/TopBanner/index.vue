@@ -93,7 +93,14 @@ export default {
       }
     },
     back() {
-      this.$router.go(-1);
+      // 需要单独处理的路劲
+      const dealPath = ["/introduce"];
+      if (this.$route.path === "/") return;
+      else if (dealPath.includes(this.$route.path)) {
+        this.$router.replace("/");
+      } else {
+        this.$router.go(-1);
+      }
     },
     home() {
       this.$router.push("/");

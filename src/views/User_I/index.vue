@@ -2,6 +2,9 @@
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
     <TopTip IconType="rise" :tipText="language.TopTip_Loan[lang]" />
+    <div class="retsult-tip" v-show="workDone_status">
+      <a-result status="success" :title="workDone_content" />
+    </div>
     <header>
       <!-- header：基础信息部分 -->
       <div class="page-title">
@@ -224,9 +227,7 @@
               >
                 <!-- {{ isSubmiting ? '提交中...' : '提交' }} -->
                 {{
-                  isSubmiting
-                    ? language.Sumbit[lang] + "..."
-                    : language.Submit[lang]
+                  isSubmiting ? language.Sumbiting[lang] : language.Submit[lang]
                 }}
               </button>
             </div>
@@ -258,9 +259,7 @@
               :disabled="isSubmiting"
             >
               {{
-                isSubmiting
-                  ? language.Submit[lang] + "..."
-                  : language.Submit[lang]
+                isSubmiting ? language.Submiting[lang] : language.Submit[lang]
               }}
               <!-- {{ isSubmiting ? '提交中...' : '提交' }} -->
             </button>
@@ -275,7 +274,7 @@
 import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
 import Modal from "@/components/Modal";
-import { DecimalPos } from "@/utils";
+import { delay, DecimalPos } from "@/utils";
 import UserBaseInfo from "@/components/UserBaseInfo";
 export default {
   // created(){
@@ -285,7 +284,6 @@ export default {
     return {
       alter_area: false,
       serCategory: "loan", // 默认值, 用户选择的服务类型：loan ? repay
-
       // 还款数据对象
       repayData: {
         number: 0,
@@ -304,6 +302,9 @@ export default {
         company: "",
       },
       isSubmiting: false, // 还款确认按钮
+      workDone_status: false,
+      workDone_content: "",
+      buiss_flag: "",
     };
   },
   components: {
@@ -317,7 +318,18 @@ export default {
       rateData: (state) => state.rateData,
       lang: (state) => state.lang,
       language: (state) => state.language,
-      // lottery: (state) => state.lottery,
+      // workDone_status: (state) => state.workDone_status,
+      // workDone_content: (state) => state.workDone_content,
+      // buiss_flag: (state) => state.buiss_flag,
+      // buiss_flag: {
+      //   get() {
+      //     return (state) => state.buiss_flag;
+      //   },
+      //   set(v) {
+      //     this.buiss_flag=v;
+      //     return v;
+      //   },
+      // },
     }),
     // userLoanTrim() {
     //   return this.userData.loan.trim();
@@ -474,6 +486,8 @@ export default {
       if (this.rules() !== "passRules") return;
       this.loanFormData.interest = this.loanInterest;
       this.isSubmiting = true; // 正在提交，防止重复点击
+      this.buiss_flag = "loan";
+      // this.$store.commit("setBuiss_flag", "loan");
 
       console.log(
         `本此贷款 : ${this.loanFormData.inputNumber}, 本此利息为: ${this.loanFormData.interest}
@@ -504,6 +518,8 @@ export default {
         this.repayData.number = 0;
         return;
       }
+      this.buiss_flag = "repay";
+      // this.$store.commit("setBuiss_flag", "repay");
       // 2. repay <= loan
       if (+this.repayData.number > this.loanTotal) {
         this.tipMsg("error", this.language.MoreThan[lang]); // "还多啦！(还款数超过了贷款数)"
@@ -615,16 +631,57 @@ export default {
     async writeDB(userObj) {
       try {
         await this.$store.dispatch("update", userObj);
-        this.tipMsg("success", this.language.Done[this.lang]); // showMesage
+        // this.tipMsg("success", this.language.Done[this.lang]); // showMesage
+        await this.showTask();
       } catch (error) {
         console.log(error);
       }
     },
     /**
+     * 展示给用户一定的时间
+     */
+    async delayShow_result() {
+      this.workDone_status = true;
+      // console.log('咋不展示',this.workDone_content);
+      await delay(3000);
+      this.isSubmiting = false;
+      this.workDone_status = false;
+      this.workDone_content = "";
+    },
+    /**
+     * 业务办理成功提示
+     */
+    async showTask() {
+      // var val = "";
+      if (this.buiss_flag === "loan") {
+        // 界面显示
+
+        if (this.lang === "cn") {
+          this.workDone_content = `本此 贷款 ${this.loanFormData.inputNumber}元，年限 ${this.loanFormData.loanYear} 年 ，利息 ${this.loanFormData.interest}元`;
+        } else if (this.lang === "en") {
+          this.workDone_content = `Loan ${this.loanFormData.inputNumber}￥, Time ${this.loanFormData.loanYear}Age, Insterest ${this.loanFormData.interest}￥`;
+        }
+        await this.delayShow_result();
+        this.clearInput_loan();
+      } else if (this.buiss_flag === "repay") {
+        if (this.lang === "cn") {
+          this.workDone_content = `本此 还款 ${this.repayData.number}元`;
+        } else if (this.lang === "en") {
+          this.workDone_content = `Repay ${this.repayData.number} ￥`;
+        }
+        await this.delayShow_result();
+        this.repayData.number = 0;
+      }
+      // console.log(val);
+      // this.$store.commit("setWorkDone_content", val);
+      this.buiss_flag = "";
+      // this.$store.commit("setBuiss_flag", "");
+    },
+    /**
      * tip func
      */
     // 清空用户输入的 inputNumber
-    clearInput() {
+    clearInput_loan() {
       // repay
       this.repayData.number = "";
       this.loanFormData.inputNumber = "";
@@ -644,7 +701,9 @@ export default {
         container: this.$refs.from,
         callback: () => {
           this.isSubmiting = false;
-          this.clearInput();
+          // if (type === "success") {
+          //   this.clearInput();
+          // }
         },
       });
     },

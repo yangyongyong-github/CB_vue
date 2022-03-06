@@ -2,7 +2,9 @@
   <div class="useri-container">
     <!-- 顶部覆盖登录选择区域的提示 -->
     <TopTip IconType="pay-circle" :tipText="language.TopTip_Deposit[lang]" />
-
+    <div class="retsult-tip" v-show="workDone_status">
+      <a-result status="success" :title="workDone_content" />
+    </div>
     <header>
       <!-- header：基础信息部分 -->
       <div class="page-title">
@@ -16,7 +18,10 @@
       <!-- div : 修改个人信息 -->
       <!-- <AlterInfo /> -->
       <!-- div : lottery -->
-      <Lottery :tipMsg="language.PleaseToDeposit[lang]" :text="language.lotteryFirstDeposit[lang]" />
+      <Lottery
+        :tipMsg="language.PleaseToDeposit[lang]"
+        :text="language.lotteryFirstDeposit[lang]"
+      />
     </div>
 
     <!-- ==================workarea======================== -->
@@ -97,7 +102,7 @@
                 <div class="title">{{ language.Short[lang] }}</div>
                 <div class="time">1-3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  {{ language.Interest[lang] }}:
+                  {{ language.Interest[lang] }}
                   <span>{{ rateData.A_1 }}%</span>
                 </div>
               </div>
@@ -112,7 +117,8 @@
                 <div class="title">{{ language.Long[lang] }}</div>
                 <div class="time">>3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  {{ language.Interest[lang] }}:<span>{{ rateData.A_3 }}%</span>
+                  {{ language.Interest[lang] }}
+                  <span>{{ rateData.A_3 }}%</span>
                 </div>
               </div>
 
@@ -139,7 +145,7 @@
                 <div class="title">{{ language.Short[lang] }}</div>
                 <div class="time">1-3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  {{ language.Interest[lang] }}:
+                  {{ language.Interest[lang] }}
                   <span>{{ rateData.B_1 }}%</span>
                 </div>
               </div>
@@ -154,7 +160,8 @@
                 <div class="title">{{ language.Long[lang] }}</div>
                 <div class="time">>3 ({{ language.Year[lang] }})</div>
                 <div class="rate">
-                  {{ language.Interest[lang] }}:<span>{{ rateData.B_3 }}%</span>
+                  {{ language.Interest[lang] }}
+                  <span>{{ rateData.B_3 }}%</span>
                 </div>
               </div>
               <hr />
@@ -210,9 +217,7 @@
               <button @click="depositWorking" :disabled="isSubmiting">
                 <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
                 {{
-                  isSubmiting
-                    ? language.Sumbit[lang] + "..."
-                    : language.Submit[lang]
+                  isSubmiting ? language.Submiting[lang] : language.Submit[lang]
                 }}
               </button>
             </div>
@@ -243,7 +248,7 @@
                   <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
                   {{
                     isSubmiting
-                      ? language.Submit[lang] + "..."
+                      ? language.Submiting[lang]
                       : language.Submit[lang]
                   }}
                 </button>
@@ -261,7 +266,7 @@
 <script>
 import { mapState } from "vuex";
 import TopTip from "@/components/TopTip";
-import { DecimalPos } from "@/utils";
+import { delay, DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
 import UserBaseInfo from "@/components/UserBaseInfo";
 import AlterInfo from "@/components/AlterInfo";
@@ -278,7 +283,6 @@ export default {
       takeData: {
         number: 0,
       },
-
       // 存款数据(用户输入的数据)
       depositFormData: {
         deposit_category: "A_1", // A_1,A_3,B_1,B_3, other // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
@@ -288,9 +292,12 @@ export default {
         interest: 0,
         total: 0,
       },
-
       // 取款确认按钮
+      // temp-store
       isSubmiting: false,
+      workDone_status: false,
+      workDone_content: "",
+      buiss_flag: "",
     };
   },
   components: {
@@ -310,6 +317,9 @@ export default {
       language: (state) => state.language,
       rateData: (state) => state.rateData,
       lottery: (state) => state.lottery,
+      // workDone_status: (state) => state.workDone_status,
+      // workDone_content: (state) => state.workDone_content,
+      // buiss_flag: (state) => state.buiss_flag,
     }),
     // 本息共计，每次通过计算获得
     depositTotal() {
@@ -319,10 +329,12 @@ export default {
     depositInterest() {
       // 用户选择的为 其他时(不带利息收益)
       if (this.depositFormData.deposit_category === "other") {
-        return this.depositFormData.inputNumber;
+        return 0;
       }
       // 大额、中额存款(带利息收益)
       const deposit_time = Math.floor(+this.depositFormData.inputYear); // 年数先向下取整
+      // console.log(deposit_time);
+      // return;
       const result =
         (this.depositFormData.inputNumber *
           deposit_time *
@@ -338,10 +350,7 @@ export default {
       console.log(this.alter_area);
       this.alter_area = !this.alter_area;
     },
-    alterPsw() {},
-    alterOther() {},
 
-    // ---------------------------------
     /**
      *Assist func:  当用户输入未通过验证时，全部清空重填
      */
@@ -351,6 +360,7 @@ export default {
     clearInput_deposit() {
       this.depositFormData.inputNumber = 0;
       this.depositFormData.inputYear = 0;
+      this.depositFormData.interest = 0;
     },
 
     // -------------- 验证规则 -----------
@@ -362,7 +372,7 @@ export default {
      */
     rules_base_take() {
       if (this.takeData.number <= 0) {
-        this.tipMsg("warn", this.language.InputNoEffect[lang]); //无效输入
+        this.tipMsg("warn", this.language.InputNoEffect[this.lang]); //无效输入
         this.clearInput_take();
         return;
       }
@@ -373,13 +383,13 @@ export default {
      * 基础输入验证：deposit
      */
     rules_base_deposit() {
-      if(this.depositFormData.inputYear<1){
-        this.tipMsg("info", this.language.LessYear_1[this.lang]); //最少1年起
-        return;
-      }
+      // if(this.depositFormData.inputYear<1){
+      //   this.tipMsg("info", this.language.LessYear_1[this.lang]); //最少1年起
+      //   return;
+      // }
       if (
         this.depositFormData.inputNumber <= 0 ||
-        this.depositFormData.inputYear <=0
+        this.depositFormData.inputYear <= 0
       ) {
         // 1. 数字，正数
         // this.clearInput_deposit();
@@ -403,11 +413,11 @@ export default {
       ) {
         this.tipMsg(
           "warn",
-          ` ${this.language.min_amount_deposit[this.lang]} Of ${
+          ` ${this.language.min_amount_deposit[this.lang]} - ${
             this.language.Deposit_large[this.lang]
           } : ${this.rateData.A}`
         ); // 大额存款，起存金额：Large deposit of Min is
-        this.clearInput_deposit();
+        // this.clearInput_deposit();
         return;
       }
 
@@ -419,11 +429,11 @@ export default {
       ) {
         this.tipMsg(
           "warn",
-          ` ${this.language.min_amount_deposit[this.lang]} Of ${
+          ` ${this.language.min_amount_deposit[this.lang]} - ${
             this.language.Deposit_middle[this.lang]
           } : ${this.rateData.B}`
         );
-        this.clearInput_deposit();
+        // this.clearInput_deposit();
         return;
       }
 
@@ -437,6 +447,11 @@ export default {
      * -  低利率类型可以存长时间，但是高利率类型不可以存短时间
      */
     rules_depoYear() {
+      // 年数先向下取整
+      this.depositFormData.inputYear = Math.floor(
+        +this.depositFormData.inputYear
+      );
+
       if (this.depositFormData.inputYear <= 0) {
         this.tipMsg("warn", this.language.InputNoEffect[lang]);
         return;
@@ -489,6 +504,7 @@ export default {
     computed_interest() {
       // 用户输入金额(失去焦点时，自动计算利息)---- 目前只能是 用户点击后提交
       this.depositFormData.interest = this.depositInterest; // 将计算的利息赋值给用户的利息
+      console.log(this.depositInterest);
     },
 
     // deposit main func
@@ -499,7 +515,8 @@ export default {
         this.clearInput_deposit();
         return;
       }
-
+      this.buiss_flag = "deposit";
+      // this.$store.commit("setBuiss_flag", "deposit");
       this.isSubmiting = true; // 正在提交，防止重复点击
       this.depositFormData.interest = this.depositInterest;
 
@@ -518,15 +535,34 @@ export default {
         2
       );
 
-      console.log(`本此存款： ${this.depositFormData.inputNumber} ，本此存款利息：${this.depositFormData.interest},
-        帐户最新存款共计：${this.userData.deposit} ，帐户最新利息共计：${this.userData.interest} `);
+      // console.log(`本此存款： ${this.depositFormData.inputNumber} ，本此存款利息：${this.depositFormData.interest},
+      //   帐户最新存款共计：${this.userData.deposit} ，帐户最新利息共计：${this.userData.interest} `);
+
+      if (
+        +this.depositFormData.inputNumber === NaN ||
+        +this.depositFormData.interest === NaN
+      )
+        return;
 
       this.writeDB();
       this.lottery.auth = true; // 赋予一次抽奖的机会
     },
 
     // ===============================================
-
+    /**
+     * 展示给用户一定的时间
+     */
+    async delayShow_result() {
+      this.workDone_status = true;
+      // this.$store.commit("setWrokDone_status", true);
+      // console.log('咋不展示',this.workDone_content);
+      await delay(3000);
+      this.isSubmiting = false;
+      this.workDone_status = false;
+      // this.$store.commit("setWorkDone_status", false);
+      this.workDone_content = "";
+      // this.$store.commit("setWorkDone_content", "");
+    },
     // take main func
     async takeWorking() {
       // 先要通过input框中的验证
@@ -536,7 +572,10 @@ export default {
       }
 
       this.isSubmiting = true; // 正在提交，防止重复点击
-      console.log("本此取款：", this.takeData.number);
+      this.buiss_flag = "take";
+      // this.$store.commit("setBuiss_flag", "take");
+
+      // console.log("本此取款：", this.takeData.number);
 
       /**
        * 1.2 take (1)
@@ -586,21 +625,21 @@ export default {
       this.writeDB();
     },
 
-    tip() {
-      this.$showMessage({
-        content: this.language.Done[this.lang], //successMsg
-        type: "success",
-        duration: 1000,
-        container: this.$refs.from,
-        callback: () => {
-          this.isSubmiting = false;
-          this.clearInput_deposit();
-          // 清空 计算的利息
-          this.depositFormData.interest = 0;
-          this.reload(); // 刷新页面
-        },
-      });
-    },
+    // tip() {
+    //   this.$showMessage({
+    //     content: this.language.Done[this.lang], //successMsg
+    //     type: "success",
+    //     duration: 1000,
+    //     container: this.$refs.from,
+    //     callback: () => {
+    //       this.isSubmiting = false;
+    //       this.clearInput_deposit();
+    //       // 清空 计算的利息
+    //       this.depositFormData.interest = 0;
+    //       this.reload(); // 刷新页面
+    //     },
+    //   });
+    // },
 
     async writeDB() {
       // 1. from store get data
@@ -615,10 +654,42 @@ export default {
        */
       try {
         await this.$store.dispatch("update", userObj);
-        this.tip(); // showMesage
+        // this.tipMsg("success", this.language.Done[this.lang]); // showMesage
+        // this.clearInput_take();
+        // this.clearInput_deposit();
+        this.showTask();
       } catch (error) {
         console.log(error);
       }
+    },
+    /**
+     * 业务办理成功提示
+     */
+    async showTask() {
+      // var val = "";
+      if (this.buiss_flag === "deposit") {
+        // 界面显示
+        if (this.lang === "cn") {
+          this.workDone_content = `本此 存款 ${this.depositFormData.inputNumber}元，年限 ${this.depositFormData.inputYear}年, 利息 ${this.depositFormData.interest}元`;
+        } else if (this.lang === "en") {
+          this.workDone_content = `Deposit ${this.depositFormData.inputNumber}￥，Time ${this.depositFormData.inputYear} Age，Interest ${this.depositFormData.interest}￥`;
+        }
+        await this.delayShow_result();
+        this.clearInput_deposit();
+      } else if (this.buiss_flag === "take") {
+        if (this.lang === "cn") {
+          this.workDone_content = `本此 取款 ${this.takeData.number}元`;
+        } else if (this.lang === "en") {
+          this.workDone_content = `Take ${this.takeData.number}￥`;
+        }
+        await this.delayShow_result();
+        this.clearInput_take();
+      }
+      this.buiss_flag = "";
+      // this.$store.commit("setWorkDone_content", val);
+      // console.log("deposit", val);
+
+      // this.$store.commit("setBuiss_flag", "");
     },
     /**
      * 消息提示
@@ -631,10 +702,15 @@ export default {
         container: this.$refs.from,
         callback: () => {
           this.isSubmiting = false;
-          // this.clearInput();
         },
       });
     },
+  },
+  watch: {
+    // "workDone.status"(o, n) {
+    //   console.log(o, n);
+    //   // this.reload(); // 刷新页面
+    // },
   },
 };
 </script>
