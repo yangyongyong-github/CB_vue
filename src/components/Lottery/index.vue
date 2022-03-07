@@ -71,7 +71,7 @@ export default {
 
   .buiness-tips {
     // 办理业务提示消息框
-    width: 107px;
+    width: 120px;
     padding-left: 5px;
     border: 1px silver dotted;
     background-color: brown;

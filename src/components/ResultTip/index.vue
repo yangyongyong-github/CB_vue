@@ -1,5 +1,6 @@
 <template>
-  <div class="retsult-tip" :v-show="showStatus">
+  <div class="retsult-tip">
+    <!-- :v-show="showStatus" -->
     <a-result :status="status" :title="title" />
   </div>
 </template>
@@ -17,17 +18,17 @@ export default {
       default: "",
       isRequired: false,
     },
-    showStatus: {
-      type: Boolean,
-      default: false,
-      isRequired: false,
-    },
+    // showStatus: {
+    //   type: Boolean,
+    //   default: false,
+    //   isRequired: false,
+    // },
   },
 };
 </script>
 
 <style lang="less" scoped>
-@import '~@/styles/mixin.less';
+@import "~@/styles/mixin.less";
 
 .retsult-tip {
   background-color: white;

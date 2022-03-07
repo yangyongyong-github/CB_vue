@@ -5,8 +5,8 @@
       <a-result status="success" :title="workDone_content" />
     </div>
     <!-- <ResultTip
-      :v-show="workDone_status"
-      :status="success"
+      v-show="workDone_status"
+      status="success"
       :title="workDone_content"
     /> -->
     <div class="box" ref="box"></div>
@@ -53,17 +53,17 @@ export default {
       return this.colors[index];
     },
     async startHandle() {
-      console.log("start lottery ...");
+      // console.log("start lottery ...");
       this.lottery.auth = false; // 使用一次机会使用完毕后关闭
       await this.preRandom();
       this.lottery.value = this.randomArrs[this.randomArrs.length - 1]; // last
-      console.log("抽奖结果为:", this.lottery.value);
-      this.showTask();
+      // console.log(`抽奖结果为: ${this.lottery.value}`);
+      await this.showTask();
       // write store
-      console.log("抽奖之前的本金 ", this.userData.deposit);
+      // console.log("抽奖之前的本金 ", this.userData.deposit);
       const newValue = +this.userData.deposit + +this.lottery.value;
       this.userData.deposit = newValue;
-      console.log(this.lottery.value, this.userData.deposit);
+      // console.log(this.lottery.value, this.userData.deposit);
       //  back
       this.$router.go(-1);
     },
@@ -128,7 +128,7 @@ export default {
     box-shadow: 5px 12px 30px 10px rgba(236, 130, 8, 0.4);
   }
   button {
-    margin-left: 50%;
+    margin-left: 47%;
     margin-top: 5%;
   }
   .retsult-tip {
