@@ -1,0 +1,32 @@
+.to-top {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    // display: none;
+    overflow: hidden;
+    position: fixed;
+    bottom: 150px;
+    right: 50px;
+    z-index: 5;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    &::after {
+        content: "";
+        width: 18px;
+        height: 18px;
+        border-left: 4px solid #fff;
+        border-top: 4px solid #fff;
+        display: block;
+        overflow: hidden;
+        position: absolute;
+        left: 15px;
+        top: 20px;
+        transform: rotate(45deg);
+    }
+}

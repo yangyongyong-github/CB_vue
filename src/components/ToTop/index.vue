@@ -1,8 +1,8 @@
 <template>
   <div id="goTop" class="to-top-container">
     <transition name="fade">
-      <div class="goTop" v-show="goTopShow" @click="goTop">
-        <i class="goTopIcon"></i>
+      <div class="to-top" v-show="goTopShow" @click="goTop">
+        <!-- <i class="goTopIcon"></i> -->
       </div>
     </transition>
   </div>
@@ -56,5 +56,5 @@ export default {
 </script>
  
 <style lang="less" scoped>
-@import './style.less';
+@import './index.less';
 </style>

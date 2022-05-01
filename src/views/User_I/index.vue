@@ -87,6 +87,17 @@
                 /></label>
               </div>
             </div>
+            <div class="company-input" v-show="loanFormData.ident === '2'">
+              <!-- 1 个人 2 企业 -->
+              <!-- 请填写 -->
+              {{ language.PleaseInput[lang] }}
+              <!-- {{ userData.ident === 1 ? "个人" : "企业" }}  -->
+              <!-- 单位(公司)名称 -->
+              {{ language.Company[lang] }}
+              {{ language.Name[lang] }}
+              :
+              <input type="text" v-model="loanFormData.company" />
+            </div>
             <div class="cause-input">
               <!-- 请填写贷款原因 -->
               {{ language.LoanCause[lang] }}
@@ -101,17 +112,6 @@
                 v-model="loanFormData.cause"
                 @blur="causeValidate"
               ></textarea>
-            </div>
-            <div class="company-input" v-show="loanFormData.ident === '2'">
-              <!-- 1 个人 2 企业 -->
-              <!-- 请填写 -->
-              {{ language.PleaseInput[lang] }}
-              <!-- {{ userData.ident === 1 ? "个人" : "企业" }}  -->
-              <!-- 单位(公司)名称 -->
-              {{ language.Company[lang] }}
-              {{ language.Name[lang] }}
-              :
-              <input type="text" v-model="loanFormData.company" />
             </div>
           </div>
           <!-- 二（二）续贷工作区 -->
