@@ -21,7 +21,7 @@
       </p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <Modal Height="135%" :text="language.AccountBeenFreezed[lang]"> </Modal>
+        <Modal Height="126%" :text="language.AccountBeenFreezed[lang]"> </Modal>
       </div>
 
       <div class="work-category">
@@ -94,7 +94,7 @@
               <!-- {{ userData.ident === 1 ? "个人" : "企业" }}  -->
               <!-- 单位(公司)名称 -->
               {{ language.Company[lang] }}
-              {{ language.Name[lang] }}
+              {{ language.Name[lang] === "姓名" ? "名称" : "" }}
               :
               <input type="text" v-model="loanFormData.company" />
             </div>
@@ -212,13 +212,13 @@
               </label>
             </div>
 
-            <!-- 3. 计算本息 -->
+            <!-- 3. 计算本息
             <div class="item item-bottom">
-              <!-- 利息为 -->
+              利息为
               {{ language.Interest[lang] }}
               :{{ loanFormData.interest }}
-              <!-- <b>确定开始本此贷款？</b> -->
-            </div>
+              <b>确定开始本此贷款？</b>
+            </div> -->
             <div class="sbt">
               <button
                 @click="loanWorking"
@@ -227,7 +227,7 @@
               >
                 <!-- {{ isSubmiting ? '提交中...' : '提交' }} -->
                 {{
-                  isSubmiting ? language.Sumbiting[lang] : language.Submit[lang]
+                  isSubmiting ? language.Submiting[lang] : language.Submit[lang]
                 }}
               </button>
             </div>
@@ -277,9 +277,6 @@ import Modal from "@/components/Modal";
 import { delay, DecimalPos } from "@/utils";
 import UserBaseInfo from "@/components/UserBaseInfo";
 export default {
-  // created(){
-  //   console.log( typeof +this.userData.interest)
-  // },
   data() {
     return {
       alter_area: false,
@@ -293,6 +290,7 @@ export default {
         loan_category: "short", // 这里给个默认的比较好，如果用户不选，将出现NaN的bug
         inputNumber: "",
         inputYear: "",
+        loanYear: 0,
         // 通过用户输入的信息，计算后的数据
         interest: 0,
         total: 0,
@@ -341,7 +339,7 @@ export default {
     // 计算贷款利息
     loanInterest() {
       const loanYear = Math.ceil(+this.loanFormData.inputYear); // 贷款时间，向上取整
-
+      this.loanYear = loanYear;
       /**
        * 根据用户输入的类型，得出相应的利率
        */
@@ -379,10 +377,21 @@ export default {
     },
     // 单个验证 input loan number
     rules_loanNum() {
-      if (this.loanFormData.inputNumber <= 0) {
+      if (+this.loanFormData.inputNumber <= 0) {
         // alert("input number no effect !"); // 死递归
-        this.tipMsg("warn", this.language.InputNoEffect[lang]); //"无效"
+        this.tipMsg("warn", this.language.InputNoEffect[this.lang]); //"无效"
         this.loanFormData.inputNumber = 0;
+        return;
+      } else if (
+        this.loanTotal + +this.loanFormData.inputNumber >= +this.rateData.C &&
+        this.userData.limited
+      ) {
+        // 3. loan >= 大额贷款限制限制
+        // alert(
+        //   "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
+        // );
+        this.tipMsg("error", this.language.LoanIsLimited[this.lang], 1700); // "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
+        this.loanFormData.inputNumber = "";
         return;
       } else {
         return 1;
@@ -390,10 +399,28 @@ export default {
     },
     // 单个验证 input loan year
     rules_loanYear() {
-      if (this.loanFormData.inputYear <= 0) {
+      if (+this.loanFormData.inputYear <= 0) {
         // alert("input year no effect !"); // 死递归
-        this.tipMsg("warn", this.language.InputNoEffect[lang]); //"无效"
+        this.tipMsg("warn", this.language.InputNoEffect[this.lang]); //"无效"
         this.loanFormData.inputYear = 0;
+        return;
+      }
+      // 贷款时间匹配判断
+      if (
+        (this.loanFormData.loan_category === "long" &&
+          +this.loanFormData.inputYear < 5) ||
+        // loan year <= 5 选择了long
+        (this.loanFormData.loan_category === "middle" &&
+          this.loanFormData.inputYear > 5) ||
+        (this.loanFormData.loan_category === "middle" &&
+          this.loanFormData.inputYear < 4) ||
+        // loan year > 5  选择了 middle
+        (this.loanFormData.loan_category === "short" &&
+          this.loanFormData.inputYear > 3) // year > 3 选择了 short
+      ) {
+        // alert("贷款和利率的年限不匹配！");
+        this.tipMsg("error", this.language.Mismatch_RateTime[this.lang]); //"贷款和利率的年限不匹配！"
+        this.loanFormData.inputYear = ""; // 清空时间即可，让用户重现填写
         return;
       } else {
         return 1;
@@ -440,38 +467,6 @@ export default {
         }
       }
 
-      // 贷款时间匹配判断
-      if (
-        (this.loanFormData.loan_category === "long" &&
-          +this.loanFormData.inputYear < 5) ||
-        // loan year <= 5 选择了long
-        (this.loanFormData.loan_category === "middle" &&
-          this.loanFormData.inputYear > 5) ||
-        (this.loanFormData.loan_category === "middle" &&
-          this.loanFormData.inputYear < 4) ||
-        // loan year > 5  选择了 middle
-        (this.loanFormData.loan_category === "short" &&
-          this.loanFormData.inputYear > 3) // year > 3 选择了 short
-      ) {
-        // alert("贷款和利率的年限不匹配！");
-        this.tipMsg("error", this.language.Mismatch_RateTime[this.lang]); //"贷款和利率的年限不匹配！"
-        this.loanFormData.inputYear = ""; // 清空时间即可，让用户重现填写
-        return;
-      }
-
-      // 3. loan >= 大额贷款限制限制
-      if (
-        this.loanTotal + +this.loanFormData.inputNumber >= this.rateData.C &&
-        this.userLimited
-      ) {
-        // alert(
-        //   "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
-        // );
-        this.tipMsg("error", this.language.LoanIsLimited[this.lang]); // "您贷款超过了银行的贷款限制数额，请联系管理员为您开通【大额贷款限制】"
-        this.loanFormData.inputNumber = "";
-        return;
-      }
-
       return "passRules";
     },
 
@@ -514,7 +509,7 @@ export default {
     // 还款输入验证
     rules_repay() {
       if (+this.repayData.number <= 0) {
-        this.tipMsg("info", this.language.InputNoEffect[lang]); //"无效输入"
+        this.tipMsg("info", this.language.InputNoEffect[this.lang]); //"无效输入"
         this.repayData.number = 0;
         return;
       }
@@ -522,7 +517,7 @@ export default {
       // this.$store.commit("setBuiss_flag", "repay");
       // 2. repay <= loan
       if (+this.repayData.number > this.loanTotal) {
-        this.tipMsg("error", this.language.MoreThan[lang]); // "还多啦！(还款数超过了贷款数)"
+        this.tipMsg("error", this.language.MoreThan[this.lang]); // "还多啦！(还款数超过了贷款数)"
         this.repayData.number = "";
         return;
       }
@@ -548,12 +543,9 @@ export default {
        */
       if (this.repayData.number > this.userData.loan) {
         const remnants = this.repayData.number - this.userData.loan; // 剩余
-        // console.log('status : this.repayData.number > this.userData.loan')
-        // console.log(' remnants(to decrease interest) : ',remnants)
         const loanValue = Math.abs(
           DecimalPos(this.userData.interest - remnants, 2)
         );
-        // console.log('loanValue : ', loanValue)
         this.$store.commit("setUserILoan", 0);
         this.$store.commit("setUserInterest", loanValue);
       } else if (
@@ -568,8 +560,6 @@ export default {
         const loanValue = Math.abs(
           DecimalPos(this.userData.interest - this.repayData.number, 2)
         );
-        // console.log('this.repayData.number < this.userData.interest')
-        // console.log('loanValue to interest' , loanValue)
         this.$store.commit("setUserInterest", loanValue);
       } else {
         /**
@@ -642,7 +632,6 @@ export default {
      */
     async delayShow_result() {
       this.workDone_status = true;
-      // console.log('咋不展示',this.workDone_content);
       await delay(3000);
       this.isSubmiting = false;
       this.workDone_status = false;
@@ -652,14 +641,15 @@ export default {
      * 业务办理成功提示
      */
     async showTask() {
-      // var val = "";
+      if (document.documentElement.scrollTop > 100) {
+        document.documentElement.scrollTop = 0; // 回到顶部
+      }
       if (this.buiss_flag === "loan") {
-        // 界面显示
-
+        // // 界面显示
         if (this.lang === "cn") {
-          this.workDone_content = `本此 贷款 ${this.loanFormData.inputNumber}元，年限 ${this.loanFormData.loanYear} 年 ，利息 ${this.loanFormData.interest}元`;
+          this.workDone_content = `本此 贷款 ${this.loanFormData.inputNumber}元，年限 ${this.loanYear} 年 ，利息 ${this.loanFormData.interest}元`;
         } else if (this.lang === "en") {
-          this.workDone_content = `Loan ${this.loanFormData.inputNumber}￥, Time ${this.loanFormData.loanYear}Age, Insterest ${this.loanFormData.interest}￥`;
+          this.workDone_content = `Loan ${this.loanFormData.inputNumber}￥, Time ${this.loanYear}Age, Insterest ${this.loanFormData.interest}￥`;
         }
         await this.delayShow_result();
         this.clearInput_loan();
@@ -684,20 +674,20 @@ export default {
     clearInput_loan() {
       // repay
       this.repayData.number = "";
+      // loan
       this.loanFormData.inputNumber = "";
       this.loanFormData.inputYear = "";
-      // loan extra
       this.loanFormData.cause = "";
       this.loanFormData.ident = 1;
       this.loanFormData.company = "";
       // 清空 计算的利息
       this.loanFormData.interest = 0;
     },
-    tipMsg(type, msg) {
+    tipMsg(type, msg, duration = 1000) {
       this.$showMessage({
         content: msg, //successMsg
         type: type,
-        duration: 1000,
+        duration,
         container: this.$refs.from,
         callback: () => {
           this.isSubmiting = false;

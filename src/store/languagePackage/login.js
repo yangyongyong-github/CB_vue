@@ -39,15 +39,15 @@ export default {
     },
     PassWord: {
         cn: '密码',
-        en: 'PassWord'
+        en: 'Password'
     },
     ConfirmePsw: {
         cn: '确认密码',
-        en: 'Confirme Psw'
+        en: 'Confirme Password'
     },
     SelectYouLoginIdentify: {
         cn: '选择登录身份',
-        en: 'Select Login Identify'
+        en: 'Login Identify'
     },
     Login: {
         cn: '登录',

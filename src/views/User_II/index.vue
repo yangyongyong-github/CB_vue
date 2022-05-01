@@ -34,7 +34,7 @@
       </p>
 
       <div class="modal" v-show="userData.isFreezed">
-        <Modal Height="160%" :text="language.AccountBeenFreezed[lang]"> </Modal>
+        <Modal Height="165%" :text="language.AccountBeenFreezed[lang]"> </Modal>
       </div>
 
       <div class="work-category">
@@ -206,13 +206,13 @@
                 </label>
               </span>
             </div>
-            <div class="confirme">
-              <!-- 本此存款利息为 -->
+            <!-- <div class="confirme">
+              本此存款利息为
               {{ language.Interest[lang] }}:
               {{ depositFormData.interest }}
               {{ language.Yuan[lang] }}
-              <!-- <b>确定开始本此存款？</b> -->
-            </div>
+              <b>确定开始本此存款？</b>
+            </div> -->
             <div class="part">
               <button @click="depositWorking" :disabled="isSubmiting">
                 <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
@@ -265,6 +265,7 @@
 
 <script>
 import { mapState } from "vuex";
+import numeral from "numeral";
 import TopTip from "@/components/TopTip";
 import { delay, DecimalPos } from "@/utils";
 import Modal from "@/components/Modal";
@@ -306,6 +307,14 @@ export default {
     AlterInfo,
     UserBaseInfo,
     Lottery,
+  },
+  filters: {
+    moneyFormat(num) {
+      if (!num || +num !== "number") {
+        return;
+      }
+      return numeral.format("1,000.00");
+    },
   },
   created() {
     console.log("rateData : ", this.rateData);
@@ -666,7 +675,10 @@ export default {
      * 业务办理成功提示
      */
     async showTask() {
-      // var val = "";
+      if (document.documentElement.scrollTop > 100) {
+        document.documentElement.scrollTop = 0; // 回到顶部
+      }
+
       if (this.buiss_flag === "deposit") {
         // 界面显示
         if (this.lang === "cn") {

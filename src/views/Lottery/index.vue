@@ -128,7 +128,7 @@ export default {
     box-shadow: 5px 12px 30px 10px rgba(236, 130, 8, 0.4);
   }
   button {
-    margin-left: 47%;
+    margin-left: 50%;
     margin-top: 5%;
   }
   .retsult-tip {

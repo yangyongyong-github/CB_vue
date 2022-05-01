@@ -39,10 +39,10 @@
           <div class="user-status">
             <div class="overall">
               <span class="indicate">目前在账资金:</span>
-              <span class="num1"> {{ All_Fund }}</span>
+              <span class="num1"> {{ All_Fund | moneyFormat }}</span>
 
               <span class="indicate ml"> 银行流动资金:</span>
-              <span class="num1"> {{ All_FundWater }}</span>
+              <span class="num1"> {{ All_FundWater | moneyFormat }}</span>
             </div>
 
             <p class="users-nums">
@@ -56,18 +56,18 @@
               <span class="num2"> {{ usersData[0].length }}</span>
 
               <span class="indicate ml">用户总贷款:</span>
-              <b>{{ All_Loan_I }}</b>
+              <b>{{ All_Loan_I | moneyFormat }}</b>
               <span class="indicate ml">用户总贷款利息:</span>
-              <b> {{ All_Interest_I }}</b>
+              <b> {{ All_Interest_I | moneyFormat }}</b>
             </div>
             <div class="userii">
               <span class="indicate">Deposit 用户总数:</span>
               <span class="num2"> {{ usersData[1].length }}</span>
 
               <span class="indicate ml">用户总存款:</span>
-              <b> {{ All_Deposit_II }}</b>
+              <b> {{ All_Deposit_II | moneyFormat }}</b>
               <span class="indicate ml">用户总存款利息:</span>
-              <b>{{ All_Interest_II }}</b>
+              <b>{{ All_Interest_II | moneyFormat }}</b>
             </div>
 
             <div class="fund-alay">
@@ -155,7 +155,7 @@
         <!--【part-1】 银行本金 : 操做-增减 -->
         <div class="corpus">
           <div>
-            <span class="tit">银行资金</span>
+            <span class="tit">银行本金</span>
 
             <span class="num1"> {{ bankData.corpus }}</span> 元(人民币)
             <button @click="toOpCorpus">修改</button>
@@ -521,6 +521,7 @@
 
 <script>
 import { mapState } from "vuex";
+import numeral from "numeral";
 import TopTip from "@/components/TopTip";
 import * as MATH from "@/utils";
 const echarts = require("echarts");
@@ -624,7 +625,6 @@ export default {
       // console.log(this.bankData.corpus*1)
       const useri = this.All_Loan_I + this.All_Interest_I;
       const userii = this.All_Deposit_II + this.All_Interest_II;
-
       return MATH.DecimalPos(useri + userii + this.bankData.corpus * 1, 2);
     },
     /**
@@ -710,6 +710,9 @@ export default {
     // Persent_Bank_fund_income() {},
   },
   filters: {
+    moneyFormat(num) {
+      return numeral(num).format("1,000.00")+' 元';
+    },
     /**
      * 过滤显示管理员的等级
      */
@@ -967,7 +970,7 @@ export default {
       }
 
       const confirme = window.confirm(
-        `再次确定 [${this.highFormData.corpusCategory}] : ${this.highFormData.corpus}元吗? `
+        `再次确定 银行本金 ${this.highFormData.corpusCategory === 'decrease' ? '减少' : '增加'} : ${this.highFormData.corpus}元吗? `
       );
 
       if (!confirme) {

@@ -95,10 +95,5 @@ export default {
 #app-container {
   width: 100%;
   overflow-x: hidden;
-  .to-top {
-    font-size: 1.4em;
-    font-weight: border;
-    color: skyblue;
-  }
 }
 </style>

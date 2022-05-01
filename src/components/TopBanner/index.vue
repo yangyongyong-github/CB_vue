@@ -20,7 +20,8 @@
           <div>
             <!-- 用户类型 -->
             <!-- <span class="indicate">{{ language.UserCategory[lang] }}</span> : -->
-            {{ userData.flag }}
+            {{ userData.flag}}
+             <!-- | identShowFilter  -->
           </div>
           <button @click="loginOut" class="indicate">
             <!-- 注销 -->
@@ -63,7 +64,24 @@ import { mapState } from "vuex";
 export default {
   computed: mapState(["userData", "isLoading", "lang", "language"]),
   filters: {
+    identShowFilter(value) {
+      if (!value) {
+        return;
+      }
+      if (value === "useri") {
+        return "贷款用户 Loan ";
+      } else if (value === "admin") {
+        return "管理员 Admin";
+      } else if (value === "userii") {
+        return "存款用户 Deposit";
+      } else {
+        return "身份未知 unkonw";
+      }
+    },
     switchLang(value) {
+      if (!value) {
+        return;
+      }
       if (value === "cn") {
         // 切换为英文
         return "切换为 英文";

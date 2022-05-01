@@ -42,7 +42,7 @@
         >{{ userData.mobile }}
       </div>
       <div>
-        <span class="guide" v-if="userData.flag==='useri'">
+        <span class="guide" v-if="userData.flag === 'useri'">
           <!-- 单位/公司 -->
           {{ language.Company[lang] }}
           :
@@ -86,7 +86,7 @@
           {{ language.Loan[lang] }}
 
           :</span
-        >{{ userData.loan }}
+        >{{ userData.loan | moneyFormat }}
         <!-- 元 -->
         {{ language.Yuan[lang] }}
       </div>
@@ -96,7 +96,7 @@
           {{ language.Deposit[lang] }}
 
           :</span
-        >{{ userData.deposit }}
+        >{{ userData.deposit | moneyFormat }}
         <!-- 元 -->
         {{ language.Yuan[lang] }}
       </div>
@@ -107,7 +107,7 @@
         <span class="guide">
           <!-- 贷款/存款利息 -->
           {{ language.Interest[lang] }} : </span
-        >{{ userData.interest }}
+        >{{ userData.interest | moneyFormat }}
         <!-- 元 -->
         {{ language.Yuan[lang] }}
       </div>
@@ -116,7 +116,7 @@
           <!-- 本息共计 -->
           {{ language.Total[lang] }}
           : </span
-        >{{ loanTotal }}
+        >{{ loanTotal | moneyFormat }}
         <!-- 元 -->
         {{ language.Yuan[lang] }}
       </div>
@@ -151,10 +151,20 @@
 </template>
 
 <script>
+import numeral from "numeral";
 import { mapState } from "vuex";
 import { DecimalPos } from "@/utils";
 
 export default {
+  filters: {
+    moneyFormat(num) {
+      // console.log(typeof +num === 'number');
+      // if (!num || +num !== 'number') {
+      //   return;
+      // }
+      return numeral(num).format('1,000.00');
+    },
+  },
   computed: {
     ...mapState({
       userData: (state) => state.userData,
