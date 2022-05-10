@@ -245,6 +245,11 @@
                   <span class="guide">LoginID:</span>{{ userQueryData.loginId }}
                 </div>
                 <div>
+                  <span class="guide">loginPwd:</span
+                  >-----
+                  <!-- {{ userQueryData.loginPwd }} -->
+                </div>
+                <div>
                   <span class="guide">Mobile:</span>{{ userQueryData.mobile }}
                 </div>
                 <div>
@@ -310,7 +315,7 @@
                   <!-- alter-pwd -->
                   <b class="guide">修改密码</b>
                   <label class="guide"> 请输入新密码: </label>
-                  <input type="text" v-model="alter_userInfo.newPsw" />
+                  <input type="text" v-model="alter_userInfo.newPwd" />
                 </div>
                 <div>
                   <!-- alter-mobile --><b class="guide">修改联系电话</b>
@@ -353,6 +358,11 @@
                 </div>
                 <div>
                   <span class="guide">LoginID:</span>{{ userQueryData.loginId }}
+                </div>
+                <div>
+                  <span class="guide">loginPwd:</span
+                  > ****
+                  <!-- {{ userQueryData.loginPwd }} -->
                 </div>
                 <div>
                   <span class="guide">Mobile:</span>{{ userQueryData.mobile }}
@@ -403,7 +413,7 @@
                   <!-- alter-pwd -->
                   <b class="guide">修改密码</b>
                   <label class="guide"> 请输入新密码: </label>
-                  <input type="text" v-model="alter_userInfo.newPsw" />
+                  <input type="text" v-model="alter_userInfo.newPwd" />
                 </div>
                 <div>
                   <!-- alter-mobile --><b class="guide">修改联系电话</b>
@@ -572,7 +582,7 @@ export default {
       },
       // 管理员修改用户信息表单
       alter_userInfo: {
-        newPsw: "",
+        newPwd: "",
         newMobile: "",
         newJob: "",
       },
@@ -711,7 +721,7 @@ export default {
   },
   filters: {
     moneyFormat(num) {
-      return numeral(num).format("1,000.00")+' 元';
+      return numeral(num).format("1,000.00") + " 元";
     },
     /**
      * 过滤显示管理员的等级
@@ -852,8 +862,8 @@ export default {
 
       this.userQueryData.job =
         this.alter_userInfo.newJob || this.userQueryData.job;
-      this.userQueryData.password =
-        this.alter_userInfo.newPsw || this.userQueryData.password;
+      this.userQueryData.loginPwd =
+        this.alter_userInfo.newPwd || this.userQueryData.password;
       this.userQueryData.mobile =
         this.alter_userInfo.newMobile || this.userQueryData.mobile;
 
@@ -953,8 +963,16 @@ export default {
       }
 
       // clear
-      this.highFormData.rateInput === 0;
-      this.highFormData.rateCategory === "";
+      this.highFormData.rateInput = 0;
+      this.highFormData.rateCategory = "";
+      this.toOpRate(); // hide area
+    },
+    // clear set curpos
+    clearhighFormData() {
+      this.highFormData.corpusFlag = false;
+      // clear input
+      this.highFormData.corpus = 0;
+      this.highFormData.corpusCategory = null;
     },
     /**
      * 点击提交进行curpos操做
@@ -970,15 +988,14 @@ export default {
       }
 
       const confirme = window.confirm(
-        `再次确定 银行本金 ${this.highFormData.corpusCategory === 'decrease' ? '减少' : '增加'} : ${this.highFormData.corpus}元吗? `
+        `再次确定 银行本金 ${
+          this.highFormData.corpusCategory === "decrease" ? "减少" : "增加"
+        } : ${this.highFormData.corpus}元吗? `
       );
 
       if (!confirme) {
         // 如果选择取消，则不予操做
-        this.highFormData.corpusFlag = false;
-        // clear input
-        this.highFormData.corpus = 0;
-        this.highFormData.corpusCategory = null;
+        this.clearhighFormData();
         return;
       }
 
@@ -1007,6 +1024,7 @@ export default {
         if (alterResult) {
           alert("bank alter done ");
         } else {
+          console.log(333);
           alert("bank alter fail ");
         }
 

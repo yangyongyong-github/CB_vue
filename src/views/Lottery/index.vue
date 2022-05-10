@@ -1,5 +1,5 @@
 <template>
-  <div class="lottery-container">
+  <div class="lottery-container" v-show="!isHideArea">
     <TopTip :tipText="this.language.OnceLottery[lang]" />
     <div class="retsult-tip" v-show="workDone_status">
       <a-result status="success" :title="workDone_content" />
@@ -37,6 +37,7 @@ export default {
       workDone_status: false,
       workDone_content: "",
       buiss_flag: "",
+      isHideArea: false,
     };
   },
   components: {
@@ -63,11 +64,24 @@ export default {
       // console.log("抽奖之前的本金 ", this.userData.deposit);
       const newValue = +this.userData.deposit + +this.lottery.value;
       this.userData.deposit = newValue;
-      // console.log(this.lottery.value, this.userData.deposit);
-      //  back
+      this.writeDB();
+      this.isHideArea = true;
       this.$router.go(-1);
     },
-
+    async writeDB() {
+      const userObj = {
+        loginId: this.userData.loginId,
+        deposit: this.userData.deposit,
+        interest: this.userData.interest,
+        flag: this.userData.flag,
+      };
+      try {
+        await this.$store.dispatch("update", userObj);
+        this.showTask();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     randomFunc() {
       const itemNum = this.getRandom(1, 30);
       this.$refs.box.style.color = this.radColor();
@@ -77,10 +91,6 @@ export default {
     async preRandom() {
       this.randomArrs = [];
       for (let i = 1; i <= 8; i++) {
-        // setInterval(() => {
-        //   this.randomFunc();
-        //   console.log('for i ',i)
-        // }, 1000);
         this.randomFunc();
         await delay(400);
       }

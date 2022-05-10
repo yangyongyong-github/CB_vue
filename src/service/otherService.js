@@ -43,7 +43,7 @@ export async function updateRate(id, rateObj) {
  * alter bank
  */
  export async function updateBank(id, bankObj) {
-  await delay(1000);
+  // await delay(1000);
   const resp = await request().post("/api/bank/update", { id, bankObj })
   return resp.data;
 }

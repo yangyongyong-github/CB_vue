@@ -206,15 +206,8 @@
                 </label>
               </span>
             </div>
-            <!-- <div class="confirme">
-              本此存款利息为
-              {{ language.Interest[lang] }}:
-              {{ depositFormData.interest }}
-              {{ language.Yuan[lang] }}
-              <b>确定开始本此存款？</b>
-            </div> -->
             <div class="part">
-              <button @click="depositWorking" :disabled="isSubmiting">
+              <button @click="depositWorking">
                 <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
                 {{
                   isSubmiting ? language.Submiting[lang] : language.Submit[lang]
@@ -239,12 +232,11 @@
               <input
                 type="number"
                 v-model="takeData.number"
-                @blur="rules_take"
               />
               <!-- 元 -->
               {{ language.Yuan[lang] }}
               <div class="btn-sub">
-                <button @click="takeWorking" :disabled="isSubmiting">
+                <button @click="takeWorking">
                   <!-- {{ isSubmiting ? "提交中..." : "提交" }} -->
                   {{
                     isSubmiting
@@ -254,8 +246,6 @@
                 </button>
               </div>
             </div>
-
-            <!-- {isSubmiting?disabled:none} -->
           </div>
         </div>
       </div>
@@ -380,12 +370,13 @@ export default {
      * 基础输入验证：take
      */
     rules_base_take() {
-      if (this.takeData.number <= 0) {
+      if (+this.takeData.number <= 0) {
         this.tipMsg("warn", this.language.InputNoEffect[this.lang]); //无效输入
         this.clearInput_take();
         return;
+      } else {
+        return "passRulesOfBase_take";
       }
-      return "passRulesOfBase_take";
     },
 
     /**
@@ -633,23 +624,6 @@ export default {
       }
       this.writeDB();
     },
-
-    // tip() {
-    //   this.$showMessage({
-    //     content: this.language.Done[this.lang], //successMsg
-    //     type: "success",
-    //     duration: 1000,
-    //     container: this.$refs.from,
-    //     callback: () => {
-    //       this.isSubmiting = false;
-    //       this.clearInput_deposit();
-    //       // 清空 计算的利息
-    //       this.depositFormData.interest = 0;
-    //       this.reload(); // 刷新页面
-    //     },
-    //   });
-    // },
-
     async writeDB() {
       // 1. from store get data
       const userObj = {
@@ -663,9 +637,6 @@ export default {
        */
       try {
         await this.$store.dispatch("update", userObj);
-        // this.tipMsg("success", this.language.Done[this.lang]); // showMesage
-        // this.clearInput_take();
-        // this.clearInput_deposit();
         this.showTask();
       } catch (error) {
         console.log(error);
@@ -717,12 +688,6 @@ export default {
         },
       });
     },
-  },
-  watch: {
-    // "workDone.status"(o, n) {
-    //   console.log(o, n);
-    //   // this.reload(); // 刷新页面
-    // },
   },
 };
 </script>
