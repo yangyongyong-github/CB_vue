@@ -2,7 +2,7 @@
   <div id="app-container" ref="mainContainer">
     <div class="main" v-show="webLoaded">
       <!-- v-loading="isLoading" -->
-      <div class="top-banner"><TopBanner /></div>
+      <TopBanner />
       <RouterView v-if="isRouterAlive" />
       <ToTop />
     </div>
@@ -12,10 +12,10 @@
 
 <script>
 import { mapState } from "vuex";
-import TopBanner from "@/components/top-banner";
+import TopBanner from "@/components/common-content/top-banner";
 import ToTop from "@/components/common/ToTop";
 import Home from "@/views/Home";
-import WebLoading from "@/components/web-loading";
+import WebLoading from "@/components/common-content/web-loading";
 
 export default {
   // name: App,
@@ -92,8 +92,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "~@/styles/var.less";
+
 #app-container {
-  width: 100%;
-  overflow-x: hidden;
+  width: @base-container-width;
+  margin: 0 auto;
+
+  .main {
+    width: 100%;
+    margin-top: 10px;
+  }
 }
 </style>

@@ -272,7 +272,7 @@
 
 <script>
 import { mapState } from "vuex";
-import TopTip from "@/components/top-tip";
+import TopTip from "@/components/common-content/top-tip";
 import Modal from "@/components/common/Modal";
 import { delay, DecimalPos } from "@/utils";
 import UserBaseInfo from "@/components/common-content/user-base-info";

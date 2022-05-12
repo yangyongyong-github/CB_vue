@@ -1,6 +1,11 @@
+@import '~@/styles/var.less';
+
 .footer-container {
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 50px;
     .game {
-      margin-top: 80px;
+      margin-top: 60px;
       margin-bottom: 150px;
       .border-shadow-style-A();
       position: relative;
@@ -24,35 +29,28 @@
     }
   
     footer {
-      width: 100%;
+      width: 80%;
+      margin: 0 auto;
       // border: 1px dotted;
       box-sizing: border-box;
-      overflow: hidden;
-      padding-left: 20%;
       font-size: 0.9em;
-      margin-top: 80px;
   
       .one {
-        padding-left: 40px;
-        width: 75%;
         display: flex;
         border-bottom: 2px solid;
-        padding-bottom: 10px;
-        margin: 10px 0;
+        padding-bottom: @size-10;
+        margin: @size-10 0;
         &>div{
             margin-left: 5px;
         }
       }
   
       .two {
-        width: 100%;
-  
         display: flex;
-        padding-left: 60px;
   
         span {
-          margin-right: 10px;
-          padding-right: 10px;
+          margin-right: @size-10;
+          padding-right: @size-10;
           border-right: 2px solid;
   
           &:last-child {
@@ -61,7 +59,7 @@
         }
   
         img {
-          width: 120px;
+          width: 110px;
           margin-left: 50px;
         }
       }

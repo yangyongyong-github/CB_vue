@@ -8,6 +8,7 @@
 数字运算采用numeral, 时间采用moment.js
 避免大规模无意义的粘贴和代码
 继续采用less，语法上和sass一样
+-   减少使用ref
 
 > **参照etax-mobile-zrr**
 
