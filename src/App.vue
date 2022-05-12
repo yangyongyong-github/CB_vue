@@ -12,10 +12,10 @@
 
 <script>
 import { mapState } from "vuex";
-import TopBanner from "@/components/TopBanner";
-import ToTop from "@/components/ToTop";
+import TopBanner from "@/components/top-banner";
+import ToTop from "@/components/common/ToTop";
 import Home from "@/views/Home";
-import WebLoading from "@/components/WebLoading";
+import WebLoading from "@/components/web-loading";
 
 export default {
   // name: App,

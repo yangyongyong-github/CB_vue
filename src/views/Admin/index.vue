@@ -532,7 +532,7 @@
 <script>
 import { mapState } from "vuex";
 import numeral from "numeral";
-import TopTip from "@/components/TopTip";
+import TopTip from "@/components/top-tip";
 import * as MATH from "@/utils";
 const echarts = require("echarts");
 

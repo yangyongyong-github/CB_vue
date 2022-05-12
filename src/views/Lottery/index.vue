@@ -19,8 +19,8 @@
 <script>
 import { mapState } from "vuex";
 import { delay } from "@/utils";
-import TopTip from "@/components/TopTip";
-import ResultTip from "@/components/ResultTip";
+import TopTip from "@/components/top-tip";
+import ResultTip from "@/components/common-content/result-tip";
 
 export default {
   data() {

@@ -256,12 +256,12 @@
 <script>
 import { mapState } from "vuex";
 import numeral from "numeral";
-import TopTip from "@/components/TopTip";
+import TopTip from "@/components/top-tip";
 import { delay, DecimalPos } from "@/utils";
-import Modal from "@/components/Modal";
-import UserBaseInfo from "@/components/UserBaseInfo";
-import AlterInfo from "@/components/AlterInfo";
-import Lottery from "@/components/Lottery";
+import Modal from "@/components/common/Modal";
+import UserBaseInfo from "@/components/common-content/user-base-info";
+import AlterInfo from "@/components/common-content/alter-info";
+import Lottery from "@/components/lottery";
 
 export default {
   inject: ["reload"], // 刷新界面

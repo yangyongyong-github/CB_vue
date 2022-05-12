@@ -141,7 +141,7 @@
 
 <script>
 import { mapState } from "vuex";
-import PureFooter from "@/components/PureFooter";
+import PureFooter from "@/components/common-content/pure-footer";
 export default {
   data() {
     return {};

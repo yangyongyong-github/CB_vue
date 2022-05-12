@@ -10,8 +10,8 @@ Vue.prototype.$showMessage = showMessage;
 //在网站被访问时，需要用token去换取用户的身份
 // store.dispatch("whoAmI");  
 
-import "./styles/global.less";
-import "./styles/common.css"
+import "./styles/_global.less";
+import "./styles/_common.css"
 Vue.config.productionTip = false;
 
 

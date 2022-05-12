@@ -53,9 +53,9 @@
 
 <script>
 import { mapState } from "vuex";
-import TopTip from "@/components/TopTip";
-import PureFooter from "@/components/PureFooter";
-import RateShow from "@/components/RateShow";
+import TopTip from "@/components/top-tip";
+import PureFooter from "@/components/common-content/pure-footer";
+import RateShow from "@/components/rate-show";
 
 import {swiperImgs, descLists, serverLists} from './mock'
 
