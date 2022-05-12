@@ -41,7 +41,7 @@
       <RateShow />
       <!-- 使用日历组件 -->
       <div class="calendar">
-        <a-calendar :fullscreen="false" />
+        <!-- <a-calendar :fullscreen="false" /> -->
       </div>
     </div>
 

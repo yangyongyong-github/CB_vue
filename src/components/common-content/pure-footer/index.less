@@ -3,70 +3,73 @@
 .footer-container {
   width: 90%;
   margin: 0 auto;
-  padding-bottom: 50px;
-    .game {
-      margin-top: 60px;
-      margin-bottom: 150px;
-      .border-shadow-style-A();
-      position: relative;
-  
-      div.img {
-        display: flex;
-        justify-content: center;
-      }
-  
-      div.text {
-        width: 56%;
-        position: absolute;
-        bottom: -12%;
-        left: 22%;
-        background-color: white;
-        font-family: cursive;
-        font-weight: bold;
-        .border-shadow-style-A();
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
-      }
+  padding-bottom: @size-10*3;
+
+
+  .game {
+    margin-top: 60px;
+    margin-bottom: 150px;
+    .border-shadow-style-A();
+    position: relative;
+
+    div.img {
+      display: flex;
+      justify-content: center;
     }
-  
-    footer {
-      width: 80%;
-      margin: 0 auto;
-      // border: 1px dotted;
-      box-sizing: border-box;
-      font-size: 0.9em;
-  
-      .one {
-        display: flex;
-        border-bottom: 2px solid;
-        padding-bottom: @size-10;
-        margin: @size-10 0;
-        &>div{
-            margin-left: 5px;
-        }
-      }
-  
-      .two {
-        display: flex;
-  
-        span {
-          margin-right: @size-10;
-          padding-right: @size-10;
-          border-right: 2px solid;
-  
-          &:last-child {
-            border-right: none;
-          }
-        }
-  
-        img {
-          width: 110px;
-          margin-left: 50px;
-        }
-      }
-  
-      span.num {
-        font-size: 0.8em;
-        color: rgb(212, 86, 86);
-      }
+
+    div.text {
+      width: 56%;
+      position: absolute;
+      bottom: -12%;
+      left: 22%;
+      background-color: white;
+      font-family: cursive;
+      font-weight: bold;
+      .border-shadow-style-A();
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
     }
   }
+
+  footer {
+    width: 80%;
+    margin: 0 auto;
+    // border: 1px dotted;
+    box-sizing: border-box;
+    font-size: 0.9em;
+
+    .one {
+      display: flex;
+      border-bottom: 2px solid;
+      padding-bottom: @size-10;
+      margin: @size-10 0;
+
+      &>div {
+        margin-left: 5px;
+      }
+    }
+
+    .two {
+      display: flex;
+
+      span {
+        margin-right: @size-10;
+        padding-right: @size-10;
+        border-right: 2px solid;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+
+      img {
+        width: 110px;
+        margin-left: 50px;
+      }
+    }
+
+    span.num {
+      font-size: 0.8em;
+      color: rgb(212, 86, 86);
+    }
+  }
+}
