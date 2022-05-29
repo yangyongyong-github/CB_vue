@@ -10,11 +10,10 @@ npm run serve # 启动项目
 分支 new  ：后期将进行项目代码优化
 
 
-
+```
 npm install # 安装依赖
-
 npm run serve # 启动项目
-
+```
 
 # 中国银行存储管理系统（全栈） 
 
